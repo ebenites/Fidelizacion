@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Gestión de Clientes y FIdelización</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    @Styles.Render("~/Content/bootstrap")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Styles.Render("~/Content/datetimepicker")
+    @Scripts.Render("~/bundles/datetimepicker")
+
+    @Scripts.Render("~/bundles/bootbox")
+
+    @Scripts.Render("~/bundles/typeahead")
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/js")
+
+    <script type="text/javascript">
+		$(function(){
+
+			
+
+		});
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+<body>
+    
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle collapsed"
+                        data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                        aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand navbar-logo" href="#"><img src="@Url.Content("~/Content/logo.png")" height="48" /></a>
+
+                <a class="navbar-brand" href="#">Gestión de Clientes y Fidelización</a>
+
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestión de Clientes<span class="caret"></span></a>
+                        <ul class="dropdown-menu"></ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administración de Puntos<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Transferir Puntos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fidelización de CLientes<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">A</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">B</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Perfil</a></li>
+                    <li><a href="#">Salir</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+
+        @{
+            string message = TempData["Message"] as string;
+            if (message != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    @message
+                </div>
+            }
+        }
+
+        @RenderBody()
+
+    </div>
+
+    <div id="footer">
+        Todos los Derechos Reservados @DateTime.Now.Year
+    </div>
+
+</body>
+</html>
