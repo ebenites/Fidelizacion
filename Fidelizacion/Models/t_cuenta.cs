@@ -39,5 +39,13 @@ namespace Fidelizacion.Models
         public virtual t_tarjeta_afiliacion t_tarjeta_afiliacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_ticket_transferencia> t_ticket_transferencia { get; set; }
+
+        public Nullable<decimal> getPuntosMaximosTransferir()
+        {
+            if(this.puntos != null)
+                return Math.Round((decimal)this.puntos * (decimal)0.8);
+            return null;
+        }
+
     }
 }

@@ -10,12 +10,6 @@
         El N° de documento indicado no presenta alguna cuenta activa, ha caducado o no es un afiliado.
     </div>
 }
-else if (ViewBag.puntos < 10)
-{
-    <div class="alert alert-danger">
-        La cuenta no dispone de puntos suficientes (mínimo 10 puntos).
-    </div>
-}
 else
 {
     
@@ -49,10 +43,9 @@ else
                     <td>@cuenta.t_ficha_afiliacion.apellido_paterno @cuenta.t_ficha_afiliacion.apellido_materno</td>
                     <td>@cuenta.numero_cuenta</td>
                     <td>@cuenta.puntos</td>
-                    <td><span id="origen-puntos" style="font-weight:bold; color:red;"></span></td>
+                    <td><span id="destino-puntos" style="font-weight:bold; color:green;"></span></td>
                     <td>
-                        <a href="javascript:void(0)" class="btn btn-success" onclick="transferir()">Transferir</a>
-                        <input type="hidden" id="origen-id" value="@cuenta.pk_cuenta"/>
+                        <input type="hidden" id="destino-id" value="@cuenta.pk_cuenta" />
                     </td>
                 </tr>
             }

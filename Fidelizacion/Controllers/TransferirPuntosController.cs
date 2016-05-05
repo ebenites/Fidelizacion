@@ -27,8 +27,52 @@ namespace Fidelizacion.Controllers
 
             List<t_cuenta> cuentas = transferirPuntosService.getCuentaOrigen(numdocumento);
             ViewBag.cuentas = cuentas;
+
+            ViewBag.ncuentas = cuentas.Count;
+
+            foreach (t_cuenta cuenta in cuentas)
+            {
+                ViewBag.puntos = cuenta.puntos;
+                //ViewBag.tipo_cuenta = cuenta.fk_tipo_cuenta;
+            }
+
+            return View();
+        }
+
+        public ActionResult GetCuentaDestino()
+        {
+
+            string numdocumento = Request.Params["destino"];
+            System.Diagnostics.Debug.WriteLine("Num Documento Destino: " + numdocumento);
+
+            List<t_cuenta> cuentas = transferirPuntosService.getCuentaDestino(numdocumento);
+            ViewBag.cuentas = cuentas;
+
+            ViewBag.ncuentas = cuentas.Count;
             
             return View();
         }
+
+        public ActionResult ViewTransferencia()
+        {
+            int origeid = int.Parse(Request.Params["origeid"]);
+            int destinoid = int.Parse(Request.Params["destinoid"]);
+
+            ViewBag.origen = transferirPuntosService.getCuenta(origeid);
+
+            ViewBag.destino = transferirPuntosService.getCuenta(destinoid);
+
+            return View();
+        }
+
+        public ActionResult Grabar()
+        {
+
+            //transferirPuntosService.grabar(...);
+
+            //return Json(data);
+            return View();
+        }
+
     }
 }

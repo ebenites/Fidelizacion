@@ -12,5 +12,9 @@ namespace Fidelizacion.Services
 
         List<t_cuenta> getCuentaOrigen(string numdocumento);
 
+        List<t_cuenta> getCuentaDestino(string numdocumento);
+
+        t_cuenta getCuenta(int cuentaid);
+
     }
 }

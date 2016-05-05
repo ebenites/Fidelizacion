@@ -12,5 +12,11 @@ namespace Fidelizacion.DAO
 
         List<t_cuenta> getCuentaOrigen(string numdocumento);
 
+        List<t_cuenta> getCuentaDestino(string numdocumento);
+
+        t_cuenta getCuenta(int cuentaid);
+
+        void grabar(int idorigen, int iddestino, int puntos, string justificacion);
+
     }
 }

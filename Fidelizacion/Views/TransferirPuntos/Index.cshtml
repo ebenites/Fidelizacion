@@ -6,26 +6,6 @@
 
 			//$('[name="destino"]').typeahead({ source: getNombres() });
 
-			$('#btn-transferir').click(function(){
-				bootbox.dialog({
-					message: $('#dia-transferir').html(),
-					title: "Transferencia de Puntos",
-					buttons: {
-						danger: {
-							label: "Cancelar",
-							className: "btn-danger"
-						},
-						main: {
-							label: "Aceptar",
-							className: "btn-primary",
-							callback: function() {
-
-							}
-						}
-					}
-				});
-			});
-
 		});
 
 		function getCuentaOrigen() {
@@ -36,10 +16,126 @@
 		    }
 
 		    var origen = $('[name="origen"]').val();
-		    $.get('@Url.Content("~/TransferirPuntos/GetCuentaOrigen")', { 'origen': origen }, function (data) {
+		    $.get('@Url.Content("~/TransferirPuntos/GetCuentaOrigen")', { 'origen': origen, "_": $.now() }, function (data) {
 		        $('#origen-table').html(data);
+		        if ($('#origen-table .alert').length) {
+		            bootbox.alert($('#origen-table .alert').html());
+		        }
 		    });
 		}
+
+    function getCuentaDestino() {
+
+        if (!$('#origen-id').length) {
+            bootbox.alert("Debe de especificar una cuenta origen primero.");
+            $('[name="destino"]').val('');
+            return;
+        }
+
+        if ($('[name="destino"]').val() == '') {
+            bootbox.alert("Debe indicar el número de documento de la cuenta destino.");
+            return;
+        }
+
+        if ($('[name="destino"]').val() == $('[name="origen"]').val()) {
+            bootbox.alert("La cuenta destino no puede ser la misma cuenta origen.");
+            return;
+        }
+
+        var destino = $('[name="destino"]').val();
+        $.get('@Url.Content("~/TransferirPuntos/GetCuentaDestino")', { 'destino': destino, "_": $.now() }, function (data) {
+            $('#destino-table').html(data);
+            if ($('#destino-table .alert').length) {
+                bootbox.alert($('#destino-table .alert').html());
+            }
+        });
+    }
+
+    function transferir() {
+        if (!$('#origen-id').length) {
+            bootbox.alert("Debe de especificar una cuenta origen primero.");
+            return;
+        }
+        if (!$('#destino-id').length) {
+            bootbox.alert("Debe de especificar una cuenta destino primero.");
+            return;
+        }
+
+        var origeid = $('#origen-id').val();
+        var destinoid = $('#destino-id').val();
+
+        $.get('@Url.Content("~/TransferirPuntos/ViewTransferencia")', { 'origeid': origeid, 'destinoid': destinoid, "_": $.now() }, function (data) {
+            bootbox.dialog({
+                message: data,
+                title: "Transferencia de Puntos"
+            });
+        });
+
+    }
+
+    function cancelarTransaccion() {
+        bootbox.hideAll()
+    }
+
+    function aceptarTransaccion() {
+        // Validar & Actualizar Grilla
+        var puntos = $('#transferencia-form [name="puntos"]').val();
+        var maximo = $('#transferencia-form [name="maximo"]').val();
+        var justificacion = $('#transferencia-form [name="justificacion"]').val();
+
+        if (puntos == '' || parseInt(puntos) < 1 || parseInt(puntos) > parseInt(maximo)) {
+            bootbox.alert("Debe indicar una cantidad válida de puntos.");
+            return;
+        }
+
+        if (justificacion == '') {
+            bootbox.alert("Debe indicar una justificación.");
+            return;
+        }
+
+        $('#origen-puntos').text('-' + puntos);
+        $('#destino-puntos').text('+' + puntos);
+        $('#transferir-puntos').val(puntos);
+        $('justificacion').val(justificacion);
+
+        bootbox.hideAll();
+    }
+
+    function grabar() {
+
+        if (!$('#origen-id').length) {
+            bootbox.alert("Debe de especificar una cuenta origen primero.");
+            return;
+        }
+        if (!$('#destino-id').length) {
+            bootbox.alert("Debe de especificar una cuenta destino primero.");
+            return;
+        }
+
+        if ($('#transferir-puntos').val() == '') {
+            bootbox.alert("No se ha indicado el monto a transferir.");
+            return;
+        }
+
+        // Transferencia
+        bootbox.confirm("¿Está seguro que desea confirmar la trasferencia?", function (result) {
+            if (result) {
+
+                $.post('@Url.Content("~/TransferirPuntos/Grabar")', {
+                    'origeid': $('#origen-id').val(),
+                    'destinoid': $('#destino-id').val(),
+                    'puntos': $('#transferir-puntos').val(),
+                    'justificacion': $('justificacion').val()
+                }, function (data) {
+                    bootbox.alert(data, function () {
+                        location.reload();
+                    });
+                });
+
+            }
+        });
+        
+    }
 
 		/*function getNombres(){
 			return ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
@@ -59,7 +155,7 @@
     @{ViewBag.Title = "Transferir Puntos";}
 </div>
 
-<form>
+<form onsubmit="return false;">
 
     <div class="row form-group">
         <label for="origen" class="col-sm-2 form-control-label text-right">Cuenta Origen</label>
@@ -79,82 +175,28 @@
         <label for="destino" class="col-sm-2 form-control-label text-right">Cuenta Destino</label>
         <div class="col-sm-10 form-inline">
             <input type="text" name="destino" class="form-control" style="width:300px" placeholder="Ingrese N° Documento" autocomplete="off" />
-            <input type="button" value="Buscar Afiliado" class="btn btn-default" />
+            <input type="button" value="Buscar Afiliado" class="btn btn-default" onclick="getCuentaDestino()"/>
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <colgroup>
-                <col width="100" />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col width="100" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <td>DNI</td>
-                    <td>Nombre</td>
-                    <td>Apellidos</td>
-                    <td>Cuenta</td>
-                    <td>Puntos</td>
-                    <td>Puntos a Transferir</td>
-                    <td></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>45545606</td>
-                    <td>Erick</td>
-                    <td>Benites Cuenca</td>
-                    <td>CV-7262819</td>
-                    <td>100</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+    <div id="destino-table" class="table-responsive">
+        
     </div>
 
+    <input type="hidden" id="transferir-puntos" value=""/>
+    <input type="hidden" id="justificacion" value="" />
 
     <hr />
 
     <div class="row form-group">
         <div class="col-sm-5 text-right">
-            <input type="submit" value="Grabar" class="btn btn-primary" style="width:100px" />
+            <input type="button" value="Grabar" class="btn btn-primary" style="width:100px" onclick="grabar()" />
         </div>
         <div class="col-sm-2 text-center">
         </div>
         <div class="col-sm-5 text-left">
-            <input type="button" value="Salir" class="btn btn-danger" style="width:100px" />
+            <a href="@Url.Content("~/Home/Cerrar")" class="btn btn-danger" style="width:100px">Salir</a>
         </div>
     </div>
 
 </form>
-
-
-<div id="dia-transferir" style="display:none">
-
-    <div class="row form-group form-horizontal">
-        <label for="cuenta" class="col-sm-3 control-label">Cuenta Destino</label>
-        <div class="col-sm-9">
-            <input type="text" name="cuenta" class="form-control" readonly value="Erick Benites Cuenca" />
-        </div>
-    </div>
-
-    <div class="row form-group form-horizontal">
-        <label for="puntos" class="col-sm-3 control-label">Puntos transferir</label>
-        <div class="col-sm-9">
-            <input type="text" name="puntos" class="form-control" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="justificacion" class="col-sm-3 control-label">Justificación</label>
-        <textarea name="justificacion" class="form-control"></textarea>
-    </div>
-
-</div>

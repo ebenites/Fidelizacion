@@ -344,6 +344,9 @@
     <Content Include="Views\Cuenta\Index.cshtml" />
     <Content Include="Views\TransferirPuntos\Index.cshtml" />
     <Content Include="Views\TransferirPuntos\GetCuentaOrigen.cshtml" />
+    <Content Include="Views\TransferirPuntos\GetCuentaDestino.cshtml" />
+    <Content Include="Views\Home\Cerrar.cshtml" />
+    <Content Include="Views\TransferirPuntos\ViewTransferencia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
