@@ -68,10 +68,23 @@ namespace Fidelizacion.Controllers
         public ActionResult Grabar()
         {
 
-            //transferirPuntosService.grabar(...);
+            int origeid = int.Parse(Request.Params["origeid"]);
+            int destinoid = int.Parse(Request.Params["destinoid"]);
+            int puntos = int.Parse(Request.Params["puntos"]);
+            string justificacion = Request.Params["justificacion"];
 
-            //return Json(data);
-            return View();
+            System.Diagnostics.Debug.WriteLine(origeid);
+            System.Diagnostics.Debug.WriteLine(destinoid);
+            System.Diagnostics.Debug.WriteLine(puntos);
+            System.Diagnostics.Debug.WriteLine(justificacion);
+
+            transferirPuntosService.grabar(origeid, destinoid, puntos, justificacion);
+
+            System.Diagnostics.Debug.WriteLine("Registro OK");
+
+            var data = new { Type = "success", Message = "Registro grabado satisfactoriamente" };
+
+            return Json(data);
         }
 
     }

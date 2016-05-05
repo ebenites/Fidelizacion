@@ -125,12 +125,13 @@
                     'origeid': $('#origen-id').val(),
                     'destinoid': $('#destino-id').val(),
                     'puntos': $('#transferir-puntos').val(),
-                    'justificacion': $('justificacion').val()
+                    'justificacion': $('#justificacion').val()
                 }, function (data) {
-                    bootbox.alert(data, function () {
+                    bootbox.alert(data.Message, function () {
                         location.reload();
                     });
-                });
+                }, 'json').fail(function (error) { bootbox.alert('Error interno en el servidor: ' + error.responseText) });
+                //.fail(function(error) { alert(error.responseJSON) });
 
             }
         });
