@@ -16,5 +16,7 @@ namespace Fidelizacion.Services
 
         t_cuenta getCuenta(int cuentaid);
 
+        void grabar(int idorigen, int iddestino, int puntos, string justificacion);
+
     }
 }

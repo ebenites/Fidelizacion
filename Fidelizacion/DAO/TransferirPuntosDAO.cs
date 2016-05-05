@@ -39,7 +39,15 @@ namespace Fidelizacion.DAO
 
         public void grabar(int idorigen, int iddestino, int puntos, string justificacion)
         {
+            /*t_ticket_transferencia ticket = new t_ticket_transferencia
+            {
+                codigo_tecnico = vtecnico,
+                anio = detalle.Cronograma.anio,
+                semana = detalle.semana
+            };
+            db.t_ticket_transferencia.Add(ticket);
 
+            db.SaveChanges();*/
         }
 
     }
