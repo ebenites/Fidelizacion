@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Fidelizacion.Models.t_ficha_afiliacion>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.apellido_paterno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.apellido_materno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numero_documento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sexo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.correo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numero_telefono)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_alta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_nacimiento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.estado_afiliado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_baja)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.t_tipo_documento.tipo_documento)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.apellido_paterno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.apellido_materno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.numero_documento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sexo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.correo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.numero_telefono)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_alta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_nacimiento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.estado_afiliado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_baja)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.t_tipo_documento.tipo_documento)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.pk_ficha_afiliacion }) |
+            @Html.ActionLink("Details", "Details", new { id=item.pk_ficha_afiliacion }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.pk_ficha_afiliacion })
+        </td>
+    </tr>
+}
+
+</table>

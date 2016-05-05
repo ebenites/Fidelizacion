@@ -1,0 +1,55 @@
+﻿@using Fidelizacion.Models;
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.ncuentas == 0)
+{
+    <div class="alert alert-danger">
+        El N° de documento indicado no presenta alguna cuenta activa, ha caducado o no es un afiliado.
+    </div>
+}
+else
+{
+    
+    <table class="table table-hover table-bordered">
+        <colgroup>
+            <col width="100" />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col width="100" />
+        </colgroup>
+        <thead>
+            <tr>
+                <td>DNI</td>
+                <td>Nombre</td>
+                <td>Apellidos</td>
+                <td>Cuenta</td>
+                <td>Puntos</td>
+                <td>Puntos a Transferir</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cuenta in (List<t_cuenta>)ViewBag.cuentas)
+            {
+                <tr>
+                    <td>@cuenta.t_ficha_afiliacion.numero_documento</td>
+                    <td>@cuenta.t_ficha_afiliacion.nombre</td>
+                    <td>@cuenta.t_ficha_afiliacion.apellido_paterno @cuenta.t_ficha_afiliacion.apellido_materno</td>
+                    <td>@cuenta.numero_cuenta</td>
+                    <td>@cuenta.puntos</td>
+                    <td><span id="destino-puntos" style="font-weight:bold; color:green;"></span></td>
+                    <td>
+                        <input type="hidden" id="destino-id" value="@cuenta.pk_cuenta" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

@@ -13,6 +13,11 @@ namespace Fidelizacion.Controllers
             return View();
         }
 
+        public ActionResult Cerrar()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

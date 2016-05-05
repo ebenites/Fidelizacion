@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Fidelizacion.Models.t_cuenta>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.numero_cuenta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_alta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha_baja)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.puntos)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.estado_cuenta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.t_cuenta2.numero_cuenta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.t_ficha_afiliacion.apellido_paterno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.t_tipo_cuenta.tipo_cuenta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.t_tarjeta_afiliacion.numero_tarjeta)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.numero_cuenta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_alta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha_baja)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.puntos)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.estado_cuenta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.t_cuenta2.numero_cuenta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.t_ficha_afiliacion.apellido_paterno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.t_tipo_cuenta.tipo_cuenta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.t_tarjeta_afiliacion.numero_tarjeta)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.pk_cuenta }) |
+            @Html.ActionLink("Details", "Details", new { id=item.pk_cuenta }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.pk_cuenta })
+        </td>
+    </tr>
+}
+
+</table>
