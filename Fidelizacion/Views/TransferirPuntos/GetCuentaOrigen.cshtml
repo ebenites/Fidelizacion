@@ -27,7 +27,7 @@ else
             <col />
             <col />
             <col />
-            <col width="100" />
+            <col width="80" />
         </colgroup>
         <thead>
             <tr>
@@ -37,7 +37,7 @@ else
                 <td>Cuenta</td>
                 <td>Puntos</td>
                 <td>Puntos a Transferir</td>
-                <td></td>
+                <td>Transferir</td>
             </tr>
         </thead>
         <tbody>
@@ -50,8 +50,8 @@ else
                     <td>@cuenta.numero_cuenta</td>
                     <td>@cuenta.puntos</td>
                     <td><span id="origen-puntos" style="font-weight:bold; color:red;"></span></td>
-                    <td>
-                        <a href="javascript:void(0)" class="btn btn-success" onclick="transferir()">Transferir</a>
+                    <td class="text-center">
+                        <a href="javascript:void(0)" class="btn btn-success" onclick="transferir()"><span class="glyphicon glyphicon-transfer"></span></a>
                         <input type="hidden" id="origen-id" value="@cuenta.pk_cuenta"/>
                     </td>
                 </tr>

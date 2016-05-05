@@ -39,16 +39,48 @@ namespace Fidelizacion.DAO
 
         public void grabar(int idorigen, int iddestino, int puntos, string justificacion)
         {
-            /*t_ticket_transferencia ticket = new t_ticket_transferencia
+
+            /*
+            var query = db.Valdkurs
+            .Where(vk=> vk.pnr == pnr)   // Filter
+            .OrderBy(vk => vk.prioritet) // prioritet is still here - order by it
+            .Select(vk => vk.kursnamn); 
+            */
+
+            t_cuenta origen = db.t_cuenta.Where(o => o.pk_cuenta == idorigen).Single();
+            System.Diagnostics.Debug.WriteLine(origen.numero_cuenta);
+
+            origen.puntos = origen.puntos - puntos;
+
+            t_cuenta destino = db.t_cuenta.Where(o => o.pk_cuenta == iddestino).Single();
+            System.Diagnostics.Debug.WriteLine(destino.numero_cuenta);
+
+            destino.puntos = destino.puntos + puntos;
+
+            t_ticket_transferencia ticket = new t_ticket_transferencia
             {
-                codigo_tecnico = vtecnico,
-                anio = detalle.Cronograma.anio,
-                semana = detalle.semana
+                puntos_transferidos = puntos,
+                fecha_transferencia = DateTime.Now,
+                motivo_transferencia = justificacion,
+                fk_cuenta = idorigen,
+                cuenta_origen = origen.numero_cuenta,
+                cuenta_destino = destino.numero_cuenta
             };
             db.t_ticket_transferencia.Add(ticket);
 
-            db.SaveChanges();*/
+            db.SaveChanges();
+
+            // Actualizando el numero de Ticket
+
+            ticket.numero_ticket = "TRAN-" + ticket.pk_transferencia.ToString("D5");
+            System.Diagnostics.Debug.WriteLine(ticket.numero_ticket);
+
+            // Grabando cambios
+
+            db.SaveChanges();
+
         }
 
     }
 }
+ 
