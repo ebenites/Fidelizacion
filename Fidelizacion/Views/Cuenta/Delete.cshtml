@@ -1,0 +1,97 @@
+﻿@model Fidelizacion.Models.t_cuenta
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>t_cuenta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.numero_cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.numero_cuenta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_alta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_alta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_baja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_baja)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.puntos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.puntos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado_cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado_cuenta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_cuenta2.numero_cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_cuenta2.numero_cuenta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_ficha_afiliacion.apellido_paterno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_ficha_afiliacion.apellido_paterno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_tipo_cuenta.tipo_cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_tipo_cuenta.tipo_cuenta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_tarjeta_afiliacion.numero_tarjeta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_tarjeta_afiliacion.numero_tarjeta)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

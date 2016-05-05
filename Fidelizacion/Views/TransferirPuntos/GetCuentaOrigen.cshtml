@@ -1,0 +1,40 @@
+﻿@using Fidelizacion.Models;
+
+<div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <colgroup>
+            <col width="100" />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col width="100" />
+        </colgroup>
+        <thead>
+            <tr>
+                <td>DNI</td>
+                <td>Nombre</td>
+                <td>Apellidos</td>
+                <td>Cuenta</td>
+                <td>Puntos</td>
+                <td>Puntos a Transferir</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cuenta in (List<t_cuenta>)ViewBag.cuentas)
+            {
+                <tr>
+                    <td>@cuenta.t_ficha_afiliacion.numero_documento</td>
+                    <td>@cuenta.t_ficha_afiliacion.nombre</td>
+                    <td>@cuenta.t_ficha_afiliacion.apellido_paterno @cuenta.t_ficha_afiliacion.apellido_materno</td>
+                    <td>@cuenta.numero_cuenta</td>
+                    <td>@cuenta.puntos</td>
+                    <td></td>
+                    <td><a href="#" id="btn-transferir" class="btn btn-success">Transferir</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,121 @@
+﻿@model Fidelizacion.Models.t_ficha_afiliacion
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>t_ficha_afiliacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.apellido_paterno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.apellido_paterno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.apellido_materno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.apellido_materno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.numero_documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.numero_documento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sexo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sexo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.correo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.correo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.numero_telefono)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.numero_telefono)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_alta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_alta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_nacimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_nacimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado_afiliado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado_afiliado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_baja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_baja)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_tipo_documento.tipo_documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_tipo_documento.tipo_documento)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
