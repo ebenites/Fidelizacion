@@ -101,7 +101,14 @@
         $('#origen-puntos').text('-' + puntos);
         $('#destino-puntos').text('+' + puntos);
         $('#transferir-puntos').val(puntos);
-        $('justificacion').val(justificacion);
+        
+        $('#justificacion').val(justificacion);
+
+        var tantes = $('#total-antes').val();
+        $('#total-despues').text(parseInt(tantes) + parseInt(puntos));
+
+        var toantes = $('#total-o-antes').val();
+        $('#total-o-despues').text(parseInt(toantes) - parseInt(puntos));
 
         bootbox.hideAll();
 
@@ -129,7 +136,7 @@
         // Transferencia
         bootbox.confirm("¿Está seguro que desea confirmar la trasferencia?", function (result) {
             if (result) {
-
+               // alert($('#justificacion').val());
                 $.post('@Url.Content("~/TransferirPuntos/Grabar")', {
                     'origeid': $('#origen-id').val(),
                     'destinoid': $('#destino-id').val(),

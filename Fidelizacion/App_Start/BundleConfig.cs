@@ -25,7 +25,8 @@ namespace Fidelizacion
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
-                      "~/Content/bootstrap.min.css"));
+                      "~/Content/bootstrap.min.css",
+                       "~/Content/carousel.css"));
 
             // datetimepicker
             bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(

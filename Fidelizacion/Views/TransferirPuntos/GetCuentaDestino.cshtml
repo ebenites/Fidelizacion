@@ -31,7 +31,7 @@ else
                 <td>Cuenta</td>
                 <td>Puntos</td>
                 <td>Puntos a Transferir</td>
-                <td></td>
+                <td>Total Puntos</td>
             </tr>
         </thead>
         <tbody>
@@ -45,6 +45,8 @@ else
                     <td>@cuenta.puntos</td>
                     <td><span id="destino-puntos" style="font-weight:bold; color:green;"></span></td>
                     <td>
+                        <input type="hidden" id="total-antes" value="@cuenta.puntos"/>
+                       <span id="total-despues"></span>
                         <input type="hidden" id="destino-id" value="@cuenta.pk_cuenta" />
                     </td>
                 </tr>
