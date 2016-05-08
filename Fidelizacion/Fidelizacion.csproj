@@ -285,6 +285,7 @@
     <Content Include="Models\FidelizacionModel.edmx.diagram">
       <DependentUpon>FidelizacionModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\GCE ASPNET.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
