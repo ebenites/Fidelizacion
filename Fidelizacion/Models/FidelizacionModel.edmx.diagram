@@ -14,19 +14,16 @@
         <EntityTypeShape EntityType="plazaveaModel.t_reporte_stock_producto_canje" Width="1.5" PointX="14.25" PointY="9.125" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_solicitud_atencion" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_solicitud_campana" Width="1.5" PointX="6" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="plazaveaModel.t_tarjeta_afiliacion" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_ticket_canje" Width="1.5" PointX="14.25" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_ticket_transferencia" Width="1.5" PointX="7.5" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_tienda" Width="1.5" PointX="6" PointY="11.875" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_tipo_cuenta" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="plazaveaModel.t_tipo_documento" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="plazaveaModel.t_producto_tienda" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
         <AssociationConnector Association="plazaveaModel.FK_t_campana_t_solicitud_campana" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_campana_t_tienda" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_cuenta_t_cuenta" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_cuenta_t_ficha_afiliacion" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_cuenta_t_tipo_cuenta" ManuallyRouted="false" />
-        <AssociationConnector Association="plazaveaModel.FK_t_tarjeta_afiliacion_t_cuenta" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_ticket_transferencia_t_cuenta" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_ficha_afiliacion_t_tipo_documento" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_solicitud_atencion_t_ficha_afiliacion" ManuallyRouted="false" />
@@ -35,6 +32,11 @@
         <AssociationConnector Association="plazaveaModel.FK_t_ticket_canje_t_producto_canje" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda" ManuallyRouted="false" />
         <AssociationConnector Association="plazaveaModel.FK_SOLICITUD_AFILIACION_TIENDA" ManuallyRouted="false" />
+        <AssociationConnector Association="plazaveaModel.FK_t_contrato_t_cuenta" />
+        <EntityTypeShape EntityType="plazaveaModel.t_tarjera_afiliacion_cuenta" Width="1.5" PointX="7.875" PointY="1.75" />
+        <EntityTypeShape EntityType="plazaveaModel.t_tarjeta_afiliacion" Width="1.5" PointX="5.625" PointY="0.75" />
+        <AssociationConnector Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" />
+        <AssociationConnector Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

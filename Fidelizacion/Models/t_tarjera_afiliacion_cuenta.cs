@@ -12,10 +12,13 @@ namespace Fidelizacion.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class t_producto_tienda
+    public partial class t_tarjera_afiliacion_cuenta
     {
-        public int fk_tienda { get; set; }
-        public Nullable<decimal> numero_stock_tienda { get; set; }
-        public string flag_estado { get; set; }
+        public int pk_tarjeta_afiliacion_cuenta { get; set; }
+        public Nullable<int> fk_tarjeta_afiliacion { get; set; }
+        public Nullable<int> fk_cuenta { get; set; }
+    
+        public virtual t_cuenta t_cuenta { get; set; }
+        public virtual t_tarjeta_afiliacion t_tarjeta_afiliacion { get; set; }
     }
 }

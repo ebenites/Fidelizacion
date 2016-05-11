@@ -14,12 +14,18 @@ namespace Fidelizacion.Models
     
     public partial class t_tarjeta_afiliacion
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public t_tarjeta_afiliacion()
+        {
+            this.t_tarjera_afiliacion_cuenta = new HashSet<t_tarjera_afiliacion_cuenta>();
+        }
+    
         public int pk_tarteja_afiliacion { get; set; }
         public Nullable<System.DateTime> fecha_vencimiento { get; set; }
         public string numero_tarjeta { get; set; }
-        public Nullable<int> fk_cuenta { get; set; }
         public Nullable<System.DateTime> fecha_emision { get; set; }
     
-        public virtual t_cuenta t_cuenta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }
     }
 }

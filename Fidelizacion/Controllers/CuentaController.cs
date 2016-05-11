@@ -17,7 +17,7 @@ namespace Fidelizacion.Controllers
         // GET: Cuenta
         public ActionResult Index()
         {
-            var t_cuenta = db.t_cuenta.Include(t => t.t_cuenta2).Include(t => t.t_ficha_afiliacion).Include(t => t.t_tipo_cuenta).Include(t => t.t_tarjeta_afiliacion);
+            var t_cuenta = db.t_cuenta.Include(t => t.t_cuenta2).Include(t => t.t_ficha_afiliacion).Include(t => t.t_tipo_cuenta).Include(t => t.t_contrato);
             return View(t_cuenta.ToList());
         }
 
@@ -42,7 +42,7 @@ namespace Fidelizacion.Controllers
             ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta");
             ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno");
             ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta");
-            ViewBag.pk_cuenta = new SelectList(db.t_tarjeta_afiliacion, "pk_tarteja_afiliacion", "numero_tarjeta");
+            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones");
             return View();
         }
 
@@ -63,7 +63,7 @@ namespace Fidelizacion.Controllers
             ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
             ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno", t_cuenta.fk_ficha_afiliacion);
             ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
-            ViewBag.pk_cuenta = new SelectList(db.t_tarjeta_afiliacion, "pk_tarteja_afiliacion", "numero_tarjeta", t_cuenta.pk_cuenta);
+            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones", t_cuenta.pk_cuenta);
             return View(t_cuenta);
         }
 
@@ -82,7 +82,7 @@ namespace Fidelizacion.Controllers
             ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
             ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno", t_cuenta.fk_ficha_afiliacion);
             ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
-            ViewBag.pk_cuenta = new SelectList(db.t_tarjeta_afiliacion, "pk_tarteja_afiliacion", "numero_tarjeta", t_cuenta.pk_cuenta);
+            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones", t_cuenta.pk_cuenta);
             return View(t_cuenta);
         }
 
@@ -102,7 +102,7 @@ namespace Fidelizacion.Controllers
             ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
             ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno", t_cuenta.fk_ficha_afiliacion);
             ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
-            ViewBag.pk_cuenta = new SelectList(db.t_tarjeta_afiliacion, "pk_tarteja_afiliacion", "numero_tarjeta", t_cuenta.pk_cuenta);
+            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones", t_cuenta.pk_cuenta);
             return View(t_cuenta);
         }
 

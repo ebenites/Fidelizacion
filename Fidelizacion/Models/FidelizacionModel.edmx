@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="plazaveaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="plazaveaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="t_campana">
           <Key>
             <PropertyRef Name="pk_campana" />
@@ -87,16 +87,6 @@
           <Property Name="nombre_producto" Type="nchar" MaxLength="10" />
           <Property Name="fecha_baja" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="t_producto_tienda">
-          <Key>
-            <PropertyRef Name="fk_tienda" />
-          </Key>
-          <Property Name="fk_tienda" Type="int" Nullable="false" />
-          <Property Name="numero_stock_tienda" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="flag_estado" Type="char" MaxLength="1" />
-        </EntityType>
         <EntityType Name="t_reporte_stock_producto_canje">
           <Key>
             <PropertyRef Name="pk_reporte_stock_producto_canje" />
@@ -127,6 +117,14 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <Property Name="fecha_inicio" Type="datetime" />
           <Property Name="fecha_fina" Type="datetime" />
         </EntityType>
+        <EntityType Name="t_tarjera_afiliacion_cuenta">
+          <Key>
+            <PropertyRef Name="pk_tarjeta_afiliacion_cuenta" />
+          </Key>
+          <Property Name="pk_tarjeta_afiliacion_cuenta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_tarjeta_afiliacion" Type="int" />
+          <Property Name="fk_cuenta" Type="int" />
+        </EntityType>
         <EntityType Name="t_tarjeta_afiliacion">
           <Key>
             <PropertyRef Name="pk_tarteja_afiliacion" />
@@ -134,7 +132,6 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <Property Name="pk_tarteja_afiliacion" Type="int" Nullable="false" />
           <Property Name="fecha_vencimiento" Type="datetime" />
           <Property Name="numero_tarjeta" Type="nchar" MaxLength="12" />
-          <Property Name="fk_cuenta" Type="int" />
           <Property Name="fecha_emision" Type="datetime" />
         </EntityType>
         <EntityType Name="t_ticket_canje">
@@ -239,6 +236,18 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_contrato_t_cuenta">
+          <End Role="t_cuenta" Type="Self.t_cuenta" Multiplicity="1" />
+          <End Role="t_contrato" Type="Self.t_contrato" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="t_cuenta">
+              <PropertyRef Name="pk_cuenta" />
+            </Principal>
+            <Dependent Role="t_contrato">
+              <PropertyRef Name="pk_contrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_t_cuenta_t_cuenta">
           <End Role="t_cuenta" Type="Self.t_cuenta" Multiplicity="0..1" />
           <End Role="t_cuenta1" Type="Self.t_cuenta" Multiplicity="*" />
@@ -323,15 +332,27 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_t_tarjeta_afiliacion_t_cuenta">
-          <End Role="t_cuenta" Type="Self.t_cuenta" Multiplicity="1" />
-          <End Role="t_tarjeta_afiliacion" Type="Self.t_tarjeta_afiliacion" Multiplicity="0..1" />
+        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta">
+          <End Role="t_cuenta" Type="Self.t_cuenta" Multiplicity="0..1" />
+          <End Role="t_tarjera_afiliacion_cuenta" Type="Self.t_tarjera_afiliacion_cuenta" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_cuenta">
               <PropertyRef Name="pk_cuenta" />
             </Principal>
-            <Dependent Role="t_tarjeta_afiliacion">
+            <Dependent Role="t_tarjera_afiliacion_cuenta">
+              <PropertyRef Name="fk_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
+          <End Role="t_tarjeta_afiliacion" Type="Self.t_tarjeta_afiliacion" Multiplicity="0..1" />
+          <End Role="t_tarjera_afiliacion_cuenta" Type="Self.t_tarjera_afiliacion_cuenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_tarjeta_afiliacion">
               <PropertyRef Name="pk_tarteja_afiliacion" />
+            </Principal>
+            <Dependent Role="t_tarjera_afiliacion_cuenta">
+              <PropertyRef Name="fk_tarjeta_afiliacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -369,19 +390,13 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <EntitySet Name="t_reporte_stock_producto_canje" EntityType="Self.t_reporte_stock_producto_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_solicitud_atencion" EntityType="Self.t_solicitud_atencion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_solicitud_campana" EntityType="Self.t_solicitud_campana" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_tarjera_afiliacion_cuenta" EntityType="Self.t_tarjera_afiliacion_cuenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tarjeta_afiliacion" EntityType="Self.t_tarjeta_afiliacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_ticket_canje" EntityType="Self.t_ticket_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_ticket_transferencia" EntityType="Self.t_ticket_transferencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tienda" EntityType="Self.t_tienda" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tipo_cuenta" EntityType="Self.t_tipo_cuenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tipo_documento" EntityType="Self.t_tipo_documento" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="t_producto_tienda" EntityType="Self.t_producto_tienda" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [t_producto_tienda].[fk_tienda] AS [fk_tienda], 
-    [t_producto_tienda].[numero_stock_tienda] AS [numero_stock_tienda], 
-    [t_producto_tienda].[flag_estado] AS [flag_estado]
-    FROM [dbo].[t_producto_tienda] AS [t_producto_tienda]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_PRODUCTO_CANJE_MODALIDAD_CANJE" Association="Self.FK_PRODUCTO_CANJE_MODALIDAD_CANJE">
             <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
             <End Role="t_producto_canje" EntitySet="t_producto_canje" />
@@ -397,6 +412,10 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <AssociationSet Name="FK_t_campana_t_tienda" Association="Self.FK_t_campana_t_tienda">
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_campana" EntitySet="t_campana" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_contrato_t_cuenta" Association="Self.FK_t_contrato_t_cuenta">
+            <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_contrato" EntitySet="t_contrato" />
           </AssociationSet>
           <AssociationSet Name="FK_t_cuenta_t_cuenta" Association="Self.FK_t_cuenta_t_cuenta">
             <End Role="t_cuenta" EntitySet="t_cuenta" />
@@ -426,9 +445,13 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
             <End Role="t_ficha_afiliacion" EntitySet="t_ficha_afiliacion" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
           </AssociationSet>
-          <AssociationSet Name="FK_t_tarjeta_afiliacion_t_cuenta" Association="Self.FK_t_tarjeta_afiliacion_t_cuenta">
+          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta" Association="Self.FK_t_tarjera_afiliacion_cuenta_t_cuenta">
             <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" Association="Self.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
             <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
+            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
           </AssociationSet>
           <AssociationSet Name="FK_t_ticket_canje_t_producto_canje" Association="Self.FK_t_ticket_canje_t_producto_canje">
             <End Role="t_producto_canje" EntitySet="t_producto_canje" />
@@ -439,8 +462,7 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
             <End Role="t_ticket_transferencia" EntitySet="t_ticket_transferencia" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="plazaveaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -467,6 +489,7 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <Property Name="fecha_firma" Type="DateTime" Precision="3" />
           <Property Name="fk_cuenta" Type="Int32" />
           <Property Name="condiciones" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_contrato_t_cuenta" FromRole="t_contrato" ToRole="t_cuenta" />
         </EntityType>
         <EntityType Name="t_cuenta">
           <Key>
@@ -485,8 +508,9 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <NavigationProperty Name="t_cuenta2" Relationship="Self.FK_t_cuenta_t_cuenta" FromRole="t_cuenta1" ToRole="t_cuenta" />
           <NavigationProperty Name="t_ficha_afiliacion" Relationship="Self.FK_t_cuenta_t_ficha_afiliacion" FromRole="t_cuenta" ToRole="t_ficha_afiliacion" />
           <NavigationProperty Name="t_tipo_cuenta" Relationship="Self.FK_t_cuenta_t_tipo_cuenta" FromRole="t_cuenta" ToRole="t_tipo_cuenta" />
-          <NavigationProperty Name="t_tarjeta_afiliacion" Relationship="Self.FK_t_tarjeta_afiliacion_t_cuenta" FromRole="t_cuenta" ToRole="t_tarjeta_afiliacion" />
           <NavigationProperty Name="t_ticket_transferencia" Relationship="Self.FK_t_ticket_transferencia_t_cuenta" FromRole="t_cuenta" ToRole="t_ticket_transferencia" />
+          <NavigationProperty Name="t_contrato" Relationship="plazaveaModel.FK_t_contrato_t_cuenta" FromRole="t_cuenta" ToRole="t_contrato" />
+          <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_cuenta" ToRole="t_tarjera_afiliacion_cuenta" />
         </EntityType>
         <EntityType Name="t_ficha_afiliacion">
           <Key>
@@ -576,17 +600,6 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <Property Name="fecha_fina" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_campana" Relationship="Self.FK_t_campana_t_solicitud_campana" FromRole="t_solicitud_campana" ToRole="t_campana" />
         </EntityType>
-        <EntityType Name="t_tarjeta_afiliacion">
-          <Key>
-            <PropertyRef Name="pk_tarteja_afiliacion" />
-          </Key>
-          <Property Name="pk_tarteja_afiliacion" Type="Int32" Nullable="false" />
-          <Property Name="fecha_vencimiento" Type="DateTime" Precision="3" />
-          <Property Name="numero_tarjeta" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
-          <Property Name="fk_cuenta" Type="Int32" />
-          <Property Name="fecha_emision" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="t_cuenta" Relationship="Self.FK_t_tarjeta_afiliacion_t_cuenta" FromRole="t_tarjeta_afiliacion" ToRole="t_cuenta" />
-        </EntityType>
         <EntityType Name="t_ticket_canje">
           <Key>
             <PropertyRef Name="pk_ticket_canje" />
@@ -648,14 +661,6 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <Property Name="tipo_documento" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="t_ficha_afiliacion" Relationship="Self.FK_t_ficha_afiliacion_t_tipo_documento" FromRole="t_tipo_documento" ToRole="t_ficha_afiliacion" />
         </EntityType>
-        <EntityType Name="t_producto_tienda">
-          <Key>
-            <PropertyRef Name="fk_tienda" />
-          </Key>
-          <Property Name="fk_tienda" Type="Int32" Nullable="false" />
-          <Property Name="numero_stock_tienda" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="flag_estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-        </EntityType>
         <Association Name="FK_t_campana_t_solicitud_campana">
           <End Role="t_solicitud_campana" Type="Self.t_solicitud_campana" Multiplicity="0..1" />
           <End Role="t_campana" Type="Self.t_campana" Multiplicity="*" />
@@ -713,18 +718,6 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
             </Principal>
             <Dependent Role="t_cuenta">
               <PropertyRef Name="fk_tipo_cuenta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_t_tarjeta_afiliacion_t_cuenta">
-          <End Role="t_cuenta" Type="Self.t_cuenta" Multiplicity="1" />
-          <End Role="t_tarjeta_afiliacion" Type="Self.t_tarjeta_afiliacion" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="t_cuenta">
-              <PropertyRef Name="pk_cuenta" />
-            </Principal>
-            <Dependent Role="t_tarjeta_afiliacion">
-              <PropertyRef Name="pk_tarteja_afiliacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -834,13 +827,11 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <EntitySet Name="t_reporte_stock_producto_canje" EntityType="Self.t_reporte_stock_producto_canje" />
           <EntitySet Name="t_solicitud_atencion" EntityType="Self.t_solicitud_atencion" />
           <EntitySet Name="t_solicitud_campana" EntityType="Self.t_solicitud_campana" />
-          <EntitySet Name="t_tarjeta_afiliacion" EntityType="Self.t_tarjeta_afiliacion" />
           <EntitySet Name="t_ticket_canje" EntityType="Self.t_ticket_canje" />
           <EntitySet Name="t_ticket_transferencia" EntityType="Self.t_ticket_transferencia" />
           <EntitySet Name="t_tienda" EntityType="Self.t_tienda" />
           <EntitySet Name="t_tipo_cuenta" EntityType="Self.t_tipo_cuenta" />
           <EntitySet Name="t_tipo_documento" EntityType="Self.t_tipo_documento" />
-          <EntitySet Name="t_producto_tienda" EntityType="Self.t_producto_tienda" />
           <AssociationSet Name="FK_t_campana_t_solicitud_campana" Association="Self.FK_t_campana_t_solicitud_campana">
             <End Role="t_solicitud_campana" EntitySet="t_solicitud_campana" />
             <End Role="t_campana" EntitySet="t_campana" />
@@ -860,10 +851,6 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
           <AssociationSet Name="FK_t_cuenta_t_tipo_cuenta" Association="Self.FK_t_cuenta_t_tipo_cuenta">
             <End Role="t_tipo_cuenta" EntitySet="t_tipo_cuenta" />
             <End Role="t_cuenta" EntitySet="t_cuenta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_t_tarjeta_afiliacion_t_cuenta" Association="Self.FK_t_tarjeta_afiliacion_t_cuenta">
-            <End Role="t_cuenta" EntitySet="t_cuenta" />
-            <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
           </AssociationSet>
           <AssociationSet Name="FK_t_ticket_transferencia_t_cuenta" Association="Self.FK_t_ticket_transferencia_t_cuenta">
             <End Role="t_cuenta" EntitySet="t_cuenta" />
@@ -897,7 +884,77 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
           </AssociationSet>
+          <AssociationSet Name="FK_t_contrato_t_cuenta" Association="plazaveaModel.FK_t_contrato_t_cuenta">
+            <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_contrato" EntitySet="t_contrato" />
+          </AssociationSet>
+          <EntitySet Name="t_tarjera_afiliacion_cuenta" EntityType="plazaveaModel.t_tarjera_afiliacion_cuenta" />
+          <EntitySet Name="t_tarjeta_afiliacion" EntityType="plazaveaModel.t_tarjeta_afiliacion" />
+          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta" Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta">
+            <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
+            <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
+            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_t_contrato_t_cuenta">
+          <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="1" />
+          <End Type="plazaveaModel.t_contrato" Role="t_contrato" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="t_cuenta">
+              <PropertyRef Name="pk_cuenta" />
+            </Principal>
+            <Dependent Role="t_contrato">
+              <PropertyRef Name="pk_contrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="t_tarjera_afiliacion_cuenta">
+          <Key>
+            <PropertyRef Name="pk_tarjeta_afiliacion_cuenta" />
+          </Key>
+          <Property Name="pk_tarjeta_afiliacion_cuenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_tarjeta_afiliacion" Type="Int32" />
+          <Property Name="fk_cuenta" Type="Int32" />
+          <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_cuenta" />
+          <NavigationProperty Name="t_tarjeta_afiliacion" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_tarjeta_afiliacion" />
+        </EntityType>
+        <EntityType Name="t_tarjeta_afiliacion">
+          <Key>
+            <PropertyRef Name="pk_tarteja_afiliacion" />
+          </Key>
+          <Property Name="pk_tarteja_afiliacion" Type="Int32" Nullable="false" />
+          <Property Name="fecha_vencimiento" Type="DateTime" Precision="3" />
+          <Property Name="numero_tarjeta" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="fecha_emision" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjeta_afiliacion" ToRole="t_tarjera_afiliacion_cuenta" />
+        </EntityType>
+        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta">
+          <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_tarjera_afiliacion_cuenta" Role="t_tarjera_afiliacion_cuenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_cuenta">
+              <PropertyRef Name="pk_cuenta" />
+            </Principal>
+            <Dependent Role="t_tarjera_afiliacion_cuenta">
+              <PropertyRef Name="fk_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
+          <End Type="plazaveaModel.t_tarjeta_afiliacion" Role="t_tarjeta_afiliacion" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_tarjera_afiliacion_cuenta" Role="t_tarjera_afiliacion_cuenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_tarjeta_afiliacion">
+              <PropertyRef Name="pk_tarteja_afiliacion" />
+            </Principal>
+            <Dependent Role="t_tarjera_afiliacion_cuenta">
+              <PropertyRef Name="fk_tarjeta_afiliacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1025,17 +1082,6 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="t_tarjeta_afiliacion">
-            <EntityTypeMapping TypeName="plazaveaModel.t_tarjeta_afiliacion">
-              <MappingFragment StoreEntitySet="t_tarjeta_afiliacion">
-                <ScalarProperty Name="pk_tarteja_afiliacion" ColumnName="pk_tarteja_afiliacion" />
-                <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
-                <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
-                <ScalarProperty Name="fk_cuenta" ColumnName="fk_cuenta" />
-                <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_ticket_canje">
             <EntityTypeMapping TypeName="plazaveaModel.t_ticket_canje">
               <MappingFragment StoreEntitySet="t_ticket_canje">
@@ -1095,12 +1141,22 @@ warning 6002: The table/view 'plazavea.dbo.t_producto_tienda' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="t_producto_tienda">
-            <EntityTypeMapping TypeName="plazaveaModel.t_producto_tienda">
-              <MappingFragment StoreEntitySet="t_producto_tienda">
-                <ScalarProperty Name="fk_tienda" ColumnName="fk_tienda" />
-                <ScalarProperty Name="numero_stock_tienda" ColumnName="numero_stock_tienda" />
-                <ScalarProperty Name="flag_estado" ColumnName="flag_estado" />
+          <EntitySetMapping Name="t_tarjera_afiliacion_cuenta">
+            <EntityTypeMapping TypeName="plazaveaModel.t_tarjera_afiliacion_cuenta">
+              <MappingFragment StoreEntitySet="t_tarjera_afiliacion_cuenta">
+                <ScalarProperty Name="fk_cuenta" ColumnName="fk_cuenta" />
+                <ScalarProperty Name="fk_tarjeta_afiliacion" ColumnName="fk_tarjeta_afiliacion" />
+                <ScalarProperty Name="pk_tarjeta_afiliacion_cuenta" ColumnName="pk_tarjeta_afiliacion_cuenta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_tarjeta_afiliacion">
+            <EntityTypeMapping TypeName="plazaveaModel.t_tarjeta_afiliacion">
+              <MappingFragment StoreEntitySet="t_tarjeta_afiliacion">
+                <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
+                <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
+                <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
+                <ScalarProperty Name="pk_tarteja_afiliacion" ColumnName="pk_tarteja_afiliacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

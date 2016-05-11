@@ -37,7 +37,7 @@
             @Html.DisplayNameFor(model => model.t_tipo_cuenta.tipo_cuenta)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.t_tarjeta_afiliacion.numero_tarjeta)
+            @Html.DisplayNameFor(model => model.t_contrato.condiciones)
         </th>
         <th></th>
     </tr>
@@ -69,7 +69,7 @@
             @Html.DisplayFor(modelItem => item.t_tipo_cuenta.tipo_cuenta)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.t_tarjeta_afiliacion.numero_tarjeta)
+            @Html.DisplayFor(modelItem => item.t_contrato.condiciones)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.pk_cuenta }) |

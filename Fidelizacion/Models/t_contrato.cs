@@ -19,5 +19,7 @@ namespace Fidelizacion.Models
         public Nullable<System.DateTime> fecha_firma { get; set; }
         public Nullable<int> fk_cuenta { get; set; }
         public string condiciones { get; set; }
+    
+        public virtual t_cuenta t_cuenta { get; set; }
     }
 }
