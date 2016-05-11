@@ -1,0 +1,94 @@
+﻿@using Fidelizacion.Models;
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+<fieldset id="producto-form">
+    <legend>Producto Canje</legend>
+    <div class="row form-group">
+        <label class="col-sm-1 form-control-label text-right">Tienda</label>
+        <div class="col-sm-2 form-inline">
+            <input type="text" class="form-control" value="@ViewBag.tienda.nombre_tienda" readonly />
+        </div>
+        <label for="categoria" class="col-sm-1 form-control-label text-right">Categoría</label>
+        <div class="col-sm-2 form-inline">
+            <select id="categoria" name="categoria" class="form-control">
+                @foreach (var categoria in ViewBag.categorias)
+                {
+                    <option value="@categoria.pk_categoria_producto_canje">@categoria.nombre_categoria_producto</option>
+                }
+            </select>
+        </div>
+        <label for="producto" class="col-sm-1 form-control-label text-right">Producto</label>
+        <div class="col-sm-3 form-inline">
+            <input type="text" id="producto" name="producto" class="form-control" placeholder="Ingrese Nombre de Producto" autocomplete="off" style="width:100%" />
+        </div>
+        <div class="col-sm-2 form-inline">
+            <input type="button" value="Filtrar" class="btn btn-default" onclick="" />
+        </div>
+    </div>
+</fieldset>
+
+@if (ViewBag.nproductos == 0)
+{
+    <div class="alert alert-danger">
+        No existen productos disponibles en estos momentos.
+    </div>
+}
+else
+{
+    
+    <table class="table table-hover table-bordered">
+        <colgroup>
+            <col width="100" />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col width="160" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre Producto</th>
+                <th>Categoría</th>
+                <th>Stock Tienda</th>
+                <th>Fecha Inicio Vigencia</th>
+                <th>Fecha Fin Vigencia</th>
+                <th>Ver Modalidades</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (t_producto_canje producto in ViewBag.productos)
+            {
+                <tr>
+                    <td>@producto.pk_producto_canje</td>
+                    <td>@producto.nombre_producto</td>
+                    <td>@producto.t_categoria_producto_canje.nombre_categoria_producto</td>
+                    <td>
+                        @if (producto.getStockByTienda(ViewBag.tienda.pk_tienda) > 0)
+                        {
+                            @producto.getStockByTienda(ViewBag.tienda.pk_tienda)
+                        }else
+                        {
+                            <strong style="color:red">AGOTADO</strong>
+                        }
+                    </td>
+                    <td>@producto.fecha_inicio_vigencia.Value.ToString("yyyy/MM/dd")</td>
+                    <td>@producto.fecha_fin_vigencia.Value.ToString("yyyy/MM/dd")</td>
+                    <td class="text-center">
+                        @if (producto.getStockByTienda(ViewBag.tienda.pk_tienda) > 0)
+                        {
+                            <a href="javascript:void(0)" class="btn btn-success btn-xs" onclick="varModalidades('@producto.pk_producto_canje')"><span class="glyphicon glyphicon-search"></span></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+        
+}
+
+<hr />

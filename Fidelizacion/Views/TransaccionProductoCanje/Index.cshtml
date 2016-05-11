@@ -2,26 +2,86 @@
     <script type="text/javascript">
         $(function () {
 
-            $('#producto-table > table').DataTable({
-                'pageLength': 5,
-                'bLengthChange': false,
-                'bFilter': false,
-                'bInfo': false,
-                'language': {
-                    'paginate': {
-                        'next': 'Siguiente',
-                        'previous': 'Anterior'
-                    }
-                }
-            });
+
 
         });
 
-        function varModalidades() {
-            bootbox.dialog({
-                message: $('#modalidad-form').html(),
-                title: "Ver Modalidad de Canje"
+        function getCuenta() {
+
+            if ($('[name="afiliado"]').val() == '') {
+                bootbox.alert("Debe indicar el número de documento de la cuenta titular.");
+                return;
+            }
+
+            var afiliado = $('[name="afiliado"]').val();
+            $.get('@Url.Content("~/TransaccionProductoCanje/GetCuenta")', { 'afiliado': afiliado, "_": $.now() }, function (data) {
+                $('#afiliado-table').html(data);
+                if ($('#afiliado-table .alert').length) {
+                    bootbox.alert($('#afiliado-table .alert').html());
+                }
             });
+        }
+
+        function verProductos() {
+            $.get('@Url.Content("~/TransaccionProductoCanje/GetProductos")', { "_": $.now() }, function (data) {
+                $('#productos-table').html(data);
+                if ($('#productos-table .alert').length) {
+                    bootbox.alert($('#productos-table .alert').html());
+                }
+
+                // Datatable
+                $('#productos-table table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+
+            });
+        }
+
+        function varModalidades(idproducto) {
+            $.get('@Url.Content("~/TransaccionProductoCanje/GetModalidades")', { 'idproducto': idproducto, "_": $.now() }, function (data) {
+                bootbox.dialog({
+                    message: data,
+                    title: "Ver Modalidad de Canje"
+                });
+            });
+        }
+
+        function cancelar() {
+            bootbox.hideAll()
+        }
+
+        function aceptar() {
+            // Validar 
+            var cantidad = $('[name="cantidad"]').val();
+            var modalidad = $('[name="modalidad"]').val();
+            var maximo = $('[name="maximo"]').val();
+
+            if (cantidad == '' || parseInt(cantidad) < 1) {
+                bootbox.alert("Debe indicar una cantidad válida.");
+                return;
+            }
+
+            if (parseInt(cantidad) > parseInt(maximo)) {  
+                bootbox.alert("No se cuenta con stock disponible para la cantidad indicada.");
+                return;
+            }
+            
+            if ($('[name="modalidad"]:checked').length == 0) {
+                bootbox.alert("Debe seleccionar una modalidad.");
+                return;
+            }
+
+            // ...
+
         }
 
     </script>
@@ -48,48 +108,12 @@
             <label for="afiliado" class="col-sm-2 form-control-label text-right">Cuenta Titular</label>
             <div class="col-sm-10 form-inline">
                 <input type="text" id="afiliado" name="afiliado" class="form-control" style="width:300px" placeholder="Ingrese N° Documento" autocomplete="off" />
-                <input type="button" value="Buscar Afiliado" class="btn btn-default" onclick="" />
+                <input type="button" value="Buscar Afiliado" class="btn btn-default" onclick="getCuenta()" />
             </div>
         </div>
     </fieldset>
 
     <div id="afiliado-table" class="table-responsive">
-
-        <table class="table table-hover table-bordered">
-            <colgroup>
-                <col width="100" />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col width="80" />
-                <col width="120" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>DNI</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Cuenta</th>
-                    <th>Tipo Afiliado</th>
-                    <th>Puntos</th>
-                    <th>Productos</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>47545606</td>
-                    <td>Talia</td>
-                    <td>Llanca Cotrina</td>
-                    <td>PVC-201602</td>
-                    <td>Titular</td>
-                    <td>80</td>
-                    <td class="text-center">
-                        <a href="javascript:void(0)" class="btn btn-success" onclick=""><span class="glyphicon glyphicon-search"></span>Ver</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
 
     </div>
 
@@ -97,84 +121,26 @@
 
     <!-- Producto Canje -->
 
-    <fieldset id="producto-form">
-        <legend>Producto Canje</legend>
-        <div class="row form-group">
-            <label for="producto" class="col-sm-2 form-control-label text-right">Nombre de Producto</label>
-            <div class="col-sm-2 form-inline">
-                <input type="text" id="producto" name="producto" class="form-control" placeholder="" autocomplete="off" />
-            </div>
-            <label for="categoria" class="col-sm-2 form-control-label text-right">Categoría</label>
-            <div class="col-sm-2 form-inline">
-                <input type="text" id="categoria" name="categoria" class="form-control" placeholder="" autocomplete="off" />
-            </div>
-            <div class="col-sm-4 form-inline">
-                <input type="button" value="Filtrar" class="btn btn-default" onclick="" />
-            </div>
-        </div>
-    </fieldset>
-
-    <div id="producto-table" class="table-responsive">
-
-        <table class="table table-hover table-bordered">
-            <colgroup>
-                <col width="100" />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col width="120" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nombre Producto</th>
-                    <th>Categoría</th>
-                    <th>Stock</th>
-                    <th>Fecha Inicio Vigencia</th>
-                    <th>Fecha Fin Vigencia</th>
-                    <th>Modalidad</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (var i = 0; i < 20; i++)
-                {
-                    <tr>
-                        <td>P @i</td>
-                        <td>Billetera #@i</td>
-                        <td>Para Ella</td>
-                        <td>@(i*3)</td>
-                        <td>10/20/2015</td>
-                        <td>04/05/2017</td>
-                        <td class="text-center">
-                            <a href="javascript:void(0)" class="btn btn-success" onclick="varModalidades()"><span class="glyphicon glyphicon-search"></span>Ver</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div id="productos-table" class="table-responsive">
 
     </div>
-
-    <hr />
 
     <!-- Canje de Producto -->
 
     <fieldset id="canje-form">
         <legend>Canje de Producto</legend>
         <div class="row form-group">
-            <label for="afiliado-txt" class="col-sm-2 form-control-label text-right">Afiliado</label>
+            <label class="col-sm-2 form-control-label text-right">Tienda</label>
             <div class="col-sm-2 form-inline">
-                <input type="text" id="afiliado-txt" name="afiliado-txt" class="form-control" value="Talía Llanca Cotrina" readonly />
+                <input type="text" class="form-control" value="Plaza Vea Risso" readonly />
             </div>
-            <label for="fecha-txt" class="col-sm-2 form-control-label text-right">Fecha de Canje</label>
+            <label class="col-sm-2 form-control-label text-right">Afiliado</label>
             <div class="col-sm-2 form-inline">
-                <input type="text" id="fecha-txt" name="fecha-txt" class="form-control" value="10/05/2016" readonly />
+                <input type="text" class="form-control" value="Talía Llanca Cotrina" readonly />
             </div>
-            <label for="tienda-txt" class="col-sm-2 form-control-label text-right">Tienda</label>
+            <label class="col-sm-2 form-control-label text-right">Fecha de Canje</label>
             <div class="col-sm-2 form-inline">
-                <input type="text" id="tienda-txt" name="tienda-txt" class="form-control" value="Plaza Vea Risso" readonly />
+                <input type="text" class="form-control" value="10/05/2016" readonly />
             </div>
         </div>
     </fieldset>
@@ -247,76 +213,6 @@
         <div class="col-sm-5 text-left">
             <a href="@Url.Content("~/Home/Cerrar")" class="btn btn-danger" style="width:100px">Salir</a>
         </div>
-    </div>
-
-</form>
-
-<form id="modalidad-form" onsubmit="return false;" style="display:none">
-    <div class="row">
-        <div class="col-sm-8">
-
-            <div class="row form-group">
-                <label for="producto-txt" class="col-sm-4 form-control-label text-right">Producto</label>
-                <div class="col-sm-8 form-inline">
-                    <input type="text" id="producto-txt" name="producto-txt" class="form-control" value="Billetera" readonly />
-                </div>
-            </div>
-            <div class="row form-group">
-                <label for="categoria-txt" class="col-sm-4 form-control-label text-right">Categoría</label>
-                <div class="col-sm-8 form-inline">
-                    <input type="text" id="categoria-txt" name="categoria-txt" class="form-control" value="Para ella" readonly />
-                </div>
-            </div>
-            <div class="row form-group">
-                <label for="stock" class="col-sm-4 form-control-label text-right">Producto</label>
-                <div class="col-sm-8 form-inline">
-                    <input type="text" id="stock" name="stock" class="form-control" placeholder="" autocomplete="off" />
-                </div>
-            </div>
-
-        </div>
-        <div class="col-sm-4">
-            <img src="http://www.modamarcas.com/files/2011/10/en-cuero-rojo.jpg" height="150" alt="producto" />
-        </div>
-    </div>
-
-    <table class="table table-hover table-bordered">
-        <caption>Modalidades</caption>
-        <colgroup>
-            <col width="80" />
-            <col />
-            <col />
-            <col />
-        </colgroup>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Modalidad</th>
-                <th>Puntos</th>
-                <th>Importe</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="text-center"><input type="checkbox" name="modalidad" class="" value="" /></td>
-                <td>Modalidad 01</td>
-                <td>30</td>
-                <td>S/. 10.00</td>
-            </tr>
-            <tr>
-                <td class="text-center"><input type="checkbox" name="modalidad" class="" value="" /></td>
-                <td>Modalidad 02</td>
-                <td>10</td>
-                <td>S/. 40.00</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <hr />
-
-    <div class="form-group text-right">
-        <input type="button" value="Salir" class="btn btn-danger" onclick="" />
-        <input type="button" value="Grabar" class="btn btn-primary" onclick="" />
     </div>
 
 </form>

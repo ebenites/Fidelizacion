@@ -1,0 +1,61 @@
+﻿@using Fidelizacion.Models;
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.ncuentas == 0)
+{
+    <div class="alert alert-danger">
+        El N° de documento indicado no presenta alguna cuenta activa, ha caducado o no es un afiliado.
+    </div>
+}
+else if (ViewBag.tipo_cuenta != 1)
+{
+    <div class="alert alert-danger">
+        El afiliado debe ser titular de cuenta para realizar el canje de productos.
+    </div>
+}
+else
+{
+
+    <table class="table table-hover table-bordered">
+        <colgroup>
+            <col width="100" />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col width="80" />
+            <col width="120" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Cuenta</th>
+                <th>Tipo Afiliado</th>
+                <th>Puntos</th>
+                <th>Ver Catálogo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cuenta in (List<t_cuenta>)ViewBag.cuentas)
+            {
+                <tr>
+                    <td>@cuenta.t_ficha_afiliacion.numero_documento</td>
+                    <td>@cuenta.t_ficha_afiliacion.nombre</td>
+                    <td>@cuenta.t_ficha_afiliacion.apellido_paterno @cuenta.t_ficha_afiliacion.apellido_materno</td>
+                    <td>@cuenta.numero_cuenta</td>
+                    <td>@cuenta.t_tipo_cuenta.tipo_cuenta</td>
+                    <td>@cuenta.puntos</td>
+                    <td class="text-center">
+                        <a href="javascript:void(0)" class="btn btn-success" onclick="verProductos()"><span class="glyphicon glyphicon-search"></span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}

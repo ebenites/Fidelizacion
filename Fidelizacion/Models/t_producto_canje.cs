@@ -17,24 +17,38 @@ namespace Fidelizacion.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public t_producto_canje()
         {
+            this.t_modalidad_canje = new HashSet<t_modalidad_canje>();
             this.t_reporte_stock_producto_canje = new HashSet<t_reporte_stock_producto_canje>();
-            this.t_ticket_canje = new HashSet<t_ticket_canje>();
         }
     
-        public int fk_modalidad { get; set; }
-        public Nullable<System.DateTime> fecha_alta { get; set; }
-        public string stock_producto { get; set; }
-        public string condicion { get; set; }
-        public Nullable<decimal> costo { get; set; }
-        public string categoria_producto { get; set; }
         public int pk_producto_canje { get; set; }
+        public int fk_categoria_producto_canje { get; set; }
         public string nombre_producto { get; set; }
+        public Nullable<System.DateTime> fecha_alta { get; set; }
         public System.DateTime fecha_baja { get; set; }
+        public Nullable<System.DateTime> fecha_inicio_vigencia { get; set; }
+        public Nullable<System.DateTime> fecha_fin_vigencia { get; set; }
+        public string estado { get; set; }
     
-        public virtual t_modalidad_canje t_modalidad_canje { get; set; }
+        public virtual t_categoria_producto_canje t_categoria_producto_canje { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_modalidad_canje> t_modalidad_canje { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_reporte_stock_producto_canje> t_reporte_stock_producto_canje { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<t_ticket_canje> t_ticket_canje { get; set; }
+
+        public int getStockByTienda(int idtienda)
+        {
+            if(this.t_reporte_stock_producto_canje != null)
+            {
+                foreach(t_reporte_stock_producto_canje reporte_stock in this.t_reporte_stock_producto_canje)
+                {
+                    if(reporte_stock.fk_tienda == idtienda)
+                    {
+                        return (int)reporte_stock.stock;
+                    }
+                }
+            }
+            return 0;
+        }
     }
 }

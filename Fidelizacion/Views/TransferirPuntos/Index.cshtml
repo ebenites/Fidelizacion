@@ -1,33 +1,33 @@
 ﻿@section scripts {
 <script type="text/javascript">
-		$(function(){
+	$(function(){
 
-			//$('[name="origen"]').typeahead({ source: getNombres() });
+		//$('[name="origen"]').typeahead({ source: getNombres() });
 
-			//$('[name="destino"]').typeahead({ source: getNombres() });
+		//$('[name="destino"]').typeahead({ source: getNombres() });
 
-		});
+	});
 
-		function getCuentaOrigen() {
+	function getCuentaOrigen() {
 
-		    if ($('[name="origen"]').val() == '') {
-		        bootbox.alert("Debe indicar el número de documento de la cuenta origen.");
-		        return;
-		    }
-
-		    if ($('[name="origen"]').val() == $('[name="destino"]').val()) {
-		        bootbox.alert("La cuenta origen no puede ser la misma cuenta destino.");
-		        return;
-		    }
-
-		    var origen = $('[name="origen"]').val();
-		    $.get('@Url.Content("~/TransferirPuntos/GetCuentaOrigen")', { 'origen': origen, "_": $.now() }, function (data) {
-		        $('#origen-table').html(data);
-		        if ($('#origen-table .alert').length) {
-		            bootbox.alert($('#origen-table .alert').html());
-		        }
-		    });
+		if ($('[name="origen"]').val() == '') {
+		    bootbox.alert("Debe indicar el número de documento de la cuenta origen.");
+		    return;
 		}
+
+		if ($('[name="origen"]').val() == $('[name="destino"]').val()) {
+		    bootbox.alert("La cuenta origen no puede ser la misma cuenta destino.");
+		    return;
+		}
+
+		var origen = $('[name="origen"]').val();
+		$.get('@Url.Content("~/TransferirPuntos/GetCuentaOrigen")', { 'origen': origen, "_": $.now() }, function (data) {
+		    $('#origen-table').html(data);
+		    if ($('#origen-table .alert').length) {
+		        bootbox.alert($('#origen-table .alert').html());
+		    }
+		});
+	}
 
     function getCuentaDestino() {
 

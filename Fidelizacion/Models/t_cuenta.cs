@@ -20,6 +20,7 @@ namespace Fidelizacion.Models
             this.t_cuenta1 = new HashSet<t_cuenta>();
             this.t_ticket_transferencia = new HashSet<t_ticket_transferencia>();
             this.t_tarjera_afiliacion_cuenta = new HashSet<t_tarjera_afiliacion_cuenta>();
+            this.t_ticket_canje = new HashSet<t_ticket_canje>();
         }
     
         public int pk_cuenta { get; set; }
@@ -42,6 +43,8 @@ namespace Fidelizacion.Models
         public virtual t_contrato t_contrato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_ticket_canje> t_ticket_canje { get; set; }
 
         public Nullable<decimal> getPuntosMaximosTransferir()
         {

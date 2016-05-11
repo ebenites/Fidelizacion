@@ -14,14 +14,24 @@ namespace Fidelizacion.Models
     
     public partial class t_ticket_canje
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public t_ticket_canje()
+        {
+            this.t_detalle_ticket_canje = new HashSet<t_detalle_ticket_canje>();
+        }
+    
         public int pk_ticket_canje { get; set; }
         public string numero_ticket { get; set; }
         public Nullable<System.DateTime> fecha_ticket { get; set; }
-        public string tienda { get; set; }
+        public Nullable<int> fk_cuenta { get; set; }
+        public Nullable<int> fk_tienda { get; set; }
         public Nullable<decimal> puntos { get; set; }
         public Nullable<decimal> importe { get; set; }
-        public Nullable<int> fk_producto_canje { get; set; }
+        public string estado { get; set; }
     
-        public virtual t_producto_canje t_producto_canje { get; set; }
+        public virtual t_cuenta t_cuenta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_detalle_ticket_canje> t_detalle_ticket_canje { get; set; }
+        public virtual t_tienda t_tienda { get; set; }
     }
 }

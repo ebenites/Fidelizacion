@@ -18,8 +18,9 @@ namespace Fidelizacion.Models
         public t_tienda()
         {
             this.t_campana = new HashSet<t_campana>();
-            this.t_reporte_stock_producto_canje = new HashSet<t_reporte_stock_producto_canje>();
             this.t_solicitud_atencion = new HashSet<t_solicitud_atencion>();
+            this.t_reporte_stock_producto_canje = new HashSet<t_reporte_stock_producto_canje>();
+            this.t_ticket_canje = new HashSet<t_ticket_canje>();
         }
     
         public int pk_tienda { get; set; }
@@ -36,8 +37,10 @@ namespace Fidelizacion.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_campana> t_campana { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_solicitud_atencion> t_solicitud_atencion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_reporte_stock_producto_canje> t_reporte_stock_producto_canje { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<t_solicitud_atencion> t_solicitud_atencion { get; set; }
+        public virtual ICollection<t_ticket_canje> t_ticket_canje { get; set; }
     }
 }

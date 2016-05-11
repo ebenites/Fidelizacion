@@ -12,26 +12,18 @@ namespace Fidelizacion.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class t_modalidad_canje
+    public partial class t_categoria_producto_canje
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public t_modalidad_canje()
+        public t_categoria_producto_canje()
         {
-            this.t_detalle_ticket_canje = new HashSet<t_detalle_ticket_canje>();
+            this.t_producto_canje = new HashSet<t_producto_canje>();
         }
     
-        public int pk_modalidad_canje { get; set; }
-        public int fk_producto_canje { get; set; }
-        public string nombre_modalidad_canje { get; set; }
-        public string tipo_canje { get; set; }
-        public decimal punto_canje { get; set; }
-        public decimal importe_canje { get; set; }
-        public Nullable<System.DateTime> fecha_alta { get; set; }
-        public Nullable<System.DateTime> fecha_baja { get; set; }
-        public string estado { get; set; }
+        public int pk_categoria_producto_canje { get; set; }
+        public string nombre_categoria_producto { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<t_detalle_ticket_canje> t_detalle_ticket_canje { get; set; }
-        public virtual t_producto_canje t_producto_canje { get; set; }
+        public virtual ICollection<t_producto_canje> t_producto_canje { get; set; }
     }
 }

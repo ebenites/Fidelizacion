@@ -189,7 +189,11 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TransaccionProductoCanjeController.cs" />
     <Compile Include="Controllers\TransferirPuntosController.cs" />
+    <Compile Include="DAO\ITiendaDAO.cs" />
+    <Compile Include="DAO\ITransaccionProductoCanjeDAO.cs" />
     <Compile Include="DAO\ITransferirPuntosDAO.cs" />
+    <Compile Include="DAO\TiendaDAO.cs" />
+    <Compile Include="DAO\TransaccionProductoCanjeDAO.cs" />
     <Compile Include="DAO\TransferirPuntosDAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -215,10 +219,16 @@
     <Compile Include="Models\t_campana.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\t_categoria_producto_canje.cs">
+      <DependentUpon>FidelizacionModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\t_contrato.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\t_cuenta.cs">
+      <DependentUpon>FidelizacionModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\t_detalle_ticket_canje.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\t_ficha_afiliacion.cs">
@@ -261,7 +271,11 @@
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ITiendaService.cs" />
+    <Compile Include="Services\ITransaccionProductoCanjeService.cs" />
     <Compile Include="Services\ITransferirPuntosService.cs" />
+    <Compile Include="Services\TiendaService.cs" />
+    <Compile Include="Services\TransaccionProductoCanjeService.cs" />
     <Compile Include="Services\TransferirPuntosService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -365,6 +379,9 @@
     <Content Include="Views\Cuenta\Details.cshtml" />
     <Content Include="Views\Cuenta\Edit.cshtml" />
     <Content Include="Views\Cuenta\Index.cshtml" />
+    <Content Include="Views\TransaccionProductoCanje\GetCuenta.cshtml" />
+    <Content Include="Views\TransaccionProductoCanje\GetProductos.cshtml" />
+    <Content Include="Views\TransaccionProductoCanje\GetModalidades.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

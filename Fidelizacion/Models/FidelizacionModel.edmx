@@ -17,11 +17,18 @@
           <Property Name="fk_solicitud_campana" Type="int" />
           <Property Name="tipo_campana" Type="char" MaxLength="1" />
         </EntityType>
+        <EntityType Name="t_categoria_producto_canje">
+          <Key>
+            <PropertyRef Name="pk_categoria_producto_canje" />
+          </Key>
+          <Property Name="pk_categoria_producto_canje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_categoria_producto" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="t_contrato">
           <Key>
             <PropertyRef Name="pk_contrato" />
           </Key>
-          <Property Name="pk_contrato" Type="int" Nullable="false" />
+          <Property Name="pk_contrato" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fecha_contrato" Type="datetime" />
           <Property Name="fecha_firma" Type="datetime" />
           <Property Name="fk_cuenta" Type="int" />
@@ -40,6 +47,17 @@
           <Property Name="fk_tipo_cuenta" Type="int" />
           <Property Name="fk_cuenta" Type="int" />
           <Property Name="fk_ficha_afiliacion" Type="int" />
+        </EntityType>
+        <EntityType Name="t_detalle_ticket_canje">
+          <Key>
+            <PropertyRef Name="fk_ticket_canje" />
+            <PropertyRef Name="fk_modalidad_canje" />
+          </Key>
+          <Property Name="fk_ticket_canje" Type="int" Nullable="false" />
+          <Property Name="fk_modalidad_canje" Type="int" Nullable="false" />
+          <Property Name="cantidad" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="subtotal_puntos" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="subtotal_importe" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="t_ficha_afiliacion">
           <Key>
@@ -61,37 +79,36 @@
         </EntityType>
         <EntityType Name="t_modalidad_canje">
           <Key>
-            <PropertyRef Name="pk_modalidad" />
+            <PropertyRef Name="pk_modalidad_canje" />
           </Key>
-          <Property Name="pk_modalidad" Type="int" Nullable="false" />
-          <Property Name="nombre_modalidad_canje" Type="varchar" MaxLength="80" />
+          <Property Name="pk_modalidad_canje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_producto_canje" Type="int" Nullable="false" />
+          <Property Name="nombre_modalidad_canje" Type="nvarchar" MaxLength="80" />
           <Property Name="tipo_canje" Type="nchar" MaxLength="2" />
-          <Property Name="punto_canje" Type="numeric" Precision="18" Scale="0" />
-          <Property Name="importe_canje" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="punto_canje" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="importe_canje" Type="numeric" Precision="18" Scale="2" Nullable="false" />
           <Property Name="fecha_alta" Type="date" />
           <Property Name="fecha_baja" Type="date" />
-          <Property Name="fecha_inicio_vigencia" Type="date" />
-          <Property Name="fecha_fin_vigencia" Type="date" />
+          <Property Name="estado" Type="nchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="t_producto_canje">
           <Key>
             <PropertyRef Name="pk_producto_canje" />
           </Key>
-          <Property Name="fk_modalidad" Type="int" Nullable="false" />
+          <Property Name="pk_producto_canje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_categoria_producto_canje" Type="int" Nullable="false" />
+          <Property Name="nombre_producto" Type="nvarchar" MaxLength="50" />
           <Property Name="fecha_alta" Type="datetime" />
-          <Property Name="stock_producto" Type="nchar" MaxLength="10" />
-          <Property Name="condicion" Type="nchar" MaxLength="10" />
-          <Property Name="costo" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="categoria_producto" Type="nchar" MaxLength="10" />
-          <Property Name="pk_producto_canje" Type="int" Nullable="false" />
-          <Property Name="nombre_producto" Type="nchar" MaxLength="10" />
           <Property Name="fecha_baja" Type="datetime" Nullable="false" />
+          <Property Name="fecha_inicio_vigencia" Type="date" />
+          <Property Name="fecha_fin_vigencia" Type="date" />
+          <Property Name="estado" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="t_reporte_stock_producto_canje">
           <Key>
             <PropertyRef Name="pk_reporte_stock_producto_canje" />
           </Key>
-          <Property Name="pk_reporte_stock_producto_canje" Type="int" Nullable="false" />
+          <Property Name="pk_reporte_stock_producto_canje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fk_producto_canje" Type="int" />
           <Property Name="fk_tienda" Type="int" />
           <Property Name="stock" Type="numeric" Precision="18" Scale="0" />
@@ -129,7 +146,7 @@
           <Key>
             <PropertyRef Name="pk_tarteja_afiliacion" />
           </Key>
-          <Property Name="pk_tarteja_afiliacion" Type="int" Nullable="false" />
+          <Property Name="pk_tarteja_afiliacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fecha_vencimiento" Type="datetime" />
           <Property Name="numero_tarjeta" Type="nchar" MaxLength="12" />
           <Property Name="fecha_emision" Type="datetime" />
@@ -138,13 +155,14 @@
           <Key>
             <PropertyRef Name="pk_ticket_canje" />
           </Key>
-          <Property Name="pk_ticket_canje" Type="int" Nullable="false" />
+          <Property Name="pk_ticket_canje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="numero_ticket" Type="nchar" MaxLength="30" />
           <Property Name="fecha_ticket" Type="date" />
-          <Property Name="tienda" Type="nvarchar" MaxLength="50" />
+          <Property Name="fk_cuenta" Type="int" />
+          <Property Name="fk_tienda" Type="int" />
           <Property Name="puntos" Type="numeric" Precision="18" Scale="0" />
           <Property Name="importe" Type="numeric" Precision="18" Scale="2" />
-          <Property Name="fk_producto_canje" Type="int" />
+          <Property Name="estado" Type="nchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="t_ticket_transferencia">
           <Key>
@@ -163,7 +181,7 @@
           <Key>
             <PropertyRef Name="pk_tienda" />
           </Key>
-          <Property Name="pk_tienda" Type="int" Nullable="false" />
+          <Property Name="pk_tienda" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nombre_tienda" Type="varchar" MaxLength="200" />
           <Property Name="nombre_direccion" Type="varchar" MaxLength="200" />
           <Property Name="fecha_apertura" Type="datetime" />
@@ -188,18 +206,6 @@
           <Property Name="pk_tipo_documento" Type="int" Nullable="false" />
           <Property Name="tipo_documento" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <Association Name="FK_PRODUCTO_CANJE_MODALIDAD_CANJE">
-          <End Role="t_modalidad_canje" Type="Self.t_modalidad_canje" Multiplicity="1" />
-          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_modalidad_canje">
-              <PropertyRef Name="pk_modalidad" />
-            </Principal>
-            <Dependent Role="t_producto_canje">
-              <PropertyRef Name="fk_modalidad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SOLICITUD_AFILIACION_TIENDA">
           <End Role="t_tienda" Type="Self.t_tienda" Multiplicity="0..1" />
           <End Role="t_solicitud_atencion" Type="Self.t_solicitud_atencion" Multiplicity="*" />
@@ -284,6 +290,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_detalle_ticket_canje_t_modalidad_canje">
+          <End Role="t_modalidad_canje" Type="Self.t_modalidad_canje" Multiplicity="1" />
+          <End Role="t_detalle_ticket_canje" Type="Self.t_detalle_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_modalidad_canje">
+              <PropertyRef Name="pk_modalidad_canje" />
+            </Principal>
+            <Dependent Role="t_detalle_ticket_canje">
+              <PropertyRef Name="fk_modalidad_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_detalle_ticket_canje_t_ticket_canje">
+          <End Role="t_ticket_canje" Type="Self.t_ticket_canje" Multiplicity="1" />
+          <End Role="t_detalle_ticket_canje" Type="Self.t_detalle_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_ticket_canje">
+              <PropertyRef Name="pk_ticket_canje" />
+            </Principal>
+            <Dependent Role="t_detalle_ticket_canje">
+              <PropertyRef Name="fk_ticket_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_t_ficha_afiliacion_t_tipo_documento">
           <End Role="t_tipo_documento" Type="Self.t_tipo_documento" Multiplicity="0..1" />
           <End Role="t_ficha_afiliacion" Type="Self.t_ficha_afiliacion" Multiplicity="*" />
@@ -293,6 +323,30 @@
             </Principal>
             <Dependent Role="t_ficha_afiliacion">
               <PropertyRef Name="fk_tipo_documento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_modalidad_canje_t_producto_canje">
+          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="1" />
+          <End Role="t_modalidad_canje" Type="Self.t_modalidad_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_producto_canje">
+              <PropertyRef Name="pk_producto_canje" />
+            </Principal>
+            <Dependent Role="t_modalidad_canje">
+              <PropertyRef Name="fk_producto_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_producto_canje_t_categoria_producto_canje">
+          <End Role="t_categoria_producto_canje" Type="Self.t_categoria_producto_canje" Multiplicity="1" />
+          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_categoria_producto_canje">
+              <PropertyRef Name="pk_categoria_producto_canje" />
+            </Principal>
+            <Dependent Role="t_producto_canje">
+              <PropertyRef Name="fk_categoria_producto_canje" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -356,15 +410,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_t_ticket_canje_t_producto_canje">
-          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="0..1" />
+        <Association Name="FK_t_ticket_canje_t_cuenta">
+          <End Role="t_cuenta" Type="Self.t_cuenta" Multiplicity="0..1" />
           <End Role="t_ticket_canje" Type="Self.t_ticket_canje" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="t_producto_canje">
-              <PropertyRef Name="pk_producto_canje" />
+            <Principal Role="t_cuenta">
+              <PropertyRef Name="pk_cuenta" />
             </Principal>
             <Dependent Role="t_ticket_canje">
-              <PropertyRef Name="fk_producto_canje" />
+              <PropertyRef Name="fk_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_ticket_canje_t_tienda">
+          <End Role="t_tienda" Type="Self.t_tienda" Multiplicity="0..1" />
+          <End Role="t_ticket_canje" Type="Self.t_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_tienda">
+              <PropertyRef Name="pk_tienda" />
+            </Principal>
+            <Dependent Role="t_ticket_canje">
+              <PropertyRef Name="fk_tienda" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -382,8 +448,10 @@
         </Association>
         <EntityContainer Name="plazaveaModelStoreContainer">
           <EntitySet Name="t_campana" EntityType="Self.t_campana" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_categoria_producto_canje" EntityType="Self.t_categoria_producto_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_contrato" EntityType="Self.t_contrato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_cuenta" EntityType="Self.t_cuenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_detalle_ticket_canje" EntityType="Self.t_detalle_ticket_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_ficha_afiliacion" EntityType="Self.t_ficha_afiliacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_modalidad_canje" EntityType="Self.t_modalidad_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_producto_canje" EntityType="Self.t_producto_canje" Schema="dbo" store:Type="Tables" />
@@ -397,10 +465,6 @@
           <EntitySet Name="t_tienda" EntityType="Self.t_tienda" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tipo_cuenta" EntityType="Self.t_tipo_cuenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tipo_documento" EntityType="Self.t_tipo_documento" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_PRODUCTO_CANJE_MODALIDAD_CANJE" Association="Self.FK_PRODUCTO_CANJE_MODALIDAD_CANJE">
-            <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
-            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
-          </AssociationSet>
           <AssociationSet Name="FK_SOLICITUD_AFILIACION_TIENDA" Association="Self.FK_SOLICITUD_AFILIACION_TIENDA">
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
@@ -429,9 +493,25 @@
             <End Role="t_tipo_cuenta" EntitySet="t_tipo_cuenta" />
             <End Role="t_cuenta" EntitySet="t_cuenta" />
           </AssociationSet>
+          <AssociationSet Name="FK_t_detalle_ticket_canje_t_modalidad_canje" Association="Self.FK_t_detalle_ticket_canje_t_modalidad_canje">
+            <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
+            <End Role="t_detalle_ticket_canje" EntitySet="t_detalle_ticket_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_detalle_ticket_canje_t_ticket_canje" Association="Self.FK_t_detalle_ticket_canje_t_ticket_canje">
+            <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
+            <End Role="t_detalle_ticket_canje" EntitySet="t_detalle_ticket_canje" />
+          </AssociationSet>
           <AssociationSet Name="FK_t_ficha_afiliacion_t_tipo_documento" Association="Self.FK_t_ficha_afiliacion_t_tipo_documento">
             <End Role="t_tipo_documento" EntitySet="t_tipo_documento" />
             <End Role="t_ficha_afiliacion" EntitySet="t_ficha_afiliacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_modalidad_canje_t_producto_canje" Association="Self.FK_t_modalidad_canje_t_producto_canje">
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+            <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_producto_canje_t_categoria_producto_canje" Association="Self.FK_t_producto_canje_t_categoria_producto_canje">
+            <End Role="t_categoria_producto_canje" EntitySet="t_categoria_producto_canje" />
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
           </AssociationSet>
           <AssociationSet Name="FK_t_reporte_stock_producto_canje_t_producto_canje" Association="Self.FK_t_reporte_stock_producto_canje_t_producto_canje">
             <End Role="t_producto_canje" EntitySet="t_producto_canje" />
@@ -453,8 +533,12 @@
             <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
             <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
           </AssociationSet>
-          <AssociationSet Name="FK_t_ticket_canje_t_producto_canje" Association="Self.FK_t_ticket_canje_t_producto_canje">
-            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+          <AssociationSet Name="FK_t_ticket_canje_t_cuenta" Association="Self.FK_t_ticket_canje_t_cuenta">
+            <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_ticket_canje_t_tienda" Association="Self.FK_t_ticket_canje_t_tienda">
+            <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
           </AssociationSet>
           <AssociationSet Name="FK_t_ticket_transferencia_t_cuenta" Association="Self.FK_t_ticket_transferencia_t_cuenta">
@@ -511,6 +595,7 @@
           <NavigationProperty Name="t_ticket_transferencia" Relationship="Self.FK_t_ticket_transferencia_t_cuenta" FromRole="t_cuenta" ToRole="t_ticket_transferencia" />
           <NavigationProperty Name="t_contrato" Relationship="plazaveaModel.FK_t_contrato_t_cuenta" FromRole="t_cuenta" ToRole="t_contrato" />
           <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_cuenta" ToRole="t_tarjera_afiliacion_cuenta" />
+          <NavigationProperty Name="t_ticket_canje" Relationship="plazaveaModel.FK_t_ticket_canje_t_cuenta" FromRole="t_cuenta" ToRole="t_ticket_canje" />
         </EntityType>
         <EntityType Name="t_ficha_afiliacion">
           <Key>
@@ -532,50 +617,6 @@
           <NavigationProperty Name="t_cuenta" Relationship="Self.FK_t_cuenta_t_ficha_afiliacion" FromRole="t_ficha_afiliacion" ToRole="t_cuenta" />
           <NavigationProperty Name="t_tipo_documento" Relationship="Self.FK_t_ficha_afiliacion_t_tipo_documento" FromRole="t_ficha_afiliacion" ToRole="t_tipo_documento" />
           <NavigationProperty Name="t_solicitud_atencion" Relationship="Self.FK_t_solicitud_atencion_t_ficha_afiliacion" FromRole="t_ficha_afiliacion" ToRole="t_solicitud_atencion" />
-        </EntityType>
-        <EntityType Name="t_modalidad_canje">
-          <Key>
-            <PropertyRef Name="pk_modalidad" />
-          </Key>
-          <Property Name="pk_modalidad" Type="Int32" Nullable="false" />
-          <Property Name="nombre_modalidad_canje" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="tipo_canje" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
-          <Property Name="punto_canje" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="importe_canje" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="fecha_alta" Type="DateTime" Precision="0" />
-          <Property Name="fecha_baja" Type="DateTime" Precision="0" />
-          <Property Name="fecha_inicio_vigencia" Type="DateTime" Precision="0" />
-          <Property Name="fecha_fin_vigencia" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="t_producto_canje" Relationship="Self.FK_PRODUCTO_CANJE_MODALIDAD_CANJE" FromRole="t_modalidad_canje" ToRole="t_producto_canje" />
-        </EntityType>
-        <EntityType Name="t_producto_canje">
-          <Key>
-            <PropertyRef Name="pk_producto_canje" />
-          </Key>
-          <Property Name="fk_modalidad" Type="Int32" Nullable="false" />
-          <Property Name="fecha_alta" Type="DateTime" Precision="3" />
-          <Property Name="stock_producto" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="condicion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="costo" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="categoria_producto" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="pk_producto_canje" Type="Int32" Nullable="false" />
-          <Property Name="nombre_producto" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="fecha_baja" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="t_modalidad_canje" Relationship="Self.FK_PRODUCTO_CANJE_MODALIDAD_CANJE" FromRole="t_producto_canje" ToRole="t_modalidad_canje" />
-          <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="Self.FK_t_reporte_stock_producto_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_reporte_stock_producto_canje" />
-          <NavigationProperty Name="t_ticket_canje" Relationship="Self.FK_t_ticket_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_ticket_canje" />
-        </EntityType>
-        <EntityType Name="t_reporte_stock_producto_canje">
-          <Key>
-            <PropertyRef Name="pk_reporte_stock_producto_canje" />
-          </Key>
-          <Property Name="pk_reporte_stock_producto_canje" Type="Int32" Nullable="false" />
-          <Property Name="fk_producto_canje" Type="Int32" />
-          <Property Name="fk_tienda" Type="Int32" />
-          <Property Name="stock" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="fecha" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="t_producto_canje" Relationship="Self.FK_t_reporte_stock_producto_canje_t_producto_canje" FromRole="t_reporte_stock_producto_canje" ToRole="t_producto_canje" />
-          <NavigationProperty Name="t_tienda" Relationship="Self.FK_t_reporte_stock_producto_canje_t_tienda" FromRole="t_reporte_stock_producto_canje" ToRole="t_tienda" />
         </EntityType>
         <EntityType Name="t_solicitud_atencion">
           <Key>
@@ -599,19 +640,6 @@
           <Property Name="fecha_inicio" Type="DateTime" Precision="3" />
           <Property Name="fecha_fina" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_campana" Relationship="Self.FK_t_campana_t_solicitud_campana" FromRole="t_solicitud_campana" ToRole="t_campana" />
-        </EntityType>
-        <EntityType Name="t_ticket_canje">
-          <Key>
-            <PropertyRef Name="pk_ticket_canje" />
-          </Key>
-          <Property Name="pk_ticket_canje" Type="Int32" Nullable="false" />
-          <Property Name="numero_ticket" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
-          <Property Name="fecha_ticket" Type="DateTime" Precision="0" />
-          <Property Name="tienda" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="puntos" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="importe" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="fk_producto_canje" Type="Int32" />
-          <NavigationProperty Name="t_producto_canje" Relationship="Self.FK_t_ticket_canje_t_producto_canje" FromRole="t_ticket_canje" ToRole="t_producto_canje" />
         </EntityType>
         <EntityType Name="t_ticket_transferencia">
           <Key>
@@ -642,8 +670,9 @@
           <Property Name="pais" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="horario" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="t_campana" Relationship="Self.FK_t_campana_t_tienda" FromRole="t_tienda" ToRole="t_campana" />
-          <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="Self.FK_t_reporte_stock_producto_canje_t_tienda" FromRole="t_tienda" ToRole="t_reporte_stock_producto_canje" />
           <NavigationProperty Name="t_solicitud_atencion" Relationship="Self.FK_SOLICITUD_AFILIACION_TIENDA" FromRole="t_tienda" ToRole="t_solicitud_atencion" />
+          <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda" FromRole="t_tienda" ToRole="t_reporte_stock_producto_canje" />
+          <NavigationProperty Name="t_ticket_canje" Relationship="plazaveaModel.FK_t_ticket_canje_t_tienda" FromRole="t_tienda" ToRole="t_ticket_canje" />
         </EntityType>
         <EntityType Name="t_tipo_cuenta">
           <Key>
@@ -757,54 +786,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PRODUCTO_CANJE_MODALIDAD_CANJE">
-          <End Role="t_modalidad_canje" Type="Self.t_modalidad_canje" Multiplicity="1" />
-          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_modalidad_canje">
-              <PropertyRef Name="pk_modalidad" />
-            </Principal>
-            <Dependent Role="t_producto_canje">
-              <PropertyRef Name="fk_modalidad" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_t_reporte_stock_producto_canje_t_producto_canje">
-          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="0..1" />
-          <End Role="t_reporte_stock_producto_canje" Type="Self.t_reporte_stock_producto_canje" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_producto_canje">
-              <PropertyRef Name="pk_producto_canje" />
-            </Principal>
-            <Dependent Role="t_reporte_stock_producto_canje">
-              <PropertyRef Name="fk_producto_canje" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_t_ticket_canje_t_producto_canje">
-          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="0..1" />
-          <End Role="t_ticket_canje" Type="Self.t_ticket_canje" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_producto_canje">
-              <PropertyRef Name="pk_producto_canje" />
-            </Principal>
-            <Dependent Role="t_ticket_canje">
-              <PropertyRef Name="fk_producto_canje" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_t_reporte_stock_producto_canje_t_tienda">
-          <End Role="t_tienda" Type="Self.t_tienda" Multiplicity="0..1" />
-          <End Role="t_reporte_stock_producto_canje" Type="Self.t_reporte_stock_producto_canje" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_tienda">
-              <PropertyRef Name="pk_tienda" />
-            </Principal>
-            <Dependent Role="t_reporte_stock_producto_canje">
-              <PropertyRef Name="fk_tienda" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SOLICITUD_AFILIACION_TIENDA">
           <End Role="t_tienda" Type="Self.t_tienda" Multiplicity="0..1" />
           <End Role="t_solicitud_atencion" Type="Self.t_solicitud_atencion" Multiplicity="*" />
@@ -822,12 +803,8 @@
           <EntitySet Name="t_contrato" EntityType="Self.t_contrato" />
           <EntitySet Name="t_cuenta" EntityType="Self.t_cuenta" />
           <EntitySet Name="t_ficha_afiliacion" EntityType="Self.t_ficha_afiliacion" />
-          <EntitySet Name="t_modalidad_canje" EntityType="Self.t_modalidad_canje" />
-          <EntitySet Name="t_producto_canje" EntityType="Self.t_producto_canje" />
-          <EntitySet Name="t_reporte_stock_producto_canje" EntityType="Self.t_reporte_stock_producto_canje" />
           <EntitySet Name="t_solicitud_atencion" EntityType="Self.t_solicitud_atencion" />
           <EntitySet Name="t_solicitud_campana" EntityType="Self.t_solicitud_campana" />
-          <EntitySet Name="t_ticket_canje" EntityType="Self.t_ticket_canje" />
           <EntitySet Name="t_ticket_transferencia" EntityType="Self.t_ticket_transferencia" />
           <EntitySet Name="t_tienda" EntityType="Self.t_tienda" />
           <EntitySet Name="t_tipo_cuenta" EntityType="Self.t_tipo_cuenta" />
@@ -864,22 +841,6 @@
             <End Role="t_ficha_afiliacion" EntitySet="t_ficha_afiliacion" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
           </AssociationSet>
-          <AssociationSet Name="FK_PRODUCTO_CANJE_MODALIDAD_CANJE" Association="Self.FK_PRODUCTO_CANJE_MODALIDAD_CANJE">
-            <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
-            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
-          </AssociationSet>
-          <AssociationSet Name="FK_t_reporte_stock_producto_canje_t_producto_canje" Association="Self.FK_t_reporte_stock_producto_canje_t_producto_canje">
-            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
-            <End Role="t_reporte_stock_producto_canje" EntitySet="t_reporte_stock_producto_canje" />
-          </AssociationSet>
-          <AssociationSet Name="FK_t_ticket_canje_t_producto_canje" Association="Self.FK_t_ticket_canje_t_producto_canje">
-            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
-            <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
-          </AssociationSet>
-          <AssociationSet Name="FK_t_reporte_stock_producto_canje_t_tienda" Association="Self.FK_t_reporte_stock_producto_canje_t_tienda">
-            <End Role="t_tienda" EntitySet="t_tienda" />
-            <End Role="t_reporte_stock_producto_canje" EntitySet="t_reporte_stock_producto_canje" />
-          </AssociationSet>
           <AssociationSet Name="FK_SOLICITUD_AFILIACION_TIENDA" Association="Self.FK_SOLICITUD_AFILIACION_TIENDA">
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
@@ -898,7 +859,45 @@
             <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
             <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="t_categoria_producto_canje" EntityType="plazaveaModel.t_categoria_producto_canje" />
+          <EntitySet Name="t_detalle_ticket_canje" EntityType="plazaveaModel.t_detalle_ticket_canje" />
+          <EntitySet Name="t_modalidad_canje" EntityType="plazaveaModel.t_modalidad_canje" />
+          <EntitySet Name="t_producto_canje" EntityType="plazaveaModel.t_producto_canje" />
+          <EntitySet Name="t_reporte_stock_producto_canje" EntityType="plazaveaModel.t_reporte_stock_producto_canje" />
+          <EntitySet Name="t_ticket_canje" EntityType="plazaveaModel.t_ticket_canje" />
+          <AssociationSet Name="FK_t_producto_canje_t_categoria_producto_canje" Association="plazaveaModel.FK_t_producto_canje_t_categoria_producto_canje">
+            <End Role="t_categoria_producto_canje" EntitySet="t_categoria_producto_canje" />
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_ticket_canje_t_cuenta" Association="plazaveaModel.FK_t_ticket_canje_t_cuenta">
+            <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_detalle_ticket_canje_t_modalidad_canje" Association="plazaveaModel.FK_t_detalle_ticket_canje_t_modalidad_canje">
+            <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
+            <End Role="t_detalle_ticket_canje" EntitySet="t_detalle_ticket_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_detalle_ticket_canje_t_ticket_canje" Association="plazaveaModel.FK_t_detalle_ticket_canje_t_ticket_canje">
+            <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
+            <End Role="t_detalle_ticket_canje" EntitySet="t_detalle_ticket_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_modalidad_canje_t_producto_canje" Association="plazaveaModel.FK_t_modalidad_canje_t_producto_canje">
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+            <End Role="t_modalidad_canje" EntitySet="t_modalidad_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_reporte_stock_producto_canje_t_producto_canje" Association="plazaveaModel.FK_t_reporte_stock_producto_canje_t_producto_canje">
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+            <End Role="t_reporte_stock_producto_canje" EntitySet="t_reporte_stock_producto_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_reporte_stock_producto_canje_t_tienda" Association="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda">
+            <End Role="t_tienda" EntitySet="t_tienda" />
+            <End Role="t_reporte_stock_producto_canje" EntitySet="t_reporte_stock_producto_canje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_ticket_canje_t_tienda" Association="plazaveaModel.FK_t_ticket_canje_t_tienda">
+            <End Role="t_tienda" EntitySet="t_tienda" />
+            <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
+          </AssociationSet>
+          </EntityContainer>
         <Association Name="FK_t_contrato_t_cuenta">
           <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="1" />
           <End Type="plazaveaModel.t_contrato" Role="t_contrato" Multiplicity="0..1" />
@@ -955,7 +954,184 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="t_categoria_producto_canje">
+          <Key>
+            <PropertyRef Name="pk_categoria_producto_canje" />
+          </Key>
+          <Property Name="pk_categoria_producto_canje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_categoria_producto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="t_producto_canje" Relationship="plazaveaModel.FK_t_producto_canje_t_categoria_producto_canje" FromRole="t_categoria_producto_canje" ToRole="t_producto_canje" />
+        </EntityType>
+        <EntityType Name="t_detalle_ticket_canje">
+          <Key>
+            <PropertyRef Name="fk_ticket_canje" />
+            <PropertyRef Name="fk_modalidad_canje" />
+          </Key>
+          <Property Name="fk_ticket_canje" Type="Int32" Nullable="false" />
+          <Property Name="fk_modalidad_canje" Type="Int32" Nullable="false" />
+          <Property Name="cantidad" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="subtotal_puntos" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="subtotal_importe" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="t_modalidad_canje" Relationship="plazaveaModel.FK_t_detalle_ticket_canje_t_modalidad_canje" FromRole="t_detalle_ticket_canje" ToRole="t_modalidad_canje" />
+          <NavigationProperty Name="t_ticket_canje" Relationship="plazaveaModel.FK_t_detalle_ticket_canje_t_ticket_canje" FromRole="t_detalle_ticket_canje" ToRole="t_ticket_canje" />
+        </EntityType>
+        <EntityType Name="t_modalidad_canje">
+          <Key>
+            <PropertyRef Name="pk_modalidad_canje" />
+          </Key>
+          <Property Name="pk_modalidad_canje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_producto_canje" Type="Int32" Nullable="false" />
+          <Property Name="nombre_modalidad_canje" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="tipo_canje" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="punto_canje" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="importe_canje" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="fecha_alta" Type="DateTime" Precision="0" />
+          <Property Name="fecha_baja" Type="DateTime" Precision="0" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="t_detalle_ticket_canje" Relationship="plazaveaModel.FK_t_detalle_ticket_canje_t_modalidad_canje" FromRole="t_modalidad_canje" ToRole="t_detalle_ticket_canje" />
+          <NavigationProperty Name="t_producto_canje" Relationship="plazaveaModel.FK_t_modalidad_canje_t_producto_canje" FromRole="t_modalidad_canje" ToRole="t_producto_canje" />
+        </EntityType>
+        <EntityType Name="t_producto_canje">
+          <Key>
+            <PropertyRef Name="pk_producto_canje" />
+          </Key>
+          <Property Name="pk_producto_canje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_categoria_producto_canje" Type="Int32" Nullable="false" />
+          <Property Name="nombre_producto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_alta" Type="DateTime" Precision="3" />
+          <Property Name="fecha_baja" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fecha_inicio_vigencia" Type="DateTime" Precision="0" />
+          <Property Name="fecha_fin_vigencia" Type="DateTime" Precision="0" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="t_categoria_producto_canje" Relationship="plazaveaModel.FK_t_producto_canje_t_categoria_producto_canje" FromRole="t_producto_canje" ToRole="t_categoria_producto_canje" />
+          <NavigationProperty Name="t_modalidad_canje" Relationship="plazaveaModel.FK_t_modalidad_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_modalidad_canje" />
+          <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_reporte_stock_producto_canje" />
+        </EntityType>
+        <EntityType Name="t_reporte_stock_producto_canje">
+          <Key>
+            <PropertyRef Name="pk_reporte_stock_producto_canje" />
+          </Key>
+          <Property Name="pk_reporte_stock_producto_canje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_producto_canje" Type="Int32" />
+          <Property Name="fk_tienda" Type="Int32" />
+          <Property Name="stock" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="t_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_producto_canje" FromRole="t_reporte_stock_producto_canje" ToRole="t_producto_canje" />
+          <NavigationProperty Name="t_tienda" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda" FromRole="t_reporte_stock_producto_canje" ToRole="t_tienda" />
+        </EntityType>
+        <EntityType Name="t_ticket_canje">
+          <Key>
+            <PropertyRef Name="pk_ticket_canje" />
+          </Key>
+          <Property Name="pk_ticket_canje" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="numero_ticket" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="fecha_ticket" Type="DateTime" Precision="0" />
+          <Property Name="fk_cuenta" Type="Int32" />
+          <Property Name="fk_tienda" Type="Int32" />
+          <Property Name="puntos" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="importe" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_ticket_canje_t_cuenta" FromRole="t_ticket_canje" ToRole="t_cuenta" />
+          <NavigationProperty Name="t_detalle_ticket_canje" Relationship="plazaveaModel.FK_t_detalle_ticket_canje_t_ticket_canje" FromRole="t_ticket_canje" ToRole="t_detalle_ticket_canje" />
+          <NavigationProperty Name="t_tienda" Relationship="plazaveaModel.FK_t_ticket_canje_t_tienda" FromRole="t_ticket_canje" ToRole="t_tienda" />
+        </EntityType>
+        <Association Name="FK_t_producto_canje_t_categoria_producto_canje">
+          <End Type="plazaveaModel.t_categoria_producto_canje" Role="t_categoria_producto_canje" Multiplicity="1" />
+          <End Type="plazaveaModel.t_producto_canje" Role="t_producto_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_categoria_producto_canje">
+              <PropertyRef Name="pk_categoria_producto_canje" />
+            </Principal>
+            <Dependent Role="t_producto_canje">
+              <PropertyRef Name="fk_categoria_producto_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_ticket_canje_t_cuenta">
+          <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_ticket_canje" Role="t_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_cuenta">
+              <PropertyRef Name="pk_cuenta" />
+            </Principal>
+            <Dependent Role="t_ticket_canje">
+              <PropertyRef Name="fk_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_detalle_ticket_canje_t_modalidad_canje">
+          <End Type="plazaveaModel.t_modalidad_canje" Role="t_modalidad_canje" Multiplicity="1" />
+          <End Type="plazaveaModel.t_detalle_ticket_canje" Role="t_detalle_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_modalidad_canje">
+              <PropertyRef Name="pk_modalidad_canje" />
+            </Principal>
+            <Dependent Role="t_detalle_ticket_canje">
+              <PropertyRef Name="fk_modalidad_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_detalle_ticket_canje_t_ticket_canje">
+          <End Type="plazaveaModel.t_ticket_canje" Role="t_ticket_canje" Multiplicity="1" />
+          <End Type="plazaveaModel.t_detalle_ticket_canje" Role="t_detalle_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_ticket_canje">
+              <PropertyRef Name="pk_ticket_canje" />
+            </Principal>
+            <Dependent Role="t_detalle_ticket_canje">
+              <PropertyRef Name="fk_ticket_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_modalidad_canje_t_producto_canje">
+          <End Type="plazaveaModel.t_producto_canje" Role="t_producto_canje" Multiplicity="1" />
+          <End Type="plazaveaModel.t_modalidad_canje" Role="t_modalidad_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_producto_canje">
+              <PropertyRef Name="pk_producto_canje" />
+            </Principal>
+            <Dependent Role="t_modalidad_canje">
+              <PropertyRef Name="fk_producto_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_reporte_stock_producto_canje_t_producto_canje">
+          <End Type="plazaveaModel.t_producto_canje" Role="t_producto_canje" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_reporte_stock_producto_canje" Role="t_reporte_stock_producto_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_producto_canje">
+              <PropertyRef Name="pk_producto_canje" />
+            </Principal>
+            <Dependent Role="t_reporte_stock_producto_canje">
+              <PropertyRef Name="fk_producto_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_reporte_stock_producto_canje_t_tienda">
+          <End Type="plazaveaModel.t_tienda" Role="t_tienda" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_reporte_stock_producto_canje" Role="t_reporte_stock_producto_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_tienda">
+              <PropertyRef Name="pk_tienda" />
+            </Principal>
+            <Dependent Role="t_reporte_stock_producto_canje">
+              <PropertyRef Name="fk_tienda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_ticket_canje_t_tienda">
+          <End Type="plazaveaModel.t_tienda" Role="t_tienda" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_ticket_canje" Role="t_ticket_canje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_tienda">
+              <PropertyRef Name="pk_tienda" />
+            </Principal>
+            <Dependent Role="t_ticket_canje">
+              <PropertyRef Name="fk_tienda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1019,47 +1195,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="t_modalidad_canje">
-            <EntityTypeMapping TypeName="plazaveaModel.t_modalidad_canje">
-              <MappingFragment StoreEntitySet="t_modalidad_canje">
-                <ScalarProperty Name="pk_modalidad" ColumnName="pk_modalidad" />
-                <ScalarProperty Name="nombre_modalidad_canje" ColumnName="nombre_modalidad_canje" />
-                <ScalarProperty Name="tipo_canje" ColumnName="tipo_canje" />
-                <ScalarProperty Name="punto_canje" ColumnName="punto_canje" />
-                <ScalarProperty Name="importe_canje" ColumnName="importe_canje" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="fecha_baja" ColumnName="fecha_baja" />
-                <ScalarProperty Name="fecha_inicio_vigencia" ColumnName="fecha_inicio_vigencia" />
-                <ScalarProperty Name="fecha_fin_vigencia" ColumnName="fecha_fin_vigencia" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_producto_canje">
-            <EntityTypeMapping TypeName="plazaveaModel.t_producto_canje">
-              <MappingFragment StoreEntitySet="t_producto_canje">
-                <ScalarProperty Name="fk_modalidad" ColumnName="fk_modalidad" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-                <ScalarProperty Name="stock_producto" ColumnName="stock_producto" />
-                <ScalarProperty Name="condicion" ColumnName="condicion" />
-                <ScalarProperty Name="costo" ColumnName="costo" />
-                <ScalarProperty Name="categoria_producto" ColumnName="categoria_producto" />
-                <ScalarProperty Name="pk_producto_canje" ColumnName="pk_producto_canje" />
-                <ScalarProperty Name="nombre_producto" ColumnName="nombre_producto" />
-                <ScalarProperty Name="fecha_baja" ColumnName="fecha_baja" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_reporte_stock_producto_canje">
-            <EntityTypeMapping TypeName="plazaveaModel.t_reporte_stock_producto_canje">
-              <MappingFragment StoreEntitySet="t_reporte_stock_producto_canje">
-                <ScalarProperty Name="pk_reporte_stock_producto_canje" ColumnName="pk_reporte_stock_producto_canje" />
-                <ScalarProperty Name="fk_producto_canje" ColumnName="fk_producto_canje" />
-                <ScalarProperty Name="fk_tienda" ColumnName="fk_tienda" />
-                <ScalarProperty Name="stock" ColumnName="stock" />
-                <ScalarProperty Name="fecha" ColumnName="fecha" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_solicitud_atencion">
             <EntityTypeMapping TypeName="plazaveaModel.t_solicitud_atencion">
               <MappingFragment StoreEntitySet="t_solicitud_atencion">
@@ -1079,19 +1214,6 @@
                 <ScalarProperty Name="tipo_campana" ColumnName="tipo_campana" />
                 <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
                 <ScalarProperty Name="fecha_fina" ColumnName="fecha_fina" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_ticket_canje">
-            <EntityTypeMapping TypeName="plazaveaModel.t_ticket_canje">
-              <MappingFragment StoreEntitySet="t_ticket_canje">
-                <ScalarProperty Name="pk_ticket_canje" ColumnName="pk_ticket_canje" />
-                <ScalarProperty Name="numero_ticket" ColumnName="numero_ticket" />
-                <ScalarProperty Name="fecha_ticket" ColumnName="fecha_ticket" />
-                <ScalarProperty Name="tienda" ColumnName="tienda" />
-                <ScalarProperty Name="puntos" ColumnName="puntos" />
-                <ScalarProperty Name="importe" ColumnName="importe" />
-                <ScalarProperty Name="fk_producto_canje" ColumnName="fk_producto_canje" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1157,6 +1279,79 @@
                 <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
                 <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
                 <ScalarProperty Name="pk_tarteja_afiliacion" ColumnName="pk_tarteja_afiliacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_categoria_producto_canje">
+            <EntityTypeMapping TypeName="plazaveaModel.t_categoria_producto_canje">
+              <MappingFragment StoreEntitySet="t_categoria_producto_canje">
+                <ScalarProperty Name="nombre_categoria_producto" ColumnName="nombre_categoria_producto" />
+                <ScalarProperty Name="pk_categoria_producto_canje" ColumnName="pk_categoria_producto_canje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_detalle_ticket_canje">
+            <EntityTypeMapping TypeName="plazaveaModel.t_detalle_ticket_canje">
+              <MappingFragment StoreEntitySet="t_detalle_ticket_canje">
+                <ScalarProperty Name="subtotal_importe" ColumnName="subtotal_importe" />
+                <ScalarProperty Name="subtotal_puntos" ColumnName="subtotal_puntos" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="fk_modalidad_canje" ColumnName="fk_modalidad_canje" />
+                <ScalarProperty Name="fk_ticket_canje" ColumnName="fk_ticket_canje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_modalidad_canje">
+            <EntityTypeMapping TypeName="plazaveaModel.t_modalidad_canje">
+              <MappingFragment StoreEntitySet="t_modalidad_canje">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_baja" ColumnName="fecha_baja" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="importe_canje" ColumnName="importe_canje" />
+                <ScalarProperty Name="punto_canje" ColumnName="punto_canje" />
+                <ScalarProperty Name="tipo_canje" ColumnName="tipo_canje" />
+                <ScalarProperty Name="nombre_modalidad_canje" ColumnName="nombre_modalidad_canje" />
+                <ScalarProperty Name="fk_producto_canje" ColumnName="fk_producto_canje" />
+                <ScalarProperty Name="pk_modalidad_canje" ColumnName="pk_modalidad_canje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_producto_canje">
+            <EntityTypeMapping TypeName="plazaveaModel.t_producto_canje">
+              <MappingFragment StoreEntitySet="t_producto_canje">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_fin_vigencia" ColumnName="fecha_fin_vigencia" />
+                <ScalarProperty Name="fecha_inicio_vigencia" ColumnName="fecha_inicio_vigencia" />
+                <ScalarProperty Name="fecha_baja" ColumnName="fecha_baja" />
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="nombre_producto" ColumnName="nombre_producto" />
+                <ScalarProperty Name="fk_categoria_producto_canje" ColumnName="fk_categoria_producto_canje" />
+                <ScalarProperty Name="pk_producto_canje" ColumnName="pk_producto_canje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_reporte_stock_producto_canje">
+            <EntityTypeMapping TypeName="plazaveaModel.t_reporte_stock_producto_canje">
+              <MappingFragment StoreEntitySet="t_reporte_stock_producto_canje">
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="fk_tienda" ColumnName="fk_tienda" />
+                <ScalarProperty Name="fk_producto_canje" ColumnName="fk_producto_canje" />
+                <ScalarProperty Name="pk_reporte_stock_producto_canje" ColumnName="pk_reporte_stock_producto_canje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_ticket_canje">
+            <EntityTypeMapping TypeName="plazaveaModel.t_ticket_canje">
+              <MappingFragment StoreEntitySet="t_ticket_canje">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="importe" ColumnName="importe" />
+                <ScalarProperty Name="puntos" ColumnName="puntos" />
+                <ScalarProperty Name="fk_tienda" ColumnName="fk_tienda" />
+                <ScalarProperty Name="fk_cuenta" ColumnName="fk_cuenta" />
+                <ScalarProperty Name="fecha_ticket" ColumnName="fecha_ticket" />
+                <ScalarProperty Name="numero_ticket" ColumnName="numero_ticket" />
+                <ScalarProperty Name="pk_ticket_canje" ColumnName="pk_ticket_canje" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
