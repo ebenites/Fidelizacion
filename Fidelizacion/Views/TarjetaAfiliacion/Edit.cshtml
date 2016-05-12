@@ -1,0 +1,78 @@
+﻿@model Fidelizacion.Models.t_tarjeta_afiliacion
+
+@{
+    ViewBag.Title = "Actualizar";
+}
+
+<h2>Actualizar Tarjeta de Afiliación</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+      
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.pk_tarteja_afiliacion)
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.numero_tarjeta, "N° Tarjeta", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numero_tarjeta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.fecha_emision, "Fecha Emisión", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.fecha_emision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fecha_emision, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.fecha_vencimiento, "Fecha Vencimiento", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.fecha_vencimiento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+
+        <div class="form-group">
+            <label for="estado" class="col-sm-2 control-label">Estados</label>
+            <div class="col-sm-2">
+                <select name="estado" class="form-control">
+                    <option value="-1">Todos</option>
+                    <option value="A" selected>Activo</option>
+                    <option value="I">Inactivo</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+           
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Grabar" class="btn btn-primary" />
+                    <input type="button" value="Salir" class="btn btn-danger" />
+                </div>
+           
+        </div>
+    </div>
+}
+
+@*<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

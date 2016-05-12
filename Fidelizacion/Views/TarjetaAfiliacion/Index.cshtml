@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Fidelizacion.Models.t_tarjeta_afiliacion>
+
+@{
+    ViewBag.Title = "Administrar Tarjeta";
+}
+
+<ol class="breadcrumb">
+    <li><a href="#">Inicio</a></li>
+    <li><a href="#">Gestión de Tarjetas de Afiliación</a></li>
+    <li class="active">Administrar tarjeta</li>
+</ol>
+
+<h2>Administrar Tarjeta</h2>
+@using (Html.BeginForm("Buscar", "TarjetaAfiliacion", FormMethod.Get))
+{
+<div class="row form-group form-horizontal">
+    <label for="numeroCuenta" class="col-sm-2 control-label">Número Tarjera</label>
+    <div class="col-sm-3">
+        <input type="text" name="numeroCuenta" class="form-control"  placeholder="Ingrese Numero de cuenta"  />
+    </div>
+</div>
+<div class="row form-group form-horizontal">
+    <label for="estado" class="col-sm-2 control-label">Estados</label>
+    <div class="col-sm-3">
+        <select  name="estado" class="form-control">
+            <option value="-1">Todos</option>
+            <option  value="A">Activo</option>
+            <option value="I">Inactivo</option>
+        </select>
+        
+    </div>
+</div>
+
+<div class="row form-group form-horizontal">
+    <div class="col-sm-5 text-left">
+
+        <input type="submit" value="Buscar" class="btn btn-default" />
+        <a href="@Url.Content("~/TarjetaAfiliacion/Create")" class="btn btn-default">Nuevo</a>
+    </div>
+</div>
+}
+    <br />
+    <table class="table">
+        <tr>
+            <th>
+                N° Tarjeta
+            </th>
+            <th>
+                Fecha Emisión
+            </th>
+            <th>
+                Fecha Vencimiento
+            </th>
+            <th>
+                Estado
+            </th>
+
+
+
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.numero_tarjeta)
+                </td>
+                <td>
+                    @string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_emision).ToString()))
+                    @*@Html.DisplayFor(modelItem => item.fecha_emision)*@
+                </td>
+                <td>
+                  @string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))
+                    @*@Html.DisplayFor(modelItem => item.fecha_vencimiento)*@
+                </td>
+                <td>
+                    Activo
+                </td>
+
+
+
+                <td>
+
+                    @Html.ActionLink("Actualizar", "Edit", new { id = item.pk_tarteja_afiliacion })
+
+
+                </td>
+            </tr>
+        }
+
+    </table>

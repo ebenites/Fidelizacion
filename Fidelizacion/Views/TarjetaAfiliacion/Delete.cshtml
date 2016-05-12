@@ -1,0 +1,64 @@
+﻿@model Fidelizacion.Models.t_tarjeta_afiliacion
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>t_tarjeta_afiliacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_vencimiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_vencimiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.numero_tarjeta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.numero_tarjeta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fk_cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fk_cuenta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_emision)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_emision)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_cuenta.numero_cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_cuenta.numero_cuenta)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
