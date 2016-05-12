@@ -1,0 +1,103 @@
+﻿@using Fidelizacion.Models;
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+<fieldset id="canje-form">
+    <legend>Canje de Producto</legend>
+    <div class="row form-group">
+        <label class="col-sm-2 form-control-label text-right">Tienda</label>
+        <div class="col-sm-2 form-inline">
+            <input type="text" class="form-control" value="@ViewBag.tienda.nombre_tienda" readonly />
+        </div>
+        <label class="col-sm-2 form-control-label text-right">Afiliado</label>
+        <div class="col-sm-2 form-inline">
+            <input type="text" class="form-control" value="@ViewBag.cuenta.t_ficha_afiliacion.nombre @ViewBag.cuenta.t_ficha_afiliacion.apellido_paterno @ViewBag.cuenta.t_ficha_afiliacion.apellido_materno" readonly />
+        </div>
+        <label class="col-sm-2 form-control-label text-right">Fecha de Canje</label>
+        <div class="col-sm-2 form-inline">
+            <input type="text" class="form-control" value="@DateTime.Now.ToString("dd/MM/yyyy")" readonly />
+        </div>
+    </div>
+</fieldset>
+
+<table class="table table-hover table-bordered">
+    <colgroup>
+        <col width="100" />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col width="80" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre Producto</th>
+            <th>Cantidad</th>
+            <th>Puntos</th>
+            <th>Importe</th>
+            <th>Subtotal Puntos</th>
+            <th>Subtotal Importe</th>
+            <th>Retirar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.carrito.getItems().Count == 0)
+        {
+            <tr>
+                <td colspan="8" class="text-center"><<< <i>Nada aún</i> >>></td>
+            </tr>
+        }
+        else
+        {
+            foreach (CarritoItem item in ViewBag.carrito.getItems())
+            {
+                <tr>
+                    <td>@item.getModalidad().t_producto_canje.pk_producto_canje</td>
+                    <td>@item.getModalidad().t_producto_canje.nombre_producto</td>
+                    <td>@item.getCantidad()</td>
+                    <td>@item.getModalidad().punto_canje</td>
+                    <td>@string.Format("{0:C}", item.getModalidad().importe_canje)</td>
+                    <td>@item.getSubTotalPuntos()</td>
+                    <td>@string.Format("{0:C}", item.getSubTotalImporte())</td>
+                    <td class="text-center">
+                        <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="eliminarCarrito('@item.getModalidad().pk_modalidad_canje')"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="row">
+    <strong class="col-sm-2">Cantidad Productos</strong>
+    <span class="col-sm-2">@ViewBag.carrito.getTotal()</span>
+    <strong class="col-sm-2">Total Puntos</strong>
+    <span class="col-sm-2">@ViewBag.carrito.getTotalPuntos()</span>
+    <strong class="col-sm-2">Total Importe</strong>
+    <span class="col-sm-2">@string.Format("{0:C}", ViewBag.carrito.getTotalImporte())</span>
+</div>      
+
+<hr />
+
+<div class="row form-group">
+    <div class="col-sm-5 text-right">
+        @if (ViewBag.carrito.getItems().Count == 0)
+        {
+            <input type="button" value="Grabar" class="btn btn-primary" style="width:100px" onclick="" disabled/>
+        }
+        else
+        {
+            <input type="button" value="Grabar" class="btn btn-primary" style="width:100px" onclick="grabar()" />
+        }
+    </div>
+    <div class="col-sm-2 text-center">
+    </div>
+    <div class="col-sm-5 text-left">
+        <a href="@Url.Content("~/Home/Cerrar")" class="btn btn-danger" style="width:100px">Salir</a>
+    </div>
+</div>

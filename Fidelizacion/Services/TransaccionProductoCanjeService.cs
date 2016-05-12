@@ -16,6 +16,11 @@ namespace Fidelizacion.Services
             return transaccionProductoCanjeDAO.getCuenta(numdocumento);
         }
 
+        public t_cuenta getCuenta(int idcuenta)
+        {
+            return transaccionProductoCanjeDAO.getCuenta(idcuenta);
+        }
+
         public List<t_categoria_producto_canje> listCategorias()
         {
             return transaccionProductoCanjeDAO.listCategorias(); ;
@@ -29,6 +34,16 @@ namespace Fidelizacion.Services
         public t_producto_canje getProductoCanje(int idproducto)
         {
             return transaccionProductoCanjeDAO.getProductoCanje(idproducto);
+        }
+
+        public t_modalidad_canje getModalidadCanje(int idproducto, int idmodalidad)
+        {
+            return transaccionProductoCanjeDAO.getModalidadCanje(idproducto, idmodalidad);
+        }
+
+        public List<t_producto_canje> listProductosCanjeByFiltro(int idcategoria, string producto)
+        {
+            return transaccionProductoCanjeDAO.listProductosCanjeByFiltro(idcategoria, producto);
         }
     }
 }

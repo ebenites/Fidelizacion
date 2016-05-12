@@ -21,7 +21,7 @@ else
 
     <table class="table table-hover table-bordered">
         <colgroup>
-            <col width="100" />
+            <col width="120" />
             <col />
             <col />
             <col />
@@ -31,10 +31,10 @@ else
         </colgroup>
         <thead>
             <tr>
-                <th>DNI</th>
+                <th>N° Documento</th>
                 <th>Nombre</th>
                 <th>Apellidos</th>
-                <th>Cuenta</th>
+                <th>N° Cuenta</th>
                 <th>Tipo Afiliado</th>
                 <th>Puntos</th>
                 <th>Ver Catálogo</th>
@@ -52,10 +52,13 @@ else
                     <td>@cuenta.puntos</td>
                     <td class="text-center">
                         <a href="javascript:void(0)" class="btn btn-success" onclick="verProductos()"><span class="glyphicon glyphicon-search"></span></a>
+                        <input type="hidden" id="idcuenta" value="@cuenta.pk_cuenta"/>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <hr/>
 
 }

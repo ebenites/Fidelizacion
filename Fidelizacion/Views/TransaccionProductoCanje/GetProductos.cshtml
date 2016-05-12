@@ -14,18 +14,19 @@
         <label for="categoria" class="col-sm-1 form-control-label text-right">Categoría</label>
         <div class="col-sm-2 form-inline">
             <select id="categoria" name="categoria" class="form-control">
+                <option value="0"></option>
                 @foreach (var categoria in ViewBag.categorias)
                 {
-                    <option value="@categoria.pk_categoria_producto_canje">@categoria.nombre_categoria_producto</option>
+                    <option value="@categoria.pk_categoria_producto_canje" @(ViewBag.idcategoria == categoria.pk_categoria_producto_canje ? "selected" : "")>@categoria.nombre_categoria_producto</option>
                 }
             </select>
         </div>
         <label for="producto" class="col-sm-1 form-control-label text-right">Producto</label>
         <div class="col-sm-3 form-inline">
-            <input type="text" id="producto" name="producto" class="form-control" placeholder="Ingrese Nombre de Producto" autocomplete="off" style="width:100%" />
+            <input type="text" id="producto" name="producto" class="form-control" placeholder="Ingrese Nombre de Producto" value="@ViewBag.producto" autocomplete="off" style="width:100%" />
         </div>
         <div class="col-sm-2 form-inline">
-            <input type="button" value="Filtrar" class="btn btn-default" onclick="" />
+            <input type="button" value="Filtrar" class="btn btn-default" onclick="filtrar()" />
         </div>
     </div>
 </fieldset>
@@ -76,8 +77,8 @@ else
                             <strong style="color:red">AGOTADO</strong>
                         }
                     </td>
-                    <td>@producto.fecha_inicio_vigencia.Value.ToString("yyyy/MM/dd")</td>
-                    <td>@producto.fecha_fin_vigencia.Value.ToString("yyyy/MM/dd")</td>
+                    <td>@producto.fecha_inicio_vigencia.Value.ToString("dd/MM/yyyy")</td>
+                    <td>@producto.fecha_fin_vigencia.Value.ToString("dd/MM/yyyy")</td>
                     <td class="text-center">
                         @if (producto.getStockByTienda(ViewBag.tienda.pk_tienda) > 0)
                         {

@@ -19,11 +19,43 @@
                 if ($('#afiliado-table .alert').length) {
                     bootbox.alert($('#afiliado-table .alert').html());
                 }
+
+                // clear forms
+                $('#productos-table').empty();
+                $('#carrito-table').empty();
             });
         }
 
         function verProductos() {
             $.get('@Url.Content("~/TransaccionProductoCanje/GetProductos")', { "_": $.now() }, function (data) {
+                $('#productos-table').html(data);
+                if ($('#productos-table .alert').length) {
+                    bootbox.alert($('#productos-table .alert').html());
+                }
+
+                // Datatable
+                $('#productos-table table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+
+            });
+
+        }
+
+        function filtrar() {
+            var idcategoria = $('#producto-form [name="categoria"]').val();
+            var producto = $('#producto-form [name="producto"]').val();
+
+            $.get('@Url.Content("~/TransaccionProductoCanje/GetProductos")', { "_": $.now(), 'idcategoria': idcategoria, 'producto': producto }, function (data) {
                 $('#productos-table').html(data);
                 if ($('#productos-table .alert').length) {
                     bootbox.alert($('#productos-table .alert').html());
@@ -59,10 +91,30 @@
             bootbox.hideAll()
         }
 
+        function listarCarrito() {
+            var idcuenta = $('#idcuenta').val();
+
+            $.get('@Url.Content("~/TransaccionProductoCanje/ListCarrito")', { "_": $.now(), 'idcuenta': idcuenta }, function (data) {
+                $('#carrito-table').html(data);
+            });
+        }
+
+        function eliminarCarrito(idmodalidad) {
+            bootbox.confirm("¿Está seguro que desea retirar el item de la lista?", function (result) {
+                if (result) {
+                    $.post('@Url.Content("~/TransaccionProductoCanje/RemoveCarrito")', { 'idmodalidad': idmodalidad }, function (data) {
+                        listarCarrito();
+                    }, 'json').fail(function (error) { bootbox.alert('Error interno en el servidor: ' + error.responseText) });
+                }
+            });
+        }
+
         function aceptar() {
-            // Validar 
+            // Validar
+            var idcuenta = $('#idcuenta').val();
+            var idproducto = $('[name="idproducto"]').val();
+            var idmodalidad = $('[name="modalidad"]').val();
             var cantidad = $('[name="cantidad"]').val();
-            var modalidad = $('[name="modalidad"]').val();
             var maximo = $('[name="maximo"]').val();
 
             if (cantidad == '' || parseInt(cantidad) < 1) {
@@ -70,18 +122,44 @@
                 return;
             }
 
-            if (parseInt(cantidad) > parseInt(maximo)) {  
+            if (parseInt(cantidad) > parseInt(maximo)) {
                 bootbox.alert("No se cuenta con stock disponible para la cantidad indicada.");
                 return;
             }
-            
+
             if ($('[name="modalidad"]:checked').length == 0) {
                 bootbox.alert("Debe seleccionar una modalidad.");
                 return;
             }
 
-            // ...
+            $.post('@Url.Content("~/TransaccionProductoCanje/AddCarrito")', { 'idcuenta': idcuenta, 'idproducto': idproducto, 'idmodalidad': idmodalidad, 'cantidad': cantidad }, function (data) {
+                if (data.Type != 'success') {
+                    bootbox.alert(data.Message)
+                }else{
+                    bootbox.hideAll();
+                    listarCarrito();
+                }
+            }, 'json').fail(function (error) { bootbox.alert('Error interno en el servidor: ' + error.responseText) });
 
+        }
+
+        function grabar() {
+
+            bootbox.confirm("¿Está seguro que desea confirmar el proceso de canje?", function (result) {
+                if (result) {
+                    var idcuenta = $('#idcuenta').val();
+
+                    $.post('@Url.Content("~/TransaccionProductoCanje/Grabar")', { 'idcuenta': idcuenta }, function (data) {
+                        bootbox.dialog({
+                            message: data,
+                            title: "Ticket de Canje"
+                        });
+                    });
+                }
+            });
+
+            // Fixed al boton
+            $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
         }
 
     </script>
@@ -117,102 +195,16 @@
 
     </div>
 
-    <hr />
-
     <!-- Producto Canje -->
 
     <div id="productos-table" class="table-responsive">
 
     </div>
 
-    <!-- Canje de Producto -->
-
-    <fieldset id="canje-form">
-        <legend>Canje de Producto</legend>
-        <div class="row form-group">
-            <label class="col-sm-2 form-control-label text-right">Tienda</label>
-            <div class="col-sm-2 form-inline">
-                <input type="text" class="form-control" value="Plaza Vea Risso" readonly />
-            </div>
-            <label class="col-sm-2 form-control-label text-right">Afiliado</label>
-            <div class="col-sm-2 form-inline">
-                <input type="text" class="form-control" value="Talía Llanca Cotrina" readonly />
-            </div>
-            <label class="col-sm-2 form-control-label text-right">Fecha de Canje</label>
-            <div class="col-sm-2 form-inline">
-                <input type="text" class="form-control" value="10/05/2016" readonly />
-            </div>
-        </div>
-    </fieldset>
-
-    <div id="canje-table" class="table-responsive">
-
-        <table class="table table-hover table-bordered">
-            <colgroup>
-                <col width="100" />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nombre Producto</th>
-                    <th>Cantidad</th>
-                    <th>Puntos Unitario</th>
-                    <th>Importe</th>
-                    <th>Subtotal Puntos</th>
-                    <th>Subtotal Importe</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>P0001</td>
-                    <td>Billetera #10</td>
-                    <td>2</td>
-                    <td>10</td>
-                    <td>S/. 5.00</td>
-                    <td>20</td>
-                    <td>S/. 10.00</td>
-                </tr>
-                <tr>
-                    <td>P0003</td>
-                    <td>Cartera #1</td>
-                    <td>1</td>
-                    <td>30</td>
-                    <td>S/. 0.00</td>
-                    <td>30</td>
-                    <td>S/. 0.00</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-    <div class="row">
-        <strong class="col-sm-2">Cantidad Productos</strong>
-        <span class="col-sm-2">3</span>
-        <strong class="col-sm-2">Total Puntos</strong>
-        <span class="col-sm-2">50</span>
-        <strong class="col-sm-2">Total Importe</strong>
-        <span class="col-sm-2">S/. 10.00</span>
-    </div>
-
-    <hr />
-
+    <!-- Carrito -->
     
-    <div class="row form-group">
-        <div class="col-sm-5 text-right">
-            <input type="button" value="Grabar" class="btn btn-primary" style="width:100px" onclick="grabar()" />
-        </div>
-        <div class="col-sm-2 text-center">
-        </div>
-        <div class="col-sm-5 text-left">
-            <a href="@Url.Content("~/Home/Cerrar")" class="btn btn-danger" style="width:100px">Salir</a>
-        </div>
+    <div id="carrito-table" class="table-responsive">
+
     </div>
 
 </form>
