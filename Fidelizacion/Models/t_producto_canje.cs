@@ -38,11 +38,11 @@ namespace Fidelizacion.Models
 
         public int getStockByTienda(int idtienda)
         {
-            if(this.t_reporte_stock_producto_canje != null)
+            if (this.t_reporte_stock_producto_canje != null)
             {
-                foreach(t_reporte_stock_producto_canje reporte_stock in this.t_reporte_stock_producto_canje)
+                foreach (t_reporte_stock_producto_canje reporte_stock in this.t_reporte_stock_producto_canje)
                 {
-                    if(reporte_stock.fk_tienda == idtienda)
+                    if (reporte_stock.fk_tienda == idtienda)
                     {
                         return (int)reporte_stock.stock;
                     }

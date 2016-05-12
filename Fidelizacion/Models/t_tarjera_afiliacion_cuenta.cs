@@ -17,6 +17,8 @@ namespace Fidelizacion.Models
         public int pk_tarjeta_afiliacion_cuenta { get; set; }
         public Nullable<int> fk_tarjeta_afiliacion { get; set; }
         public Nullable<int> fk_cuenta { get; set; }
+        public Nullable<System.DateTime> fecha_afiliacion { get; set; }
+        public string estado { get; set; }
     
         public virtual t_cuenta t_cuenta { get; set; }
         public virtual t_tarjeta_afiliacion t_tarjeta_afiliacion { get; set; }

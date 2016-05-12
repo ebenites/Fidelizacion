@@ -187,11 +187,14 @@
     <Compile Include="Controllers\FichaAfiliacionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TarjetaAfiliacionController.cs" />
     <Compile Include="Controllers\TransaccionProductoCanjeController.cs" />
     <Compile Include="Controllers\TransferirPuntosController.cs" />
+    <Compile Include="DAO\ITarjetaAfiliacionDAO.cs" />
     <Compile Include="DAO\ITiendaDAO.cs" />
     <Compile Include="DAO\ITransaccionProductoCanjeDAO.cs" />
     <Compile Include="DAO\ITransferirPuntosDAO.cs" />
+    <Compile Include="DAO\TarjetaAfiliacionDAO.cs" />
     <Compile Include="DAO\TiendaDAO.cs" />
     <Compile Include="DAO\TransaccionProductoCanjeDAO.cs" />
     <Compile Include="DAO\TransferirPuntosDAO.cs" />
@@ -216,6 +219,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\TarjetaAfiliacionViewModels.cs" />
     <Compile Include="Models\t_campana.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
@@ -285,6 +289,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\carousel.css" />
     <Content Include="Content\dashboard.css" />
+    <Content Include="Content\images\tarjetaOh.png" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\style.css" />
     <Content Include="Content\tienda.jpg" />
@@ -382,6 +387,11 @@
     <Content Include="Views\TransaccionProductoCanje\GetCuenta.cshtml" />
     <Content Include="Views\TransaccionProductoCanje\GetProductos.cshtml" />
     <Content Include="Views\TransaccionProductoCanje\GetModalidades.cshtml" />
+    <Content Include="Views\TarjetaAfiliacion\Create.cshtml" />
+    <Content Include="Views\TarjetaAfiliacion\Delete.cshtml" />
+    <Content Include="Views\TarjetaAfiliacion\Details.cshtml" />
+    <Content Include="Views\TarjetaAfiliacion\Edit.cshtml" />
+    <Content Include="Views\TarjetaAfiliacion\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

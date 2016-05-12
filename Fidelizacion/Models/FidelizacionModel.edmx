@@ -141,6 +141,8 @@
           <Property Name="pk_tarjeta_afiliacion_cuenta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fk_tarjeta_afiliacion" Type="int" />
           <Property Name="fk_cuenta" Type="int" />
+          <Property Name="fecha_afiliacion" Type="datetime" />
+          <Property Name="estado" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="t_tarjeta_afiliacion">
           <Key>
@@ -150,6 +152,7 @@
           <Property Name="fecha_vencimiento" Type="datetime" />
           <Property Name="numero_tarjeta" Type="nchar" MaxLength="12" />
           <Property Name="fecha_emision" Type="datetime" />
+          <Property Name="estado" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="t_ticket_canje">
           <Key>
@@ -919,6 +922,8 @@
           <Property Name="fk_cuenta" Type="Int32" />
           <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_cuenta" />
           <NavigationProperty Name="t_tarjeta_afiliacion" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_tarjeta_afiliacion" />
+          <Property Name="fecha_afiliacion" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="t_tarjeta_afiliacion">
           <Key>
@@ -929,6 +934,7 @@
           <Property Name="numero_tarjeta" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
           <Property Name="fecha_emision" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjeta_afiliacion" ToRole="t_tarjera_afiliacion_cuenta" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <Association Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta">
           <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="0..1" />
@@ -1266,6 +1272,8 @@
           <EntitySetMapping Name="t_tarjera_afiliacion_cuenta">
             <EntityTypeMapping TypeName="plazaveaModel.t_tarjera_afiliacion_cuenta">
               <MappingFragment StoreEntitySet="t_tarjera_afiliacion_cuenta">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_afiliacion" ColumnName="fecha_afiliacion" />
                 <ScalarProperty Name="fk_cuenta" ColumnName="fk_cuenta" />
                 <ScalarProperty Name="fk_tarjeta_afiliacion" ColumnName="fk_tarjeta_afiliacion" />
                 <ScalarProperty Name="pk_tarjeta_afiliacion_cuenta" ColumnName="pk_tarjeta_afiliacion_cuenta" />
@@ -1275,6 +1283,7 @@
           <EntitySetMapping Name="t_tarjeta_afiliacion">
             <EntityTypeMapping TypeName="plazaveaModel.t_tarjeta_afiliacion">
               <MappingFragment StoreEntitySet="t_tarjeta_afiliacion">
+                <ScalarProperty Name="estado" ColumnName="estado" />
                 <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
                 <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
                 <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />

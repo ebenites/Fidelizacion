@@ -67,7 +67,6 @@ namespace Fidelizacion.Controllers
                 fecha_vencimiento = t_tarjeta_afiliacion.fechaVencimiento,
                 fecha_emision = t_tarjeta_afiliacion.fechaEmision,
                 numero_tarjeta = t_tarjeta_afiliacion.numeroTarjeta.ToString(),
-                fk_cuenta = null
             };
                
             if (ModelState.IsValid)
