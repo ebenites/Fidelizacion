@@ -129,10 +129,10 @@
                             
                             @if (item.fecha_vencimiento.Value.AddMonths(-1) < DateTime.Now)
                             {
-                                <span style="color:red">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
+                                <span style="color:red;font-weight:bold">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
                             }
                             else {
-                                <span style="color:green">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
+                                <span style="color:green;font-weight:bold">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
                             }
                             @*<span>@item.fecha_vencimiento.Value.AddMonths(-1)</span>*@
 
