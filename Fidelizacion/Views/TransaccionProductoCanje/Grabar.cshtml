@@ -1,0 +1,58 @@
+﻿@using Fidelizacion.Models;
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12 text-center"><img src="@Url.Content("~/Content/logo.png")" height="48" /></div>
+</div>
+
+<br/>
+
+<div class="row">
+    <div class="col-sm-12 text-center"><strong>Ticket de Canje @DateTime.Now.Year - @DateTime.Now.ToString("MMddhhmmss")</strong></string></div>
+</div>
+
+
+<hr/>
+
+
+<div class="row form-group">
+    <label class="col-xs-6 form-control-label">Tienda</label>
+    <div class="col-xs-6 form-inline">
+        Plaza Vea Risso
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-6 form-control-label">Fecha de Canje</label>
+    <div class="col-xs-6 form-inline">
+        @DateTime.Now.ToString("dd/MM/yyyy")
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-6 form-control-label">Cantidad de Puntos</label>
+    <div class="col-xs-6 form-inline">
+        160
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-6 form-control-label">Total Importe</label>
+    <div class="col-xs-6 form-inline">
+        S/. 60.00
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-6 form-control-label">Puntos Restantes</label>
+    <div class="col-xs-6 form-inline">
+        130
+    </div>
+</div>
+
+
+<hr/>
+
+
+<div class="form-group text-right">
+    <a href="@Url.Content("~/Home/Cerrar")" class="btn btn-danger" style="width:100px">Salir</a>
+</div>

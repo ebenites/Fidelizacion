@@ -202,6 +202,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Carrito.cs" />
+    <Compile Include="Models\CarritoItem.cs" />
     <Compile Include="Models\FidelizacionModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -394,9 +396,12 @@
     <Content Include="Views\TarjetaAfiliacion\Details.cshtml" />
     <Content Include="Views\TarjetaAfiliacion\Edit.cshtml" />
     <Content Include="Views\TarjetaAfiliacion\Index.cshtml" />
+    <Content Include="Views\TransaccionProductoCanje\ListCarrito.cshtml" />
+    <Content Include="Views\TransaccionProductoCanje\Grabar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\productos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

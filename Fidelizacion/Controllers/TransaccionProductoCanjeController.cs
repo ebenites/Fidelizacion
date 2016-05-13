@@ -41,6 +41,9 @@ namespace Fidelizacion.Controllers
                 Session["CUENTA_ACTUAL"] = cuenta.pk_cuenta;
             }
 
+            // Empty Carrito
+            emptyCarrito();
+
             return View();
         }
 
@@ -54,13 +57,28 @@ namespace Fidelizacion.Controllers
             ViewBag.categorias = categorias;
             ViewBag.ncategorias = categorias.Count;
 
-            List<t_producto_canje> productos = transaccionProductoCanjeService.listProductosCanje();
+            List<t_producto_canje> productos = null;
+
+            if (Request.Params["idcategoria"] != null)
+            {
+                int idcategoria = int.Parse(Request.Params["idcategoria"]);
+                string producto = Request.Params["producto"];
+                ViewBag.idcategoria = idcategoria;
+                ViewBag.producto = producto;
+
+                productos = transaccionProductoCanjeService.listProductosCanjeByFiltro(idcategoria, producto);
+            }
+            else
+            {
+                productos = transaccionProductoCanjeService.listProductosCanje();
+            }
+            
             ViewBag.productos = productos;
             ViewBag.nproductos = productos.Count;
 
             return View();
         }
-
+        
         public ActionResult GetModalidades()
         {
             int idproducto = int.Parse(Request.Params["idproducto"]);
@@ -76,5 +94,103 @@ namespace Fidelizacion.Controllers
 
             return View();
         }
+
+        public ActionResult ListCarrito()
+        {
+            int idtienda = (int)Session["TIENDA_ACTUAL"];
+            t_tienda tienda = tiendaService.get(idtienda);
+            ViewBag.tienda = tienda;
+
+            int idcuenta = int.Parse(Request.Params["idcuenta"]);
+            t_cuenta cuenta = transaccionProductoCanjeService.getCuenta(idcuenta);
+            ViewBag.cuenta = cuenta;
+
+            Carrito carrito = getCarrito();
+            ViewBag.carrito = carrito;
+
+            return View();
+        }
+
+        public ActionResult AddCarrito()
+        {
+            int idcuenta = int.Parse(Request.Params["idcuenta"]);
+            int idproducto = int.Parse(Request.Params["idproducto"]);
+            int idmodalidad = int.Parse(Request.Params["idmodalidad"]);
+            int cantidad = int.Parse(Request.Params["cantidad"]);
+
+            System.Diagnostics.Debug.WriteLine("idproducto:" + idproducto);
+            System.Diagnostics.Debug.WriteLine("idmodalidad:" + idmodalidad);
+            System.Diagnostics.Debug.WriteLine("cantidad:" + cantidad);
+
+            t_cuenta cuenta = transaccionProductoCanjeService.getCuenta(idcuenta);
+            System.Diagnostics.Debug.WriteLine("cuenta:" + cuenta);
+            t_modalidad_canje modalidad = transaccionProductoCanjeService.getModalidadCanje(idproducto, idmodalidad);
+            System.Diagnostics.Debug.WriteLine("modalidad:" + modalidad);
+            
+
+            Carrito carrito = getCarrito();
+
+
+            CarritoItem item = new CarritoItem(modalidad, cantidad);
+
+            // Validaciones
+            int puntosRequeridos = carrito.getTotalPuntos() + item.getSubTotalPuntos();
+            int puntosDsiponibles = (int)cuenta.puntos;
+
+            System.Diagnostics.Debug.WriteLine("puntosRequeridos:" + puntosRequeridos);
+            System.Diagnostics.Debug.WriteLine("puntosDsiponibles:" + puntosDsiponibles);
+
+            if ( puntosRequeridos > puntosDsiponibles)
+            {
+                return Json(new { Type = "error", Message = "No no cuenta con puntos suficientes para completar la operación." });
+            }
+            // 
+            
+            carrito.agregar(item);
+
+            setCarrito(carrito);
+
+            var data = new { Type = "success", Message = "OK" };
+            return Json(data);
+        }
+
+        public ActionResult RemoveCarrito()
+        {
+            int idmodalidad = int.Parse(Request.Params["idmodalidad"]);
+            System.Diagnostics.Debug.WriteLine("idmodalidad:" + idmodalidad);
+
+            Carrito carrito = getCarrito();
+            carrito.eliminar(idmodalidad);
+            setCarrito(carrito);
+
+            var data = new { Type = "success", Message = "OK" };
+            return Json(data);
+        }
+
+        private Carrito getCarrito()
+        {
+            if(Session["CARRITO_ACTUAL"] == null)
+            {
+                Session["CARRITO_ACTUAL"] = new Carrito();
+            }
+            return (Carrito)Session["CARRITO_ACTUAL"];
+        }
+
+        private void setCarrito(Carrito carrito)
+        {
+            Session["CARRITO_ACTUAL"] = carrito;
+        }
+
+        private void emptyCarrito()
+        {
+            Session.Remove("CARRITO_ACTUAL");
+        }
+
+        public ActionResult Grabar()
+        {
+
+            return View();
+        }
+
     }
 }

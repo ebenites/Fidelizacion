@@ -20,6 +20,7 @@ else
                 <label class="col-sm-4 form-control-label text-right">Producto</label>
                 <div class="col-sm-8 form-inline">
                     <input type="text" class="form-control" value="@ViewBag.producto.nombre_producto" readonly />
+                    <input type="hidden" name="idproducto" value="@ViewBag.producto.pk_producto_canje"/>
                 </div>
             </div>
             <div class="row form-group">
@@ -37,7 +38,7 @@ else
 
         </div>
         <div class="col-sm-4">
-            <img src="http://www.modamarcas.com/files/2011/10/en-cuero-rojo.jpg" height="150" alt="producto" />
+            <img src="@Url.Content("~/Content/productos/"+ViewBag.producto.pk_producto_canje+".jpg")" height="150" alt="producto" />
         </div>
     </div>
 
