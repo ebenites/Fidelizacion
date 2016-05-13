@@ -22,5 +22,7 @@ namespace Fidelizacion.DAO
         t_modalidad_canje getModalidadCanje(int idproducto, int idmodalidad);
 
         List<t_producto_canje> listProductosCanjeByFiltro(int idcategoria, string producto);
+
+        t_ticket_canje grabarTicket(int idcuenta, int idtienda, Carrito carrito);
     }
 }

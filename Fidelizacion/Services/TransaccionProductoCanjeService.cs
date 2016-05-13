@@ -45,5 +45,10 @@ namespace Fidelizacion.Services
         {
             return transaccionProductoCanjeDAO.listProductosCanjeByFiltro(idcategoria, producto);
         }
+
+        public t_ticket_canje grabarTicket(int idcuenta, int idtienda, Carrito carrito)
+        {
+            return transaccionProductoCanjeDAO.grabarTicket(idcuenta, idtienda, carrito);
+        }
     }
 }

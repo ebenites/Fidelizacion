@@ -104,5 +104,63 @@ namespace Fidelizacion.DAO
             return modalidad;
         }
 
+        public t_ticket_canje grabarTicket(int idcuenta, int idtienda, Carrito carrito)
+        {
+
+            using (var tx = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    // Descontar puntos a la cuenta
+                    t_cuenta cuenta = db.t_cuenta.Include(o => o.t_ficha_afiliacion).Include(o => o.t_tipo_cuenta)
+                                        .Where(o => o.pk_cuenta == idcuenta).Single();
+
+                    cuenta.puntos = cuenta.puntos - carrito.getTotalPuntos();
+
+                    db.SaveChanges();
+
+                    // Descontar stock a los productos
+                    foreach (CarritoItem item in carrito.getItems())
+                    {
+                        t_reporte_stock_producto_canje producto_stock = db.t_reporte_stock_producto_canje.Where(o => o.fk_producto_canje == item.getModalidad().fk_producto_canje && o.fk_tienda == idtienda).Single();
+                        producto_stock.stock = producto_stock.stock - item.getCantidad();
+
+                        db.SaveChanges();
+                    }
+
+                    // Grabar ticket
+                    t_ticket_canje ticket = new t_ticket_canje();
+                    ticket.fecha_ticket = DateTime.Now;
+                    ticket.fk_cuenta = idcuenta;
+                    ticket.fk_tienda = idtienda;
+                    ticket.puntos = carrito.getTotalPuntos();
+                    ticket.importe = carrito.getTotalImporte();
+                    ticket.estado = "C";
+
+                    db.t_ticket_canje.Add(ticket);
+
+                    db.SaveChanges();
+
+
+                    // Grabar detalle
+
+
+
+                    db.SaveChanges();
+
+                    tx.Commit();
+
+                    return ticket;
+
+                }
+                catch (Exception)
+                {
+                    tx.Rollback();
+                }
+            }
+            return null;
+        } 
+
     }
 }
