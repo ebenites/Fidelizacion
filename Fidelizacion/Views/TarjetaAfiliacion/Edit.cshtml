@@ -1,4 +1,4 @@
-﻿@model Fidelizacion.Models.t_tarjeta_afiliacion
+﻿@model Fidelizacion.Models.TarjetaAfiliacionViewModels
 
 @{
     ViewBag.Title = "Actualizar";
@@ -15,45 +15,52 @@
       
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.pk_tarteja_afiliacion)
+        @Html.HiddenFor(model => model.Codigo)
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_tarjeta, "N° Tarjeta", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.numeroTarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.numero_tarjeta, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.numeroTarjeta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.numeroTarjeta, "", new { @class = "text-danger" })
             </div>
         </div>
 
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.fecha_emision, "Fecha Emisión", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.fechaEmision, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.fecha_emision, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fecha_emision, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.fechaEmision,  new { htmlAttributes = new { @class = "form-control", @onblur = "checkboxcheck(this)" } })
+                @Html.ValidationMessageFor(model => model.fechaEmision, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.fecha_vencimiento, "Fecha Vencimiento", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.fechaVencimiento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.fecha_vencimiento, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fecha_vencimiento, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.fechaVencimiento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fechaVencimiento, "", new { @class = "text-danger" })
             </div>
         </div>
 
         
 
         <div class="form-group">
+           
             <label for="estado" class="col-sm-2 control-label">Estados</label>
             <div class="col-sm-2">
-                <select name="estado" class="form-control">
-                    <option value="-1">Todos</option>
-                    <option value="A" selected>Activo</option>
-                    <option value="I">Inactivo</option>
-                </select>
+                @Html.DropDownListFor(model => model.Estado, new SelectList(
+                  new List<Object>{
+
+                       new { value = "A" , text = "Activo" },
+                       new { value = "I" , text = "Inactivo"}
+                    },
+                  "value",
+                  "text",
+                   2), new { @class = "form-control" })
+
+                
 
             </div>
         </div>
@@ -62,7 +69,7 @@
            
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Grabar" class="btn btn-primary" />
-                    <input type="button" value="Salir" class="btn btn-danger" />
+                    <input type="button" value="Salir" class="btn btn-danger" onclick="javascript:retornar()" />
                 </div>
            
         </div>
@@ -75,4 +82,38 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+    function retornar() {
+        window.location.href = '@Url.Content("~/TarjetaAfiliacion/Index")'
+    }
+
+    function checkboxcheck(val) {
+        if (val.value != null && val.value != '') {
+            //alert("2--" + val.value)
+            var date = new Date(val.value);
+            //date.setYear(date.getFullYear() + 5);
+            date.setDate(date.getDate() + 1);
+            date.setFullYear(date.getFullYear() + 5);
+
+            var today = date;
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            var today = yyyy + '-' + mm + '-' + dd;
+            //alert("3--" + today)
+            $("#fechaVencimiento").attr("value", today);
+            $('#fechaVencimiento').attr('readonly', true);
+        }
+
+    }
+
+</script>
 }

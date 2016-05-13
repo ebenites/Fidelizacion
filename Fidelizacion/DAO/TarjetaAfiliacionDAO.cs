@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Fidelizacion.Models;
+using System.Data;
+using System.Data.Entity;
 
 namespace Fidelizacion.DAO
 {
@@ -10,40 +12,60 @@ namespace Fidelizacion.DAO
     {
         private plazaveaEntities db = new plazaveaEntities();
 
-
-        public void Agregar(TarjetaAfiliacionViewModels tarjetaAfiliacion)
+        public IQueryable<t_tarjeta_afiliacion> Buscar(string numeroCuenta, string estado)
         {
+            var t_tarjeta_afiliacion = (IQueryable<t_tarjeta_afiliacion>)null; 
 
-            t_tarjeta_afiliacion tarjetaAfiliacionModel = new t_tarjeta_afiliacion
+            if (estado.Equals("-1"))
             {
-                numero_tarjeta = tarjetaAfiliacion.numeroTarjeta.ToString(),
-                fecha_vencimiento = tarjetaAfiliacion.fechaVencimiento,
-                fecha_emision = tarjetaAfiliacion.fechaEmision
+                t_tarjeta_afiliacion = db.t_tarjeta_afiliacion.Where(o => o.numero_tarjeta.Contains(numeroCuenta));
+            }
+            else {
+                t_tarjeta_afiliacion = db.t_tarjeta_afiliacion.Where(o => o.numero_tarjeta.Contains(numeroCuenta) && o.estado.Equals(estado));
+            }
+            return t_tarjeta_afiliacion;
 
+        }
+
+        public t_tarjeta_afiliacion getPorId(int id)
+        {
+            t_tarjeta_afiliacion t_tarjeta_afiliacion = db.t_tarjeta_afiliacion.Find(id);
+            return t_tarjeta_afiliacion;
+        }
+
+        public t_tarjeta_afiliacion insertar(TarjetaAfiliacionViewModels t_tarjeta_afiliacion)
+        {
+            t_tarjeta_afiliacion models = new t_tarjeta_afiliacion()
+            {
+
+                fecha_vencimiento = t_tarjeta_afiliacion.fechaVencimiento,
+                fecha_emision = t_tarjeta_afiliacion.fechaEmision,
+                numero_tarjeta = t_tarjeta_afiliacion.numeroTarjeta.ToString(),
+                estado = "A"
             };
-            db.t_tarjeta_afiliacion.Add(tarjetaAfiliacionModel);
+
+            db.t_tarjeta_afiliacion.Add(models);
             db.SaveChanges();
+
+            return getPorId(models.pk_tarteja_afiliacion);
         }
 
-        public List<TarjetaAfiliacionViewModels> Buscar(TarjetaAfiliacionViewModels tarjetaAfiliacion)
+        public t_tarjeta_afiliacion modificar(TarjetaAfiliacionViewModels t_tarjeta_afiliacion)
         {
-            //var cuentas = db.t_cuenta.Include(o => o.t_ficha_afiliacion).Where(
-            //   o => o.t_ficha_afiliacion.numero_documento == numdocumento
-            //   && o.t_ficha_afiliacion.estado_afiliado == "A"
-            //   && o.estado_cuenta == "A").ToList();
 
-           // var tarjetas = db.t_tarjeta_afiliacion.Where(o=> o.t_tarjeta_afiliacion. );
-            return null;
-        }
+            t_tarjeta_afiliacion t_tarjeta_afiliacion_mo = db.t_tarjeta_afiliacion.Find(t_tarjeta_afiliacion.Codigo);
 
-        public void Eliminar(TarjetaAfiliacionViewModels tarjetaAfiliacion)
-        {
-            throw new NotImplementedException();
-        }
+            t_tarjeta_afiliacion_mo.estado = t_tarjeta_afiliacion.Estado;
+            t_tarjeta_afiliacion_mo.fecha_emision = t_tarjeta_afiliacion.fechaEmision;
+            t_tarjeta_afiliacion_mo.fecha_vencimiento = t_tarjeta_afiliacion.fechaVencimiento;
+            // t_tarjeta_afiliacion_mo.estado = t_tarjeta_afiliacion.Estado;
 
-        public void Modificar(TarjetaAfiliacionViewModels tarjetaAfiliacion)
-        {
-            throw new NotImplementedException();
+
+            db.Entry(t_tarjeta_afiliacion_mo).State = EntityState.Modified;
+            db.SaveChanges();
+            t_tarjeta_afiliacion_mo = db.t_tarjeta_afiliacion.Find(t_tarjeta_afiliacion.Codigo);
+
+            return t_tarjeta_afiliacion_mo;
         }
     }
 }

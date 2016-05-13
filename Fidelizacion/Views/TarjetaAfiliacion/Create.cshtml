@@ -18,7 +18,7 @@
         
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-       
+        @Html.ValidationMessage("NUM_CUENTA_EXISTE", "", new { @class = "text-danger" })
 
         <div class="form-group">
             
@@ -33,14 +33,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.fechaEmision, "Fecha Emisión",htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.fechaEmision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fechaEmision, new { htmlAttributes = new { @class = "form-control", @onblur = "checkboxcheck(this)" } })
                 @Html.ValidationMessageFor(model => model.fechaEmision, "", new { @class = "text-danger" })
                
             </div>
         </div>
         
 
-        <div class="form-group">
+        <div class="form-group" >
             @Html.LabelFor(model => model.fechaVencimiento,"Fecha Vencimiento", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
                 @Html.EditorFor(model => model.fechaVencimiento, new { htmlAttributes = new { @class = "form-control" } })
@@ -63,7 +63,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Grabar" class="btn btn-primary" />
-                <input type="button" value="Salir" class="btn btn-danger" />
+                <input type="button" value="Salir" class="btn btn-danger" onclick="javascript:retornar()" />
             </div>
            
                 
@@ -77,6 +77,39 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    function retornar() {
+        window.location.href = '@Url.Content("~/TarjetaAfiliacion/Index")'
+    }
 
+    function checkboxcheck(val) {
+        if (val.value != null && val.value != '') {
+            //alert("2--" + val.value)
+            var date = new Date(val.value);
+            //date.setYear(date.getFullYear() + 5);
+            date.setDate(date.getDate() + 1);
+            date.setFullYear(date.getFullYear() + 5);
+
+            var today = date;
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            var today = yyyy + '-' + mm + '-' + dd;
+            //alert("3--" + today)
+            $("#fechaVencimiento").attr("value", today);
+            $('#fechaVencimiento').attr('readonly', true);
+        }
+      
+    }
+
+
+    </script>
 
 }

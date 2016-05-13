@@ -1,5 +1,40 @@
 ﻿@model IEnumerable<Fidelizacion.Models.t_tarjeta_afiliacion>
 
+@section scripts {
+<script type="text/javascript">
+    $(function () {
+        $('#productos-table table.table').DataTable({
+            'pageLength': 5,
+            'bLengthChange': false,
+            'bFilter': false,
+            'bInfo': false,
+            'language': {
+                'paginate': {
+                    'next': 'Siguiente',
+                    'previous': 'Anterior'
+                }
+            }
+        });
+
+
+    });
+
+   
+    function irModificar() {
+
+        var idModificar =$('input:radio[name=opcionModificar]:checked').val();
+       
+       // var root = "~/TarjetaAfiliacionController/Edit?id=" + idModificar;
+       
+        if (idModificar == null) {
+            alert("Debe seleccionar un registro a modificar.")
+            return;
+        }
+         window.location.href = '@Url.Content("~/TarjetaAfiliacion/Edit?id=")' + idModificar;
+    }
+</script>
+}
+
 @{
     ViewBag.Title = "Administrar Tarjeta";
 }
@@ -27,7 +62,7 @@
             <option  value="A">Activo</option>
             <option value="I">Inactivo</option>
         </select>
-        
+
     </div>
 </div>
 
@@ -36,58 +71,143 @@
 
         <input type="submit" value="Buscar" class="btn btn-default" />
         <a href="@Url.Content("~/TarjetaAfiliacion/Create")" class="btn btn-default">Nuevo</a>
+        <input type="button" value="Actualizar" class="btn btn-default" onclick="javascript:irModificar()" />
     </div>
 </div>
 }
     <br />
-    <table class="table">
-        <tr>
-            <th>
-                N° Tarjeta
-            </th>
-            <th>
-                Fecha Emisión
-            </th>
-            <th>
-                Fecha Vencimiento
-            </th>
-            <th>
-                Estado
-            </th>
+@if (Model != null && Model.Count() > 0)
+{ <div id="productos-table" class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <colgroup>
+                <col width="30" />
+                <col />
+                <col />
+                <col />
+                <col />
+                
+            </colgroup>
+            <thead>
+                <tr>
+<th>
+
+                    </th>
+                    <th>
+                        N° Tarjeta
+                    </th>
+                    <th>
+                        Fecha Emisión
+                    </th>
+                    <th>
+                        Fecha Vencimiento
+                    </th>
+                    <th>
+                        Estado
+                    </th>
 
 
-
-
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.numero_tarjeta)
-                </td>
-                <td>
-                    @string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_emision).ToString()))
-                    @*@Html.DisplayFor(modelItem => item.fecha_emision)*@
-                </td>
-                <td>
-                  @string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))
-                    @*@Html.DisplayFor(modelItem => item.fecha_vencimiento)*@
-                </td>
-                <td>
-                    Activo
-                </td>
-
-
-
-                <td>
-
-                    @Html.ActionLink("Actualizar", "Edit", new { id = item.pk_tarteja_afiliacion })
-
-
-                </td>
             </tr>
-        }
 
-    </table>
+                    @*<th></th>*@
+              </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+
+                            <input type="radio" name="opcionModificar" id="opcionModificar" value="@item.pk_tarteja_afiliacion" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.numero_tarjeta)
+                        </td>
+                        <td>
+                            @string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_emision).ToString()))
+                            @*@Html.DisplayFor(modelItem => item.fecha_emision)*@
+                        </td>
+                        <td>
+                            
+                            @if (item.fecha_vencimiento.Value.AddMonths(-1) < DateTime.Now)
+                            {
+                                <span style="color:red">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
+                            }
+                            else {
+                                <span style="color:green">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
+                            }
+                            @*<span>@item.fecha_vencimiento.Value.AddMonths(-1)</span>*@
+
+                            @*@Html.DisplayFor(modelItem => item.fecha_vencimiento)*@
+                        </td>
+                        <td>
+                            @if (item.estado.Equals("A"))
+                            {
+                                <span>Activo</span>
+                            }
+                            else {
+                                <span>Inactivo</span>
+                            }
+                        </td>
+
+
+
+                        @*<td>
+
+                        @Html.ActionLink("Actualizar", "Edit", new { id = item.pk_tarteja_afiliacion })
+
+
+                    </td>*@
+                    </tr>
+
+                }
+            </tbody>
+
+</table>
+    </div>
+}
+else
+{
+
+    <div id="productos-table" class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <colgroup>
+                <col width="30" />
+                <col />
+                <col />
+                <col />
+                <col />
+
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                        N° Tarjeta
+                    </th>
+                    <th>
+                        Fecha Emisión
+                    </th>
+                    <th>
+                        Fecha Vencimiento
+                    </th>
+                    <th>
+                        Estado
+                    </th>
+
+
+                </tr>
+
+                @*<th></th>*@
+            </thead>
+            <tbody>
+                <tr>
+
+                    <td colspan="5">No se encontraron registros</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+}
