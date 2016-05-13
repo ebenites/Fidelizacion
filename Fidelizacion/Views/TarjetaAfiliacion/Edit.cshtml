@@ -84,6 +84,12 @@
     @Scripts.Render("~/bundles/jqueryval")
 
 <script type="text/javascript">
+
+
+    $(function () {
+        $('#numeroTarjeta').attr('readonly', true);
+
+    });
     function retornar() {
         window.location.href = '@Url.Content("~/TarjetaAfiliacion/Index")'
     }
