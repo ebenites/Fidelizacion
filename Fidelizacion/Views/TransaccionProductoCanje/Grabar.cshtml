@@ -33,19 +33,19 @@
 <div class="row form-group">
     <label class="col-xs-6 form-control-label">Cantidad de Puntos</label>
     <div class="col-xs-6 form-inline">
-        160
+        @ViewBag.ticket.puntos
     </div>
 </div>
 <div class="row form-group">
     <label class="col-xs-6 form-control-label">Total Importe</label>
     <div class="col-xs-6 form-inline">
-        S/. 60.00
+        @string.Format("{0:C}", @ViewBag.ticket.importe)
     </div>
 </div>
 <div class="row form-group">
     <label class="col-xs-6 form-control-label">Puntos Restantes</label>
     <div class="col-xs-6 form-inline">
-        130
+        @ViewBag.cuenta.puntos
     </div>
 </div>
 
