@@ -31,10 +31,10 @@ namespace Fidelizacion
             // datetimepicker
             bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(
                       "~/Scripts/moment-with-locales.js",
-                      "~/Scripts/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"));
+                      "~/Scripts/bootstrap-datetimepicker.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/datetimepicker").Include(
-                      "~/Scripts/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"));
+                      "~/Scripts/bootstrap-datetimepicker.min.css"));
 
             // bootbox
             bundles.Add(new ScriptBundle("~/bundles/bootbox").Include(
@@ -43,6 +43,14 @@ namespace Fidelizacion
             // typeahead
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
                       "~/Scripts/bootstrap3-typeahead.min.js"));
+
+            // datatables
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                      "~/Scripts/jquery.dataTables.min.js",
+                      "~/Scripts/dataTables.bootstrap.min.js"));
+
+            bundles.Add(new StyleBundle("~/Content/datatables").Include(
+                      "~/Content/dataTables.bootstrap.min.css"));
 
             // gml resources
             bundles.Add(new ScriptBundle("~/bundles/js").Include(

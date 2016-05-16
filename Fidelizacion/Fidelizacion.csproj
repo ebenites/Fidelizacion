@@ -293,6 +293,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\carousel.css" />
     <Content Include="Content\dashboard.css" />
+    <Content Include="Content\dataTables.bootstrap.min.css" />
     <Content Include="Content\images\tarjetaOh.png" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\style.css" />
@@ -325,9 +326,11 @@
     <None Include="Properties\PublishProfiles\GCE ASPNET.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
+    <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

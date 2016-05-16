@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Fidelizacion.Models;
+using System.Diagnostics;
 
 namespace Fidelizacion.DAO
 {
@@ -120,14 +121,19 @@ namespace Fidelizacion.DAO
 
                     db.SaveChanges();
 
+                    Debug.WriteLine("Puntos descontados");
+
                     // Descontar stock a los productos
                     foreach (CarritoItem item in carrito.getItems())
                     {
-                        t_reporte_stock_producto_canje producto_stock = db.t_reporte_stock_producto_canje.Where(o => o.fk_producto_canje == item.getModalidad().fk_producto_canje && o.fk_tienda == idtienda).Single();
+                        int idproducto = item.getModalidad().fk_producto_canje;
+                        t_reporte_stock_producto_canje producto_stock = db.t_reporte_stock_producto_canje.Where(o => o.fk_producto_canje == idproducto && o.fk_tienda == idtienda).Single();
                         producto_stock.stock = producto_stock.stock - item.getCantidad();
 
                         db.SaveChanges();
                     }
+
+                    Debug.WriteLine("Stock descontados");
 
                     // Grabar ticket
                     t_ticket_canje ticket = new t_ticket_canje();
@@ -142,21 +148,42 @@ namespace Fidelizacion.DAO
 
                     db.SaveChanges();
 
+                    Debug.WriteLine("Ticket grabado");
+
+                    // Actualizando el numero de ricket
+
+                    ticket.numero_ticket = "PVCANJE-" + DateTime.Now.ToString("yyyy-MM-") + ticket.pk_ticket_canje.ToString("D4");
+                    
+                    db.SaveChanges();
 
                     // Grabar detalle
 
+                    foreach (CarritoItem item in carrito.getItems())
+                    {
+                        t_detalle_ticket_canje detalle = new t_detalle_ticket_canje();
+                        detalle.fk_ticket_canje = ticket.pk_ticket_canje;
+                        detalle.fk_modalidad_canje = item.getModalidad().pk_modalidad_canje;
+                        detalle.cantidad = item.getCantidad();
+                        detalle.subtotal_puntos = item.getSubTotalPuntos();
+                        detalle.subtotal_importe = item.getSubTotalImporte();
 
+                        db.t_detalle_ticket_canje.Add(detalle);
 
-                    db.SaveChanges();
+                        db.SaveChanges();
+                    }
+                    
+                    Debug.WriteLine("Detalle ticket grabado");
 
                     tx.Commit();
 
                     return ticket;
 
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     tx.Rollback();
+                    Debug.WriteLine(e.Message);
+                    Debug.WriteLine(e.StackTrace);
                 }
             }
             return null;

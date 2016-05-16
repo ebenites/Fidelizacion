@@ -197,21 +197,21 @@ namespace Fidelizacion.Controllers
             Carrito carrito = getCarrito();
             ViewBag.carrito = carrito;
 
-            /*
+            
             t_ticket_canje ticket = transaccionProductoCanjeService.grabarTicket(idcuenta, tienda.pk_tienda, carrito);
             ViewBag.ticket = ticket;
-            */
+            
             t_cuenta cuenta = transaccionProductoCanjeService.getCuenta(idcuenta);
             ViewBag.cuenta = cuenta;
 
-            t_ticket_canje ticket = new t_ticket_canje();
+            /*t_ticket_canje ticket = new t_ticket_canje();
             ticket.fecha_ticket = DateTime.Now;
             ticket.fk_cuenta = idcuenta;
             ticket.fk_tienda = idtienda;
             ticket.puntos = carrito.getTotalPuntos();
             ticket.importe = carrito.getTotalImporte();
             ticket.estado = "C";
-            ViewBag.ticket = ticket;
+            ViewBag.ticket = ticket;*/
 
             return View();
         }
