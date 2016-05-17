@@ -52,6 +52,13 @@ namespace Fidelizacion
             bundles.Add(new StyleBundle("~/Content/datatables").Include(
                       "~/Content/dataTables.bootstrap.min.css"));
 
+            // highcharts
+            bundles.Add(new ScriptBundle("~/bundles/highcharts").Include(
+                      "~/Scripts/highcharts.js",
+                      "~/Scripts/exporting.js",
+                      "~/Scripts/offline-exporting.js",
+                      "~/Scripts/jquery.highchartTable-min.js"));
+
             // gml resources
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                       ));
