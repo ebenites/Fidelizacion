@@ -44,7 +44,8 @@ namespace Fidelizacion.Controllers
 
             List<ReporteCanje> reporte = reporteCanjeService.reporteProductoCanje(idtienda, anio, trimestre, idcategoria);
             ViewBag.reporte = reporte;
-            
+            ViewBag.nreporte = reporte.Count;
+
             return View();
         }
 
@@ -62,6 +63,7 @@ namespace Fidelizacion.Controllers
 
             List<ReporteCanje> reporte = reporteCanjeService.reporteCategoriaCanje(idtienda, anio, trimestre, idcategoria);
             ViewBag.reporte = reporte;
+            ViewBag.nreporte = reporte.Count;
 
             return View();
         }
