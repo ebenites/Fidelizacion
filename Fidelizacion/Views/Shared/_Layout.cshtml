@@ -23,6 +23,9 @@
     @Styles.Render("~/Content/datatables")
     @Scripts.Render("~/bundles/datatables")
 
+    @Scripts.Render("~/bundles/highcharts")
+
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/js")
 
@@ -74,28 +77,33 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administración de Puntos<span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Adm. de Puntos<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Transacción de Producto Canje", "Index", "TransaccionProductoCanje")</li>
                             <li>@Html.ActionLink("Transferencia de Puntos", "Index", "TransferirPuntos")</li>
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestión de Tarjetas<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Administrar tarjeta", "Index", "TarjetaAfiliacion")</li>
+                          
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Generar Reporte de Canjes", "Index", "ReporteCanje")</li>
+                        </ul>
+                    </li>
                     @*<li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fidelización de CLientes<span class="caret"></span></a>
+                        <a href="#"> href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fidelización de CLientes<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">A</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#">B</a></li>
                         </ul>
                     </li>*@
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestión de Tarjetas de Afiliación<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Administrar tarjeta", "Index", "TarjetaAfiliacion")</li>
-                          
-                        </ul>
-                    </li>
                 </ul>
 
                 @Html.Partial("_LoginPartial")

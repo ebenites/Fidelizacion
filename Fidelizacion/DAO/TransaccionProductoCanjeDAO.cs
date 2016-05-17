@@ -32,7 +32,7 @@ namespace Fidelizacion.DAO
 
         public List<t_categoria_producto_canje> listCategorias()
         {
-            var categorias = db.t_categoria_producto_canje.ToList();
+            var categorias = db.t_categoria_producto_canje.OrderBy(o => o.nombre_categoria_producto).ToList();
             return categorias;
         }
 

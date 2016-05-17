@@ -1,0 +1,160 @@
+﻿@using Fidelizacion.Models;
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+
+
+
+        });
+
+        function generar() {
+            var idtienda = $('[name="tienda"]').val();
+            var anio = $('[name="anio"]').val();
+            var trimestre = $('[name="trimestre"]').val();
+            var idcategoria = $('[name="idcategoria"]').val();
+
+            var params = { 'idtienda': idtienda, 'anio': anio, 'trimestre': trimestre, 'idcategoria': idcategoria };
+
+            var tipo = $('[name="tipo"]:checked').val();
+
+            var url = '';
+            if (tipo == 'P') {
+                url = '@Url.Content("~/ReporteCanje/ReporteProductos")';
+            } else if (tipo == 'C') {
+                url = '@Url.Content("~/ReporteCanje/ReporteCategorias")';
+            }
+
+            $.post(url, params, function (data) {
+                $('#reporte-table').html(data);
+                $('#reporte-table table.highchart').highchartTable();
+            });
+
+        }
+
+        function saveGraph() {
+            var chart = Highcharts.charts[Highcharts.charts.length - 1];
+            chart.exportChart({
+                type: 'application/pdf',
+                filename: 'Reporte'
+            });
+        }
+
+        function printGraph() {
+            console.log()
+            var chart = Highcharts.charts[Highcharts.charts.length-1];
+            chart.print();
+        }
+    </script>
+}
+
+<ol class="breadcrumb">
+    <li><a href="#">Inicio</a></li>
+    <li><a href="#">Reportes</a></li>
+    <li class="active">Generar Reporte de Canjes</li>
+</ol>
+
+<div class="page-header">
+    <h2>Generar Reporte de Canjes</h2>
+    @{ViewBag.Title = "Generar Reporte de Canjes";}
+</div>
+
+<form onsubmit="return false;">
+
+    <fieldset>
+        <legend>Filtro</legend>
+
+        <div class="row">
+            <div class="col-sm-6">
+
+                <div class="row form-group">
+                    <label for="tienda" class="col-sm-2 form-control-label text-right">Tienda</label>
+                    <div class="col-sm-10 form-inline">
+                        <select id="tienda" name="tienda" class="form-control">
+                            <option value="0">-- Todos --</option>
+                            @foreach (t_tienda tienda in ViewBag.tiendas)
+                            {
+                                <option value="@tienda.pk_tienda")>@tienda.nombre_tienda</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <label for="anio" class="col-sm-2 form-control-label text-right">Año</label>
+                    <div class="col-sm-10 form-inline">
+                        <select id="anio" name="anio" class="form-control">
+                            <option value="0">-- Todos --</option>
+                            @foreach (int anio in ViewBag.anios)
+                            {
+                                <option value="@anio" )>@anio</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <label for="trimestre" class="col-sm-2 form-control-label text-right">Trimestre</label>
+                    <div class="col-sm-10 form-inline">
+                        <select id="trimestre" name="trimestre" class="form-control">
+                            <option value="0">-- Todos --</option>
+                            @for (int i=1; i<=4; i++)
+                            {
+                                <option value="@i" )>@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <label for="idcategoria" class="col-sm-2 form-control-label text-right">Categoría</label>
+                    <div class="col-sm-10 form-inline">
+                        <select id="idcategoria" name="idcategoria" class="form-control">
+                            <option value="0">-- Todos --</option>
+                            @foreach (t_categoria_producto_canje categoria in ViewBag.categorias)
+                            {
+                                <option value="@categoria.pk_categoria_producto_canje" )>@categoria.nombre_categoria_producto</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="tipo" id="tipo" value="P" checked>
+                            Ranking de productos
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="tipo" id="tipo" value="C">
+                            Ranking de categorias
+                        </label>
+                    </div>
+                </div>
+                
+                <br />
+
+                <br />
+
+                <div class="row form-group">
+                    <div class="col-sm-12 form-inline">
+                        <input type="button" value="Generar" class="btn btn-primary" style="width:100px" onclick="generar()" />
+                        <a href="@Url.Content("~/Home/Cerrar")" class="btn btn-danger" style="width:100px">Salir</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </fieldset>
+
+    <hr/>
+
+    <div id="reporte-table" class="table-responsive">
+
+    </div>
+
+</form>

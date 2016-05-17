@@ -187,14 +187,17 @@
     <Compile Include="Controllers\FichaAfiliacionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ReporteCanjeController.cs" />
     <Compile Include="Controllers\TarjetaAfiliacionController.cs" />
     <Compile Include="Controllers\TransaccionProductoCanjeController.cs" />
     <Compile Include="Controllers\TransferirPuntosController.cs" />
     <Compile Include="DAO\ITarjetaAfiliacionDAO.cs" />
+    <Compile Include="DAO\IReporteCanjeDAO.cs" />
     <Compile Include="DAO\ITiendaDAO.cs" />
     <Compile Include="DAO\ITransaccionProductoCanjeDAO.cs" />
     <Compile Include="DAO\ITransferirPuntosDAO.cs" />
     <Compile Include="DAO\TarjetaAfiliacionDAO.cs" />
+    <Compile Include="DAO\ReporteCanjeDAO.cs" />
     <Compile Include="DAO\TiendaDAO.cs" />
     <Compile Include="DAO\TransaccionProductoCanjeDAO.cs" />
     <Compile Include="DAO\TransferirPuntosDAO.cs" />
@@ -222,6 +225,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ReporteCanje.cs" />
     <Compile Include="Models\TarjetaAfiliacionViewModels.cs" />
     <Compile Include="Models\t_campana.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
@@ -279,10 +283,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ITarjetaAfiliacionService.cs" />
+    <Compile Include="Services\IReporteCanjeService.cs" />
     <Compile Include="Services\ITiendaService.cs" />
     <Compile Include="Services\ITransaccionProductoCanjeService.cs" />
     <Compile Include="Services\ITransferirPuntosService.cs" />
     <Compile Include="Services\TarjetaAfiliacionService.cs" />
+    <Compile Include="Services\ReporteCanjeService.cs" />
     <Compile Include="Services\TiendaService.cs" />
     <Compile Include="Services\TransaccionProductoCanjeService.cs" />
     <Compile Include="Services\TransferirPuntosService.cs" />
@@ -328,16 +334,20 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
+    <Content Include="Scripts\exporting.js" />
+    <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.highchartTable-min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\offline-exporting.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -402,6 +412,9 @@
     <Content Include="Views\TarjetaAfiliacion\Index.cshtml" />
     <Content Include="Views\TransaccionProductoCanje\ListCarrito.cshtml" />
     <Content Include="Views\TransaccionProductoCanje\Grabar.cshtml" />
+    <Content Include="Views\ReporteCanje\Index.cshtml" />
+    <Content Include="Views\ReporteCanje\ReporteProductos.cshtml" />
+    <Content Include="Views\ReporteCanje\ReporteCategorias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
