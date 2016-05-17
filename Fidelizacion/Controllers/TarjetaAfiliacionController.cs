@@ -57,7 +57,12 @@ namespace Fidelizacion.Controllers
         public ActionResult Create()
         {
             ViewBag.pk_tarteja_afiliacion = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta");
-            return View();
+            //ViewBag.fechaEmision = DateTime.Now;
+            TarjetaAfiliacionViewModels tarjeta = new TarjetaAfiliacionViewModels()
+            {
+                fechaEmision = DateTime.Now
+            };
+            return View(tarjeta);
         }
 
         // POST: TarjetaAfiliacion/Create
@@ -114,7 +119,7 @@ namespace Fidelizacion.Controllers
                 return HttpNotFound();
             }
             //ViewBag.pk_tarteja_afiliacion = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_tarjeta_afiliacion.pk_tarteja_afiliacion);
-            TarjetaAfiliacionViewModels tarjetaView = new TarjetaAfiliacionViewModels()
+            TarjetaAfiliacionEditViewModels tarjetaView = new TarjetaAfiliacionEditViewModels()
             {
                 numeroTarjeta = t_tarjeta_afiliacion.numero_tarjeta,
                 fechaEmision = (DateTime) t_tarjeta_afiliacion.fecha_emision ,
@@ -130,7 +135,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Codigo,fechaVencimiento,numeroTarjeta,fechaEmision,Estado")] TarjetaAfiliacionViewModels t_tarjeta_afiliacion)
+        public ActionResult Edit([Bind(Include = "Codigo,fechaVencimiento,numeroTarjeta,fechaEmision,Estado,motivo")] TarjetaAfiliacionViewModels t_tarjeta_afiliacion)
         {
             if (ModelState.IsValid)
             {

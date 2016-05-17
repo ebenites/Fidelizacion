@@ -78,6 +78,20 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 <script type="text/javascript">
+
+    $(function () {
+        var fechaEmision = $('#fechaEmision').val();
+
+        obj = {
+            value : fechaEmision
+        }
+        
+        checkboxcheck(obj)
+      
+       // $('#fechaVencimiento').attr('readonly', true);
+      
+
+    });
     function retornar() {
         window.location.href = '@Url.Content("~/TarjetaAfiliacion/Index")'
     }
