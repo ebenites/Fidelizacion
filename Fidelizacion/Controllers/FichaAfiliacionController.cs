@@ -18,6 +18,8 @@ namespace Fidelizacion.Controllers
         public ActionResult Index()
         {
             var t_ficha_afiliacion = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
+            FichaAfiliacionViewModel fichaAfiliacion = new FichaAfiliacionViewModel();
+            fichaAfiliacion.fecha_alta = DateTime.Now;
             return View(t_ficha_afiliacion.ToList());
         }
 
