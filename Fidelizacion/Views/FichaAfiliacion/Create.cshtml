@@ -24,7 +24,8 @@
     });
 
     function generar() {
-        $('#numero_cuenta').val(Math.round(Math.random() * 10000000000000000));
+        var ncuenta = Math.round(Math.random() * 10000000000000000);
+        $('[name="numero_cuenta"]').val(ncuenta);
     }
 
     </script>
@@ -74,7 +75,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.numero_documento, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -82,24 +83,25 @@
         <div class="form-group">
             @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
             </div>
         </div>
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.apellido_paterno, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*Html.LabelFor(model => model.apellido_paterno, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2" for="apellido_paterno">Apellidos</label>
             <div class="col-md-4">
-                @Html.EditorFor(model => model.apellido_paterno, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.apellido_paterno, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.apellido_paterno, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="display:none">
             @Html.LabelFor(model => model.apellido_materno, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.apellido_materno, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.apellido_materno, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.apellido_materno, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -244,7 +246,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.numero_cuenta, "", new { @class = "text-danger" })
             </div>
 
@@ -310,7 +312,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.numero_cuenta, "", new { @class = "text-danger" })
             </div>
 
@@ -359,8 +361,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="button" value="Grabar" class="btn btn-default" />&nbsp;&nbsp;
-                <input type="button" value="Salir" class="btn btn-default" />
+                <input type="submit" value="Grabar" class="btn btn-primary" />&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'"/>
             </div>
         </div>
     </div>
