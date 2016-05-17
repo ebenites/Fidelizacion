@@ -1,100 +1,132 @@
 ﻿@model IEnumerable<Fidelizacion.Models.t_ficha_afiliacion>
 
+@section scripts {
+    <script type="text/javascript">
+    $(function () {
+        $('#fichaAfiliados-table table.table').DataTable({
+            'pageLength': 5,
+            'bLengthChange': false,
+            'bFilter': false,
+            'bInfo': false,
+            'language': {
+                'paginate': {
+                    'next': 'Siguiente',
+                    'previous': 'Anterior'
+                }
+            }
+        });
+
+
+    });
+
+
+   
+    </script>
+}
+
+
+
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Registrar Afiliado";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Registrar Afiliado</h2>
+<br />
+<div class="form-horizontal">
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.apellido_paterno)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.apellido_materno)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.numero_documento)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sexo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.correo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.numero_telefono)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_alta)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_nacimiento)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.estado_afiliado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fecha_baja)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.t_tipo_documento.tipo_documento)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.apellido_paterno)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.apellido_materno)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.numero_documento)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sexo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.correo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.numero_telefono)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_alta)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_nacimiento)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.estado_afiliado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fecha_baja)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.t_tipo_documento.tipo_documento)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.pk_ficha_afiliacion }) |
-            @Html.ActionLink("Details", "Details", new { id=item.pk_ficha_afiliacion }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.pk_ficha_afiliacion })
-        </td>
-    </tr>
-}
 
+    <div class="form-group">
+
+        <label for="numeroCuenta" class="col-sm-2 control-label">Afiliado</label>
+        <div class="col-md-4">
+            <input type="text" name="numeroCuenta" class="form-control" placeholder="IngresarNumero de documento de identidad" />
+        </div>
+        <div class="col-md-1">
+            @Html.ActionLink("Buscar", "Buscar", null,new { @class = "btn btn-default", @role = "button" })
+        </div>
+        <div class="col-md-1">
+            @Html.ActionLink("Nuevo", "Create", null, new { @class = "btn btn-default", @role = "button" })
+        </div>
+    </div>
+</div>
+    @*<p>
+            @Html.ActionLink("Create New", "Create")
+        </p>*@
+    <br />
+
+    <div id="fichaAfiliados-table" class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <colgroup>
+                <col  />
+                <col />
+                <col />
+                <col />
+                <col />
+
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        N° Documento
+                    </th>
+                    <th>
+                        Tipo Afiliado
+                    </th>
+                    <th>
+                        Afiliado
+                    </th>
+
+
+                    <th>
+                        Estado
+                    </th>
+
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.numero_documento)
+                        </td>
+                        <td>
+                            ##
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nombre) @Html.DisplayFor(modelItem => item.apellido_paterno) @Html.DisplayFor(modelItem => item.apellido_materno)
+                        </td>
+
+
+
+                        <td>
+                            @if (item.estado_afiliado.Equals("A"))
+                            {
+                                <span>Activo</span>
+                            }
+                            else
+                            {
+                                <span>Inactivo</span>
+                            }
+                            @*@Html.DisplayFor(modelItem => item.estado_afiliado)*@
+                        </td>
+
+                        <td>
+
+                            @Html.ActionLink("Ver", "Details", new { id = item.pk_ficha_afiliacion }, new { @class = "btn btn-default", @role = "button" }) &nbsp;&nbsp;
+                            @Html.ActionLink("Asociado", "Edit", new { id = item.pk_ficha_afiliacion }, new { @class = "btn btn-default", @role = "button" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id=item.pk_ficha_afiliacion })*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
 </table>
+
+
+    </div>
+        
