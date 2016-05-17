@@ -6,38 +6,49 @@
 
 <h3>Ranking de Categorías</h3>
 
-<div class="row">
-    <div class="col-md-10">
+@if (ViewBag.nreporte == 0)
+{
+    <div class="alert alert-danger">
+        No existe información bajo los filtros indicados.
+    </div>
+}
+else
+{
 
-        <table class="table table-hover table-bordered highchart" style="display:none" data-graph-container-before="1" data-graph-type="pie" data-graph-datalabels-enabled="1">
-            <colgroup>
-                <col />
-                <col />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Categoría</th>
-                    <th>Cantidad</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (ReporteCanje categoria in ViewBag.reporte)
-                {
+    <div class="row">
+        <div class="col-md-10">
+
+            <table class="table table-hover table-bordered highchart" style="display:none" data-graph-container-before="1" data-graph-type="pie" data-graph-datalabels-enabled="1">
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <thead>
                     <tr>
-                        <td>@categoria.nombre</td>
-                        <td data-graph-name="@categoria.nombre">@categoria.cantidad</td>
+                        <th>Categoría</th>
+                        <th>Cantidad</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (ReporteCanje categoria in ViewBag.reporte)
+                    {
+                        <tr>
+                            <td>@categoria.nombre</td>
+                            <td data-graph-name="@categoria.nombre">@categoria.cantidad</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
+        </div>
+        <div class="col-md-2">
+
+            <button class="btn btn-default" onclick="saveGraph()" style="width:100px">Guardar</button><br />
+            <button class="btn btn-default" onclick="printGraph()" style="width:100px">Imprimir</button><br />
+
+        </div>
     </div>
-    <div class="col-md-2">
 
-        <button class="btn btn-default" onclick="saveGraph()" style="width:100px">Guardar</button><br />
-        <button class="btn btn-default" onclick="printGraph()" style="width:100px">Imprimir</button><br />
+    <hr />
 
-    </div>
-</div>
-
-<hr />
+}
