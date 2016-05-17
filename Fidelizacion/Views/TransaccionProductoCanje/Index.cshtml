@@ -107,6 +107,8 @@
                     }, 'json').fail(function (error) { bootbox.alert('Error interno en el servidor: ' + error.responseText) });
                 }
             });
+            $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
+            $('div.bootbox-confirm [data-bb-handler="cancel"]').text('Cancelar');
         }
 
         function aceptar() {
@@ -160,6 +162,7 @@
 
             // Fixed al boton
             $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
+            $('div.bootbox-confirm [data-bb-handler="cancel"]').text('Cancelar');
         }
 
     </script>
