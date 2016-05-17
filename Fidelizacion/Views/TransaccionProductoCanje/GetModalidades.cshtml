@@ -24,6 +24,13 @@ else
                 </div>
             </div>
             <div class="row form-group">
+                <label class="col-sm-4 form-control-label text-right">Catergoría</label>
+                <div class="col-sm-8 form-inline">
+                    <input type="text" class="form-control" value="@ViewBag.producto.t_categoria_producto_canje.nombre_categoria_producto " readonly />
+                    
+                </div>
+            </div>
+            <div class="row form-group">
                 <label class="col-sm-4 form-control-label text-right">Stock</label>
                 <div class="col-sm-8 form-inline">
                     <input type="text" class="form-control" name="maximo" value="@ViewBag.producto.getStockByTienda(ViewBag.tienda.pk_tienda)" readonly />
@@ -74,8 +81,8 @@ else
     <hr />
 
     <div class="form-group text-right">        
-        <input type="button" value="Aceptar" class="btn btn-primary" onclick="aceptar()" />
-        <input type="button" value="Cancelar" class="btn btn-danger" onclick="cancelar()" />
+        <input type="button" value="Aceptar" class="btn btn-primary" onclick="aceptar()" />&nbsp;&nbsp;
+        <input type="button" value="Salir" class="btn btn-danger" onclick="cancelar()" />
     </div>
 
 }
