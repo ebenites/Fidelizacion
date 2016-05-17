@@ -35,7 +35,11 @@ namespace Fidelizacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(t_ficha_afiliacion);
+            FichaAfiliacionViewModel ficha = new FichaAfiliacionViewModel()
+            {
+                nombre=t_ficha_afiliacion.nombre
+            };
+            return View(ficha);
         }
 
         // GET: FichaAfiliacion/Create

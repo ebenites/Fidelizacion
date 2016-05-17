@@ -26,14 +26,7 @@
             @Html.DisplayFor(model => model.numero_tarjeta)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.fk_cuenta)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.fk_cuenta)
-        </dd>
-
+       
         <dt>
             @Html.DisplayNameFor(model => model.fecha_emision)
         </dt>
@@ -42,17 +35,11 @@
             @Html.DisplayFor(model => model.fecha_emision)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.t_cuenta.numero_cuenta)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.t_cuenta.numero_cuenta)
-        </dd>
+       
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.pk_tarteja_afiliacion }) |
+   
     @Html.ActionLink("Back to List", "Index")
 </p>
