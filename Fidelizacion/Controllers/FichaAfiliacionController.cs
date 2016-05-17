@@ -17,8 +17,10 @@ namespace Fidelizacion.Controllers
         // GET: FichaAfiliacion
         public ActionResult Index()
         {
-            var t_ficha_afiliacion = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
-            return View(t_ficha_afiliacion.ToList());
+            //var t_ficha_afiliacion = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
+            FichaAfiliacionViewModel fichaAfiliacion = new FichaAfiliacionViewModel();
+            fichaAfiliacion.fecha_alta = DateTime.Now;
+            return View(fichaAfiliacion);
         }
 
         // GET: FichaAfiliacion/Details/5
