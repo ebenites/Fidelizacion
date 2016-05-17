@@ -25,6 +25,7 @@ namespace Fidelizacion.Models
         public string numero_tarjeta { get; set; }
         public Nullable<System.DateTime> fecha_emision { get; set; }
         public string estado { get; set; }
+        public string motivo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }

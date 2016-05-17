@@ -98,6 +98,7 @@
           <Property Name="pk_producto_canje" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fk_categoria_producto_canje" Type="int" Nullable="false" />
           <Property Name="nombre_producto" Type="nvarchar" MaxLength="50" />
+          <Property Name="costo" Type="decimal" Precision="18" Scale="2" />
           <Property Name="fecha_alta" Type="datetime" />
           <Property Name="fecha_baja" Type="datetime" Nullable="false" />
           <Property Name="fecha_inicio_vigencia" Type="date" />
@@ -153,6 +154,7 @@
           <Property Name="numero_tarjeta" Type="nchar" MaxLength="12" />
           <Property Name="fecha_emision" Type="datetime" />
           <Property Name="estado" Type="char" MaxLength="1" />
+          <Property Name="motivo" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="t_ticket_canje">
           <Key>
@@ -935,6 +937,7 @@
           <Property Name="fecha_emision" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjeta_afiliacion" ToRole="t_tarjera_afiliacion_cuenta" />
           <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="motivo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta">
           <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="0..1" />
@@ -1012,6 +1015,7 @@
           <NavigationProperty Name="t_categoria_producto_canje" Relationship="plazaveaModel.FK_t_producto_canje_t_categoria_producto_canje" FromRole="t_producto_canje" ToRole="t_categoria_producto_canje" />
           <NavigationProperty Name="t_modalidad_canje" Relationship="plazaveaModel.FK_t_modalidad_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_modalidad_canje" />
           <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_reporte_stock_producto_canje" />
+          <Property Name="costo" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="t_reporte_stock_producto_canje">
           <Key>
@@ -1283,6 +1287,7 @@
           <EntitySetMapping Name="t_tarjeta_afiliacion">
             <EntityTypeMapping TypeName="plazaveaModel.t_tarjeta_afiliacion">
               <MappingFragment StoreEntitySet="t_tarjeta_afiliacion">
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
                 <ScalarProperty Name="estado" ColumnName="estado" />
                 <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
                 <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
@@ -1328,6 +1333,7 @@
           <EntitySetMapping Name="t_producto_canje">
             <EntityTypeMapping TypeName="plazaveaModel.t_producto_canje">
               <MappingFragment StoreEntitySet="t_producto_canje">
+                <ScalarProperty Name="costo" ColumnName="costo" />
                 <ScalarProperty Name="estado" ColumnName="estado" />
                 <ScalarProperty Name="fecha_fin_vigencia" ColumnName="fecha_fin_vigencia" />
                 <ScalarProperty Name="fecha_inicio_vigencia" ColumnName="fecha_inicio_vigencia" />

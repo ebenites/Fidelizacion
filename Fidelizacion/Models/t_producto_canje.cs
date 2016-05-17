@@ -29,6 +29,7 @@ namespace Fidelizacion.Models
         public Nullable<System.DateTime> fecha_inicio_vigencia { get; set; }
         public Nullable<System.DateTime> fecha_fin_vigencia { get; set; }
         public string estado { get; set; }
+        public Nullable<decimal> costo { get; set; }
     
         public virtual t_categoria_producto_canje t_categoria_producto_canje { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

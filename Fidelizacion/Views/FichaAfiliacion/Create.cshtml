@@ -1,11 +1,41 @@
 ﻿@model Fidelizacion.Models.FichaAfiliacionViewModel
 
+@section scripts {
+    <script type="text/javascript">
+    $(function () {
+        $('#estado_afiliado').val('Activo');
+        $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
+
+        $('#estado').val('A');
+
+        $('#fecha_asignacion').datetimepicker({
+            format: "YYYY-MM-DD",
+            defaultDate: moment(),
+            locale: "es"
+        });
+
+        $('input[name="fecha_nacimiento"]').datetimepicker({
+            format: "YYYY-MM-DD",
+            locale: "es"
+        });
+
+        $('#motivo').val('Alta');
+       
+    });
+
+    function generar() {
+        $('#numero_cuenta').val(Math.round(Math.random() * 10000000000000000));
+    }
+
+    </script>
+}
+
 @{
     ViewBag.Title = "Nuevo Afiliado";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Nuevo Afiliaso</h2>
+<h2>Nuevo Afiliado</h2>
 <br />
 
 @using (Html.BeginForm()) 
@@ -37,7 +67,7 @@
 
             </div>
             <div class="col-md-1">
-                <input type="button"  value="Limpiar" class="btn btn-default"/>
+                <input type="button"  value="Limpiar" class="btn btn-default" onclick="this.form.reset()"/>
             </div>
         </div>
 
@@ -79,7 +109,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.fecha_nacimiento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.fecha_nacimiento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fecha_nacimiento, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.fecha_nacimiento, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -125,7 +155,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.correo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @type = "email", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -193,8 +223,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.estado_afiliado, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                <input readonly value="Activo" class="form-control" type="text"/>
-                @*@Html.EditorFor(model => model.estado_afiliado, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.EditorFor(model => model.estado_afiliado, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.estado_afiliado, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -203,7 +232,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.fecha_alta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.fecha_alta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fecha_alta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.fecha_alta, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -220,10 +249,10 @@
             </div>
 
             <div class="col-md-1">
-                <input type="button" value="Generar" class="btn btn-default"/>
+                <input type="button" value="Generar" class="btn btn-default" onclick="generar()"/>
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default"/>
+                <input type="button" value="Limpiar" class="btn btn-default" onclick="this.form.reset()"/>
             </div>
         </div>
 
@@ -239,7 +268,16 @@
         <div class="form-group">
             @Html.LabelFor(model => model.tipo_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.tipo_cuenta, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.EditorFor(model => model.tipo_cuenta, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.tipo_cuenta, new SelectList(
+                  new List<Object>{
+
+                       new { value = "1" , text = "Titular" },
+                       new { value = "1" , text = "Adicional" }
+                    },
+                  "value",
+                  "text",
+                   2), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.tipo_cuenta, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -247,19 +285,20 @@
         <div class="form-group">
             @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.cuenta_titular, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.cuenta_titular, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.cuenta_titular, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-1">
-                <input type="button" value="Buscar" class="btn btn-default"/>
+                <input type="button" value="Buscar" class="btn btn-default" disabled/>
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.estado, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                <input type="text" class="form-control" value="Activo" readonly />
                 @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -289,13 +328,13 @@
                 <input type="button" value="Buscar" class="btn btn-default" />
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default" />
+                <input type="button" value="Limpiar" class="btn btn-default"  onclick="this.form.reset()"/>
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.fecha_asignacion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.fecha_asignacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.fecha_asignacion, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.fecha_asignacion, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -303,7 +342,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.estado_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
+                @*Html.EditorFor(model => model.estado_tarjeta, new { htmlAttributes = new { @class = "form-control" } })*@
+                <input type="text" class="form-control" value="Activo" readonly />
                 @Html.ValidationMessageFor(model => model.estado_tarjeta, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -311,7 +351,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.motivo, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.motivo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.motivo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.motivo, "", new { @class = "text-danger" })
             </div>
         </div>
