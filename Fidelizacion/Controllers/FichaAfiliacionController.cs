@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Fidelizacion.Models;
+using System.Data.Entity.Validation;
 
 namespace Fidelizacion.Controllers
 {
@@ -87,12 +88,46 @@ namespace Fidelizacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "pk_ficha_afiliacion,apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,fecha_alta,fecha_nacimiento,estado_afiliado,fecha_baja,fk_tipo_documento")] t_ficha_afiliacion t_ficha_afiliacion)
         {
-            if (ModelState.IsValid)
+            /*if (ModelState.IsValid)
             {
                 db.t_ficha_afiliacion.Add(t_ficha_afiliacion);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-            }
+            }*/
+
+            /*try
+            {*/
+                t_ficha_afiliacion ficha = new t_ficha_afiliacion();
+                ficha.apellido_paterno = Request.Params["apellido_paterno"];
+                ficha.apellido_materno = "Duracel"; // Request.Params["apellido_materno"];
+                ficha.nombre = Request.Params["nombre"];
+                ficha.numero_documento = Request.Params["numero_documento"];
+                ficha.fk_tipo_documento = int.Parse(Request.Params["fk_tipo_documento"]);
+                ficha.sexo = Request.Params["sexo"];
+                ficha.correo = Request.Params["correo"];
+                ficha.numero_telefono = Request.Params["numero_telefono"];
+                ficha.estado_afiliado = "A";
+                ficha.fecha_nacimiento = DateTime.Now;
+                ficha.fecha_alta = DateTime.Now;
+
+
+                db.t_ficha_afiliacion.Add(t_ficha_afiliacion);
+                db.SaveChanges();
+
+            /*}
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+            }*/
 
             ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
             return View(t_ficha_afiliacion);
