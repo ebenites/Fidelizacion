@@ -135,11 +135,22 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Codigo,fechaVencimiento,numeroTarjeta,fechaEmision,Estado,motivo")] TarjetaAfiliacionViewModels t_tarjeta_afiliacion)
+        public ActionResult Edit([Bind(Include = "Codigo,fechaVencimiento,numeroTarjeta,fechaEmision,Estado,motivo")] TarjetaAfiliacionEditViewModels t_tarjeta_afiliacion_edit)
         {
+            TarjetaAfiliacionViewModels t_tarjeta_afiliacion = null;
             if (ModelState.IsValid)
             {
 
+                 t_tarjeta_afiliacion =  new TarjetaAfiliacionViewModels() {
+
+                     Codigo = t_tarjeta_afiliacion_edit.Codigo ,
+                     fechaVencimiento = t_tarjeta_afiliacion_edit.fechaVencimiento,
+                     numeroTarjeta = t_tarjeta_afiliacion_edit.numeroTarjeta,
+                     fechaEmision = t_tarjeta_afiliacion_edit.fechaEmision,
+                     Estado = t_tarjeta_afiliacion_edit.Estado,
+                     motivo = t_tarjeta_afiliacion_edit.motivo
+
+                 }         ;
                 //t_tarjeta_afiliacion t_tarjeta_afiliacion_mo = db.t_tarjeta_afiliacion.Find(t_tarjeta_afiliacion.Codigo);
 
                 //t_tarjeta_afiliacion_mo.estado = t_tarjeta_afiliacion.Estado;

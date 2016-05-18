@@ -101,6 +101,6 @@ namespace Fidelizacion.Models
 
         public int pk_ficha_afiliacion { get; set; }
            public DateTime fecha_baja { get; set; }
-      
+      public String tipo_afiliado { get; set; }
     }
 }

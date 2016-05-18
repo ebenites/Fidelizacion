@@ -58,6 +58,7 @@ namespace Fidelizacion.DAO
             t_tarjeta_afiliacion_mo.estado = t_tarjeta_afiliacion.Estado;
             t_tarjeta_afiliacion_mo.fecha_emision = t_tarjeta_afiliacion.fechaEmision;
             t_tarjeta_afiliacion_mo.fecha_vencimiento = t_tarjeta_afiliacion.fechaVencimiento;
+            t_tarjeta_afiliacion_mo.motivo = t_tarjeta_afiliacion.motivo;
             // t_tarjeta_afiliacion_mo.estado = t_tarjeta_afiliacion.Estado;
 
 

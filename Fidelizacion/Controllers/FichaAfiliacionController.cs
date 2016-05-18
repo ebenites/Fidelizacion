@@ -14,13 +14,44 @@ namespace Fidelizacion.Controllers
     {
         private plazaveaEntities db = new plazaveaEntities();
 
+        public ActionResult Buscar(String numeroCuenta)
+        {
+
+
+                   var t_afiliado = db.t_ficha_afiliacion .Where(o => o.numero_documento.Contains(numeroCuenta));
+
+            //var t_afiliado = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
+
+            List<FichaAfiliacionViewModel> fichaAfiliacion = new List<FichaAfiliacionViewModel>();
+
+            FichaAfiliacionViewModel ficha = null;
+            foreach (var item in t_afiliado)
+            {
+                //t_ficha_afiliacion fichaafiliacion = db.t_ficha_afiliacion.Find(item.fk_ficha_afiliacion); 
+                t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == item.pk_ficha_afiliacion).Single(); 
+                ficha = new FichaAfiliacionViewModel() {
+                    numero_documento  = item.numero_documento ,
+                    nombre = item.nombre + " " + item.apellido_paterno + " " + item.apellido_paterno ,
+                    estado_afiliado = item.estado_afiliado ,
+                     
+                    tipo_afiliado = cuenta.t_tipo_cuenta.tipo_cuenta  
+                
+                     
+
+                };
+                fichaAfiliacion.Add(ficha);
+            }
+
+            return View("Index", fichaAfiliacion.ToList());
+        }
+
         // GET: FichaAfiliacion
         public ActionResult Index()
         {
             var t_ficha_afiliacion = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
             FichaAfiliacionViewModel fichaAfiliacion = new FichaAfiliacionViewModel();
             fichaAfiliacion.fecha_alta = DateTime.Now;
-            return View(t_ficha_afiliacion.ToList());
+            return View();
         }
 
         // GET: FichaAfiliacion/Details/5
