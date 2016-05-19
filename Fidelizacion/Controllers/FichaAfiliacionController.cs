@@ -86,49 +86,95 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "pk_ficha_afiliacion,apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,fecha_alta,fecha_nacimiento,estado_afiliado,fecha_baja,fk_tipo_documento")] t_ficha_afiliacion t_ficha_afiliacion)
+        public ActionResult Create([Bind(Include = "pk_ficha_afiliacion,apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta")] FichaAfiliacionViewModel t_ficha_afiliacion)
         {
-            /*if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                db.t_ficha_afiliacion.Add(t_ficha_afiliacion);
+                
+
+            try
+            {
+                t_ficha_afiliacion t_ficha_afiliacion2 = new t_ficha_afiliacion() {
+                    
+
+
+                    apellido_materno = t_ficha_afiliacion.apellido_paterno,
+                    apellido_paterno = t_ficha_afiliacion.apellido_paterno,
+                    nombre = t_ficha_afiliacion.nombre,
+                    numero_documento = t_ficha_afiliacion.numero_documento,
+                    sexo = t_ficha_afiliacion.sexo,
+                    correo = t_ficha_afiliacion.correo,
+                    numero_telefono = t_ficha_afiliacion.numero_telefono,
+                    estado_afiliado = "A"
+
+                    //apellido_materno = "Del Carpio",
+                    //apellido_paterno = "Geldres",
+                    //nombre = "Fabian",
+                    //numero_documento = "123456",
+                    //sexo = "M",
+                    //correo = "fbngeldres@gmail.com",
+                    //numero_telefono = "123456",
+                    //estado_afiliado = "A"
+
+                };
+
+            
+               
+
+                db.t_ficha_afiliacion.Add(t_ficha_afiliacion2);
+               
                 db.SaveChanges();
-                return RedirectToAction("Index");
-            }*/
-
-            /*try
-            {*/
-                t_ficha_afiliacion ficha = new t_ficha_afiliacion();
-                ficha.apellido_paterno = Request.Params["apellido_paterno"];
-                ficha.apellido_materno = "Duracel"; // Request.Params["apellido_materno"];
-                ficha.nombre = Request.Params["nombre"];
-                ficha.numero_documento = Request.Params["numero_documento"];
-                ficha.fk_tipo_documento = int.Parse(Request.Params["fk_tipo_documento"]);
-                ficha.sexo = Request.Params["sexo"];
-                ficha.correo = Request.Params["correo"];
-                ficha.numero_telefono = Request.Params["numero_telefono"];
-                ficha.estado_afiliado = "A";
-                ficha.fecha_nacimiento = DateTime.Now;
-                ficha.fecha_alta = DateTime.Now;
 
 
-                db.t_ficha_afiliacion.Add(t_ficha_afiliacion);
-                db.SaveChanges();
+                    t_cuenta t_cuenta2 = new t_cuenta()
+                    {
+                        numero_cuenta = t_ficha_afiliacion.numero_cuenta,
+                        fecha_alta = DateTime.Now,
+                        puntos = t_ficha_afiliacion.puntos,
+                        estado_cuenta = "A",
+                        t_ficha_afiliacion = t_ficha_afiliacion2,
+                        fk_tipo_cuenta = t_ficha_afiliacion.tipo_cuenta 
 
-            /*}
+                    };
+
+                    db.t_cuenta.Add(t_cuenta2);
+                    db.SaveChanges();
+
+
+                    t_tarjeta_afiliacion t_tajeta_afiliacio2n = db.t_tarjeta_afiliacion.Find(1);
+
+                    System.Diagnostics.Debug.WriteLine(t_cuenta2.numero_cuenta);
+                    t_tarjera_afiliacion_cuenta t_tarjeta = new t_tarjera_afiliacion_cuenta()
+                    {
+
+                        t_tarjeta_afiliacion = t_tajeta_afiliacio2n,
+                        t_cuenta = t_cuenta2,
+                        fecha_afiliacion = DateTime.Now ,
+                        estado = "A"
+                        
+
+                    };
+
+                    db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
+                    db.SaveChanges();
+                }
             catch (DbEntityValidationException e)
             {
                 foreach (var eve in e.EntityValidationErrors)
                 {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                    System.Diagnostics.Debug.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
                         eve.Entry.Entity.GetType().Name, eve.Entry.State);
                     foreach (var ve in eve.ValidationErrors)
                     {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                        System.Diagnostics.Debug.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
                             ve.PropertyName, ve.ErrorMessage);
                     }
                 }
-            }*/
-
+            }
+                //db.t_ficha_afiliacion.Add(t_ficha_afiliacion);
+                //db.SaveChanges();
+                return View(t_ficha_afiliacion);
+            }
             ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
             return View(t_ficha_afiliacion);
         }
