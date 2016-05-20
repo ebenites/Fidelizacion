@@ -18,7 +18,7 @@ namespace Fidelizacion.Controllers
         {
 
 
-                   var t_afiliado = db.t_ficha_afiliacion .Where(o => o.numero_documento.Contains(numeroCuenta));
+                   var t_afiliado = db.t_ficha_afiliacion .Where(o => o.numero_documento.Contains(numeroCuenta)).ToList();
 
             //var t_afiliado = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
 

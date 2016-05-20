@@ -305,6 +305,10 @@
     <Content Include="Content\dataTables.bootstrap.min.css" />
     <Content Include="Content\images\tarjetaOh.png" />
     <Content Include="Content\logo.png" />
+    <Content Include="Content\productos\10.jpg" />
+    <Content Include="Content\productos\11.jpg" />
+    <Content Include="Content\productos\12.jpg" />
+    <Content Include="Content\productos\2.jpg" />
     <Content Include="Content\style.css" />
     <Content Include="Content\tienda.jpg" />
     <Content Include="favicon.ico" />
@@ -420,7 +424,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\productos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
