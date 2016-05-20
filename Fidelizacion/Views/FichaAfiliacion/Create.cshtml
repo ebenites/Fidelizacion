@@ -1,9 +1,163 @@
 ﻿@model Fidelizacion.Models.FichaAfiliacionViewModel
 
+
 @section scripts {
+    
     <script type="text/javascript">
+
+        function procesarFormulario() {
+
+            var tarjeta_afiliacion = $('#fk_tarjeta_afiliacion').val()
+
+            var tip_cuenta = $('#tipo_cuenta').val()
+            var operacion = true;
+         
+            if (tip_cuenta == '2') {
+               
+                var fk_cuenta = $('#fk_cuenta_titular').val()
+                
+                if (fk_cuenta == null || fk_cuenta == '' || fk_cuenta == '0') {
+                   
+                    $('#validacionfk_cuenta_titular').text("No se selecciono una cuenta titular.");
+                    operacion = false;
+                }
+            
+            }
+            
+            if (tarjeta_afiliacion == null || tarjeta_afiliacion == '' || tarjeta_afiliacion == '0') {
+                $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
+                operacion = false;
+            }
+            alert(tarjeta_afiliacion);
+            if (operacion) {
+                $('#formularioCrear').submit();
+            }
+            
+            
+        }
+
+        function buscarCuentaTitular() {
+
+           
+            var cuentaTitular2 = $('#cuenta_titular').val();
+
+           
+            alert(cuentaTitular2)
+            var objeto = {
+                cuenta_titular: cuentaTitular2
+            }
+            $.ajax({
+                url: '@Url.Content("~/FichaAfiliacion/GetCuentaTitular")',
+                type: "GET",
+                contentType: "application/json",
+                data: { cuenta_titular: cuentaTitular2},
+                dataType: "json",
+                success: function (response) {
+                    try {
+
+                       
+
+                        if (response.operacion) {
+                            
+                            $('#fk_cuenta_titular').attr('value', response.objeto.pk_cuenta);
+
+                            
+                        } else
+                        {
+                            alert(response.mensaje)
+                            $('#fk_cuenta_titular').attr('value', "");
+
+                        }
+                        
+                    } catch (e) {
+                        alert(e.message)
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde");
+
+                }
+
+
+            });
+
+        }
+
+
+        function buscarNumeroTarjeta() {
+
+
+            var cuentaTitular2 = $('#numero_tarjeta').val();
+
+            alert(cuentaTitular2)
+            var objeto = {
+                cuenta_titular: cuentaTitular2
+            }
+            $.ajax({
+                url: '@Url.Content("~/FichaAfiliacion/GetTarjetaAfiliacion")',
+                type: "GET",
+                contentType: "application/json",
+                data: { numero_tarjeta: cuentaTitular2 },
+                dataType: "json",
+                success: function (response) {
+                    try {
+
+
+                        if (response != null) {
+                            if (response.operacion) {
+                                alert(response.objeto.numero_tarjeta)
+                                $('#irAdministrar').css('display', 'none');
+                                $('#fk_tarjeta_afiliacion').attr('value', response.objeto.pk_tarteja_afiliacion);
+                                alert($('#fk_tarjeta_afiliacion').val());
+                            } else {
+                                alert(response.mensaje)
+                                $('#fk_tarjeta_afiliacion').attr('value', "");
+                            }
+
+                            if (response.mostrarLink) {
+                                
+                                $('#irAdministrar').css('display', 'block');
+                            }
+                            
+                        }
+
+
+
+
+                    } catch (e) {
+                        alert(e.message)
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde");
+
+                }
+
+
+            });
+
+        }
+
+        function habilitarCuentaTitular(obj) {
+            var tipoCuenta = obj.value;
+
+
+            if (tipoCuenta == "2") {
+               
+                $('#cuenta_titular').attr("readonly", false);
+                $('#buscar_cuentatitular').attr("disabled", false);
+                
+                $('#labelCuentaTitular').addClass("required-field");
+                
+            }
+
+
+        }
     $(function () {
         $('#estado_afiliado').val('Activo');
+        $('#tipo_cuenta').val('1');
         $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
 
         $('#estado').val('A');
@@ -20,12 +174,13 @@
         });
 
         $('#motivo').val('Alta');
-       
+
     });
 
     function generar() {
         var ncuenta = Math.round(Math.random() * 10000000000000000);
         $('[name="numero_cuenta"]').val(ncuenta);
+        $('[name="puntos"]').val(100);
     }
 
     </script>
@@ -36,10 +191,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+
+    .required-field:after {
+    color: #d00;
+    content: "(*)";
+    position: absolute;
+    margin-left: 3px;
+    top: 10px;
+}
+</style>
+
 <h2>Nuevo Afiliado</h2>
 <br />
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "FichaAfiliacion", FormMethod.Post, new { id = "formularioCrear" })) 
 {
     @Html.AntiForgeryToken()
 
@@ -47,9 +213,10 @@
         <h4>Datos Personales</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+        @Html.ValidationMessage("ERROR_MESSAGE", "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.fk_tipo_documento, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.fk_tipo_documento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
+           
             <div class="col-md-4">
                 @*@Html.DropDownList("fk_tipo_documento", null, htmlAttributes: new { @class = "form-control" })*@
               
@@ -73,7 +240,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.numero_documento, "", new { @class = "text-danger" })
@@ -81,7 +248,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
@@ -91,17 +258,17 @@
 
         <div class="form-group">
             @*Html.LabelFor(model => model.apellido_paterno, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <label class="control-label col-md-2" for="apellido_paterno">Apellidos</label>
+            <label class="control-label required-field col-md-2" for="apellido_paterno" >Apellidos</label>
             <div class="col-md-4">
                 @Html.EditorFor(model => model.apellido_paterno, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.apellido_paterno, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group" style="display:none">
+        <div class="form-group" >
             @Html.LabelFor(model => model.apellido_materno, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.apellido_materno, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.EditorFor(model => model.apellido_materno, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.apellido_materno, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -109,7 +276,7 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.fecha_nacimiento, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.fecha_nacimiento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.fecha_nacimiento, new { htmlAttributes = new { @type = "date", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.fecha_nacimiento, "", new { @class = "text-danger" })
@@ -118,7 +285,7 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.sexo, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.sexo, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.sexo, new SelectList(
                   new List<Object>{
@@ -135,7 +302,7 @@
 
 
         <div class="form-group">
-        @Html.LabelFor(model => model.estado_civil, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.estado_civil, htmlAttributes: new { @class = "control-label required-field col-md-2" })
         <div class="col-md-4">
             @Html.DropDownListFor(model => model.estado_civil, new SelectList(
                   new List<Object>{
@@ -155,7 +322,7 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.correo, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.correo, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @type = "email", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
@@ -163,7 +330,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_telefono, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.numero_telefono, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.numero_telefono, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.numero_telefono, "", new { @class = "text-danger" })
@@ -244,9 +411,9 @@
         <hr />
         
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @required = "required" } })
+                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly"} })
                 @Html.ValidationMessageFor(model => model.numero_cuenta, "", new { @class = "text-danger" })
             </div>
 
@@ -259,40 +426,45 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.puntos, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.puntos, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.puntos, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.puntos, new { htmlAttributes = new { @class = "form-control" , @readonly="readonly" } })
                 @Html.ValidationMessageFor(model => model.puntos, "", new { @class = "text-danger" })
             </div>
         </div>
         
 
         <div class="form-group">
-            @Html.LabelFor(model => model.tipo_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.tipo_cuenta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @*@Html.EditorFor(model => model.tipo_cuenta, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.DropDownListFor(model => model.tipo_cuenta, new SelectList(
                   new List<Object>{
 
                        new { value = "1" , text = "Titular" },
-                       new { value = "1" , text = "Adicional" }
+                       new { value = "2" , text = "Adicional" }
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   2), new { @class = "form-control" , @onchange="habilitarCuentaTitular(this)" })
+
+
                 @Html.ValidationMessageFor(model => model.tipo_cuenta, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2" , @id="labelCuentaTitular" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.cuenta_titular, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                @Html.ValidationMessageFor(model => model.cuenta_titular, "", new { @class = "text-danger" })
+                @*@Html.ValidationMessageFor(model => model.cuenta_titular, "", new { @class = "text-danger" })*@
+                @Html.ValidationMessageFor(model => model.fk_cuenta_titular, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.fk_cuenta_titular, null)
+                @*<span class="field-validation-valid text-danger" data-valmsg-for="fk_cuenta_titular"  id="validacionfk_cuenta_titular"></span>*@
             </div>
 
             <div class="col-md-1">
-                <input type="button" value="Buscar" class="btn btn-default" disabled/>
+                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="buscarCuentaTitular()"/>
             </div>
         </div>
 
@@ -310,7 +482,7 @@
         <hr />
 
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.numero_cuenta, "", new { @class = "text-danger" })
@@ -320,14 +492,20 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.numero_tarjeta, "", new { @class = "text-danger" })
+                <a href="@Url.Content("~/TarjetaAfiliacion/Create")" style="display:none" id="irAdministrar">Ingresar Administrar Tarjeta</a>
+                @*<input type="text" name="fk_tarjeta_afiliacion" id="fk_tarjeta_afiliacion" />*@
+                @*@Html.LabelFor(model => model.fk_tarjeta_afiliacion, htmlAttributes: new { @class = "control-label required-field col-md-2" })
+               @Html.EditorFor(model => model.fk_tarjeta_afiliacion, new { htmlAttributes = new { @class = "form-control" } })*@
+                 @Html.HiddenFor(model => model.fk_tarjeta_afiliacion, "")
+                <span class="field-validation-valid text-danger" data-valmsg-for="fk_tarjeta_afiliacion" data-valmsg-replace="true" id="validacionfk_tarjeta_afiliacion"></span>
             </div>
 
             <div class="col-md-1">
-                <input type="button" value="Buscar" class="btn btn-default" />
+                <input type="button" value="Buscar" class="btn btn-default" onclick="buscarNumeroTarjeta()" />
             </div>
             <div class="col-md-1">
                 <input type="button" value="Limpiar" class="btn btn-default"  onclick="this.form.reset()"/>
@@ -342,7 +520,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2"  })
             <div class="col-md-4">
                 @*Html.EditorFor(model => model.estado_tarjeta, new { htmlAttributes = new { @class = "form-control" } })*@
                 <input type="text" class="form-control" value="Activo" readonly />
@@ -361,7 +539,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Grabar" class="btn btn-primary" />&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Grabar" class="btn btn-primary" onclick="procesarFormulario();"/>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'"/>
             </div>
         </div>

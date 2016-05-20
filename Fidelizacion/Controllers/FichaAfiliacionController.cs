@@ -76,10 +76,154 @@ namespace Fidelizacion.Controllers
         // GET: FichaAfiliacion/Create
         public ActionResult Create()
         {
-            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento");
+            //ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento");
            
             ViewBag.fecha_alta = DateTime.Now;
             return View();
+        }
+
+
+        [HttpGet]
+        public ActionResult GetCuentaTitular(String cuenta_titular) {
+
+            //var obj = "{mensaje:\" no te lo puedo creer\"}"+ cuenta_titular;
+            String mensaje = "";
+            Boolean exitoOperacion = false;
+            //Object cuenta = null;
+            t_cuenta cuenta = null;
+
+            try
+            {
+
+          
+            if (cuenta_titular != null && !cuenta_titular.Trim().Equals(""))
+            {
+
+
+                IQueryable<t_cuenta> cuentaTitular = db.t_cuenta.Where(o => o.numero_cuenta == cuenta_titular);
+
+
+                if (cuentaTitular != null || cuentaTitular.Count() > 0)
+                {
+
+                    if (cuentaTitular.Count() > 1)
+                    {
+                        mensaje = "Se encontro más de un registro con el número de cuenta " + cuenta_titular;
+                        exitoOperacion = false;
+                    }
+                    else if (cuentaTitular.Count() == 1)
+                    {
+                        exitoOperacion = true;
+                            var cuentaLista = cuentaTitular.ToList().ElementAt(0);
+                            cuenta = new t_cuenta()
+                            {
+
+                                numero_cuenta = cuentaLista.numero_cuenta ,
+                                pk_cuenta = cuentaLista.pk_cuenta 
+                            };
+
+                    }
+                }
+                else {
+                    mensaje = "No se encontro registros con el número de cuenta  " + cuenta_titular;
+                    exitoOperacion = false;
+                }
+
+
+            }
+            else {
+                mensaje = "No se ingreso número de cuenta  ";
+                exitoOperacion = false;
+            }
+            }
+            catch (Exception e)
+            {
+                mensaje = e.Message;
+                exitoOperacion = false;
+            }
+            RespuestaViewModel respuesta = new RespuestaViewModel()
+            {
+                mensaje = mensaje ,
+                operacion = exitoOperacion,
+                objeto = cuenta
+            };
+
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        [HttpGet]
+        public ActionResult GetTarjetaAfiliacion(String numero_tarjeta)
+        {
+
+            var obj = "{mensaje:\" no te lo puedo creer\"}" + numero_tarjeta;
+            String mensaje = "sin setear " + numero_tarjeta;
+            Boolean exitoOperacion = false;
+            Boolean mostrarLink = false;
+            //Object cuenta = null;
+            t_tarjeta_afiliacion cuenta = null;
+
+            try
+            {
+
+
+                if (numero_tarjeta != null && !numero_tarjeta.Trim().Equals(""))
+                {
+
+
+                    IQueryable<t_tarjeta_afiliacion> listaTarjetaAfiliacion = db.t_tarjeta_afiliacion.Where(o => o.numero_tarjeta == numero_tarjeta);
+
+
+                    if (listaTarjetaAfiliacion != null && listaTarjetaAfiliacion.Count() > 0)
+                    {
+
+                        if (listaTarjetaAfiliacion.Count() > 1)
+                        {
+                            mensaje = "Se encontro más de un registro con el número de cuenta " + numero_tarjeta;
+                            exitoOperacion = false;
+                            
+                        }
+                        else if (listaTarjetaAfiliacion.Count() == 1)
+                        {
+                            exitoOperacion = true;
+                            var cuentaLista = listaTarjetaAfiliacion.ToList().ElementAt(0);
+                            cuenta = new t_tarjeta_afiliacion()
+                            {
+
+                                numero_tarjeta = cuentaLista.numero_tarjeta,
+                                pk_tarteja_afiliacion = cuentaLista.pk_tarteja_afiliacion
+                            };
+
+                        }
+                    }
+                    else {
+                        mensaje = "No se encontro registros con el número de cuenta  " + numero_tarjeta;
+                        exitoOperacion = false;
+                        mostrarLink = true;
+                    }
+
+
+                }
+                else {
+                    mensaje = "No se ingreso número de cuenta  ";
+                    exitoOperacion = false;
+                }
+            }
+            catch (Exception e)
+            {
+                mensaje = e.Message;
+                exitoOperacion = false;
+            }
+            RespuestaViewModel respuesta = new RespuestaViewModel()
+            {
+                mensaje = mensaje,
+                operacion = exitoOperacion,
+                objeto = cuenta,
+                mostrarLink = mostrarLink
+            };
+
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
         // POST: FichaAfiliacion/Create
@@ -87,7 +231,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "pk_ficha_afiliacion,apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta")] FichaAfiliacionViewModel t_ficha_afiliacion)
+        public ActionResult Create([Bind(Include = "apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta")] FichaAfiliacionViewModel fichaAfiliacionView)
         {
             if (ModelState.IsValid)
             {
@@ -95,66 +239,60 @@ namespace Fidelizacion.Controllers
 
             try
             {
-                //t_ficha_afiliacion t_ficha_afiliacion2 = new t_ficha_afiliacion() {
-                    
+               
 
+                    t_tarjeta_afiliacion tarjetaAfiliacion = db.t_tarjeta_afiliacion.Find(fichaAfiliacionView.fk_tarjeta_afiliacion);
 
-                //    apellido_materno = t_ficha_afiliacion.apellido_paterno,
-                //    apellido_paterno = t_ficha_afiliacion.apellido_paterno,
-                //    nombre = t_ficha_afiliacion.nombre,
-                //    numero_documento = t_ficha_afiliacion.numero_documento,
-                //    sexo = t_ficha_afiliacion.sexo,
-                //    correo = t_ficha_afiliacion.correo,
-                //    numero_telefono = t_ficha_afiliacion.numero_telefono,
-                //    estado_afiliado = "A"
+                    if (tarjetaAfiliacion!= null ) {
+                       
+                        t_cuenta cuentaAfiliado = null;
+                        if (fichaAfiliacionView.tipo_cuenta.Equals("2")) {
+                           
+                            cuentaAfiliado = db.t_cuenta.Where(o => o.pk_cuenta == fichaAfiliacionView.fk_cuenta_titular).Single();
+                            if (cuentaAfiliado != null)
+                            {
+                                if (cuentaAfiliado.t_tipo_cuenta.pk_tipo_cuenta.CompareTo(2)==0) {
+                                    ModelState.AddModelError("ERROR_MESSAGE", "El numero de tarjeta " + fichaAfiliacionView.numero_tarjeta + " es Asociado.");
+                                    return View(fichaAfiliacionView);
+                                }
+                                
+                            }
+                            else {
+                                ModelState.AddModelError("ERROR_MESSAGE", "No se encontro el titular con la cuenta " + fichaAfiliacionView.cuenta_titular + ".");
+                                return View(fichaAfiliacionView);
+                            }
+                        }
 
-                //    //apellido_materno = "Del Carpio",
-                //    //apellido_paterno = "Geldres",
-                //    //nombre = "Fabian",
-                //    //numero_documento = "123456",
-                //    //sexo = "M",
-                //    //correo = "fbngeldres@gmail.com",
-                //    //numero_telefono = "123456",
-                //    //estado_afiliado = "A"
+                        int? fk_cuenta_afiliado = null;
+                        if (cuentaAfiliado!= null) {
+                            fk_cuenta_afiliado = cuentaAfiliado.pk_cuenta;
+                        }
+                       
+                        t_tarjera_afiliacion_cuenta t_tarjeta = new t_tarjera_afiliacion_cuenta()  {
 
-                //};
-
-                    //t_cuenta t_cuenta2 = new t_cuenta()
-                    //{
-                    //    numero_cuenta = t_ficha_afiliacion.numero_cuenta,
-                    //    fecha_alta = DateTime.Now,
-                    //    puntos = t_ficha_afiliacion.puntos,
-                    //    estado_cuenta = "A",
-                    //    //t_ficha_afiliacion = t_ficha_afiliacion2,
-                    //    fk_tipo_cuenta = t_ficha_afiliacion.tipo_cuenta
-
-                    //};
-
-                    t_tarjeta_afiliacion t_tajeta_afiliacio2n = db.t_tarjeta_afiliacion.Find(1);
-
-
-                    t_tarjera_afiliacion_cuenta t_tarjeta = new t_tarjera_afiliacion_cuenta()
-                    {
-
-                        t_tarjeta_afiliacion = t_tajeta_afiliacio2n,
-                        //fk_cuenta = t_cuenta2.pk_cuenta,
+                        t_tarjeta_afiliacion = tarjetaAfiliacion,
+                        
                         t_cuenta = new t_cuenta() {
-                            numero_cuenta = t_ficha_afiliacion.numero_cuenta,
+                            numero_cuenta = fichaAfiliacionView.numero_cuenta,
                             fecha_alta = DateTime.Now,
-                            puntos = t_ficha_afiliacion.puntos,
+                            puntos = fichaAfiliacionView.puntos,
                             estado_cuenta = "A",
                             t_ficha_afiliacion = new t_ficha_afiliacion() {
-                                apellido_materno = t_ficha_afiliacion.apellido_paterno,
-                                apellido_paterno = t_ficha_afiliacion.apellido_paterno,
-                                nombre = t_ficha_afiliacion.nombre,
-                                numero_documento = t_ficha_afiliacion.numero_documento,
-                                sexo = t_ficha_afiliacion.sexo,
-                                correo = t_ficha_afiliacion.correo,
-                                numero_telefono = t_ficha_afiliacion.numero_telefono,
+                                apellido_materno = fichaAfiliacionView.apellido_paterno,
+                                apellido_paterno = fichaAfiliacionView.apellido_paterno,
+                                nombre = fichaAfiliacionView.nombre,
+                                numero_documento = fichaAfiliacionView.numero_documento,
+                                sexo = fichaAfiliacionView.sexo,
+                                correo = fichaAfiliacionView.correo,
+                                numero_telefono = fichaAfiliacionView.numero_telefono,
+                                fecha_alta = DateTime.Now ,
+                                fecha_nacimiento = fichaAfiliacionView.fecha_nacimiento ,
+                                fk_tipo_documento = fichaAfiliacionView .fk_tipo_documento ,  
                                 estado_afiliado = "A"
 
                             },
-                            fk_tipo_cuenta = t_ficha_afiliacion.tipo_cuenta
+                            fk_tipo_cuenta = fichaAfiliacionView.tipo_cuenta,
+                            fk_cuenta = fk_cuenta_afiliado
                         },
                         fecha_afiliacion = DateTime.Now,
                         estado = "A"
@@ -162,26 +300,27 @@ namespace Fidelizacion.Controllers
 
                     };
 
-                    //t_cuenta2.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
-                    //t_ficha_afiliacion2.t_cuenta.Add(t_cuenta2);
-                                    db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
+                        
+                        db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
                     
                
                 db.SaveChanges();
 
 
-                  
-
-                    //db.t_cuenta.Add(t_cuenta2);
-                    //db.SaveChanges();
 
 
-                  
+                    }
+                    else
+                    {
+
+                        ModelState.AddModelError("ERROR_MESSAGE", "El numero de tarjeta " + fichaAfiliacionView.numero_tarjeta + " no fue encontrado.");
+                        return View(fichaAfiliacionView);
+                    }
+
+
                     //System.Diagnostics.Debug.WriteLine(t_cuenta2.numero_cuenta);
-                    
 
-                    //db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
-                    //db.SaveChanges();
+
                 }
             catch (DbEntityValidationException e)
             {
@@ -196,12 +335,11 @@ namespace Fidelizacion.Controllers
                     }
                 }
             }
-                //db.t_ficha_afiliacion.Add(t_ficha_afiliacion);
-                //db.SaveChanges();
-                return View(t_ficha_afiliacion);
+               
+              
             }
-            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
-            return View(t_ficha_afiliacion);
+            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", fichaAfiliacionView.fk_tipo_documento);
+            return View(fichaAfiliacionView);
         }
 
         // GET: FichaAfiliacion/Edit/5

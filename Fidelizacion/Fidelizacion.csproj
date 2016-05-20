@@ -207,6 +207,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Carrito.cs" />
     <Compile Include="Models\CarritoItem.cs" />
+    <Compile Include="Models\DateNotGreaterThanTodayAttribute.cs" />
     <Compile Include="Models\FichaAfiliacionViewModel.cs" />
     <Compile Include="Models\FidelizacionModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -226,6 +227,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ReporteCanje.cs" />
+    <Compile Include="Models\RespuestaViewModel.cs" />
     <Compile Include="Models\TarjetaAfiliacionViewModels.cs" />
     <Compile Include="Models\t_campana.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
