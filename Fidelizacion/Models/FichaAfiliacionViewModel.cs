@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -123,5 +124,62 @@ namespace Fidelizacion.Models
         public int pk_ficha_afiliacion { get; set; }
            public DateTime fecha_baja { get; set; }
       public String tipo_afiliado { get; set; }
+    }
+
+
+
+    public class DesasociarFichaAfiliacionViewModel
+    {
+        [Display(Name = "Tipo Documento de Identidad")]
+        public string  tipo_documento { get; set; }
+
+        [Display(Name = "Numero Documento de Identidad")]
+        public string numero_documento { get; set; }
+
+        [Display(Name = "Nombres")]
+        public string nombre { get; set; }
+
+
+        [Display(Name = "Apellido Paterno")]
+        public string apellido_paterno { get; set; }
+
+
+        public IEnumerable<DesasociarFichaAfiliacionViewModel> Asociados { get; set; }
+
+        [Display(Name = "Sexo")]
+        public string sexo { get; set; }
+
+
+      
+
+         
+
+
+        [Display(Name = "Estado")]
+        public string estado_afiliado { get; set; }
+
+        [Display(Name = "Fecha Alta")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime fecha_alta { get; set; }
+
+
+        //Datos de la cuenta
+        [Display(Name = "N° Cuenta")]
+        public String numero_cuenta { get; set; }
+
+        [Display(Name = "Puntos")]
+        public int puntos { get; set; }
+
+        //Datos Tarjeta
+
+        [Display(Name = "N° Tarjeta")]
+        public String numero_tarjeta { get; set; }
+
+
+        public String tipo_cuenta { get; set; }
+
+        public int pk_numero_cuenta { get; set; }
+
     }
 }

@@ -1,0 +1,203 @@
+﻿@model Fidelizacion.Models.DesasociarFichaAfiliacionViewModel
+
+
+@section scripts {
+    
+    <script type="text/javascript">
+
+    $(function () {
+      
+
+    });
+
+   
+
+    </script>
+}
+
+@{
+    ViewBag.Title = "Desasociar Afiliado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>Desasociar Adicionales</h2>
+<br />
+
+@using (Html.BeginForm("Create", "FichaAfiliacion", FormMethod.Post, new { id = "formularioCrear" })) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Datos del Titular</h4>
+        <hr />
+        
+        @Html.ValidationMessage("ERROR_MESSAGE", "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.tipo_documento, htmlAttributes: new { @class = "control-label col-md-2" })
+           
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.tipo_documento)
+            </label>
+
+            @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="col-md-2">*@
+                @*@Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control" } })*@
+                <label class="control-label col-md-2">
+                    @Html.DisplayFor(model => model.numero_documento)
+                </label>
+@*</div>*@
+
+            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
+           
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.numero_cuenta)
+            </label>
+             @*<div class="col-md-2">
+                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+            </div>*@
+
+        </div>
+
+      
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="col-md-2">
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                
+            </div>*@
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.nombre)
+            </label>
+
+            @Html.LabelFor(model => model.sexo, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.sexo)
+            </label>
+            @*<div class="col-md-2">
+                @Html.DropDownListFor(model => model.sexo, new SelectList(
+                  new List<Object>{
+
+                       new { value = "M" , text = "Masculino" },
+                       new { value = "F" , text = "Femenino"}
+                    },
+                  "value",
+                  "text",
+                   2), new { @class = "form-control" })
+
+            </div>*@
+
+            @Html.LabelFor(model => model.estado_afiliado, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="col-md-2">
+                @Html.EditorFor(model => model.estado_afiliado, new { htmlAttributes = new { @class = "form-control" } })
+
+            </div>*@
+            @if (Model.estado_afiliado.Equals("A"))
+            {
+                <label class="control-label col-md-2">
+                    Activo
+                </label>
+            }
+            else {
+                <label class="control-label col-md-2">
+                    Inactivo
+                </label>
+            }
+
+
+        </div>
+
+      
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
+            
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.numero_tarjeta)
+            </label>
+            @*<div class="col-md-2">
+                @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
+
+            </div>*@
+            @Html.LabelFor(model => model.puntos, htmlAttributes: new { @class = "control-label col-md-2" })
+           
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.puntos)
+            </label>
+             @*<div class="col-md-2">
+                @Html.EditorFor(model => model.puntos, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+            </div>*@
+            @Html.LabelFor(model => model.fecha_alta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">
+                @Html.DisplayFor(model => model.fecha_alta)
+            </label>
+            
+        </div>
+
+        
+
+      
+        <br />
+
+      
+        <table class="table">
+            <thead>
+
+                <tr>
+
+                    <td>N°</td>
+                    <td>DNI</td>
+                    <td>Tarjeta</td>
+                    <td>Cuenta</td>
+                    <td>Nombres Afiliado</td>
+                    <td>Tipo Cuenta</td>
+                    <td>Opciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                   @if (Model.Asociados != null)
+                   {
+
+                       int indice = 1;
+                       foreach (var item in Model.Asociados)
+                       {
+                          
+                    <tr>
+                        <td>@indice</td>
+                        <td>@item.numero_documento</td>
+                        <td>@item.numero_tarjeta</td>
+                        <td>@item.numero_cuenta</td>
+                        <td>@item.nombre</td>
+                        <td>@item.tipo_cuenta</td>
+                        
+                        <td><input type="button" value="Desasociar" onclick="desasociar(this)" /></td>
+                    </tr>
+                           indice++;
+                       }
+                   }
+            </tbody>
+
+        </table>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Grabar" class="btn btn-primary" onclick="procesarFormulario();"/>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'"/>
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>*@

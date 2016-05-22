@@ -34,9 +34,10 @@ namespace Fidelizacion.Controllers
                     nombre = item.nombre + " " + item.apellido_paterno + " " + item.apellido_paterno ,
                     estado_afiliado = item.estado_afiliado ,
                      
-                    tipo_afiliado = cuenta.t_tipo_cuenta.tipo_cuenta  
-                
-                     
+                    tipo_afiliado = cuenta.t_tipo_cuenta.tipo_cuenta  ,
+                    pk_ficha_afiliacion = item.pk_ficha_afiliacion 
+
+
 
                 };
                 fichaAfiliacion.Add(ficha);
@@ -80,6 +81,52 @@ namespace Fidelizacion.Controllers
            
             ViewBag.fecha_alta = DateTime.Now;
             return View();
+        }
+
+        public ActionResult Desasociar(int id) {
+
+            t_ficha_afiliacion fichaAfiliacion = db.t_ficha_afiliacion.Find(id);
+
+            t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == fichaAfiliacion.pk_ficha_afiliacion).Single();
+            t_tarjeta_afiliacion tarjeta =  db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta && o.estado.Equals("A")).Single().t_tarjeta_afiliacion;   
+            DesasociarFichaAfiliacionViewModel desasociarFicha = new DesasociarFichaAfiliacionViewModel() {
+                numero_documento = fichaAfiliacion.numero_documento,
+                numero_cuenta = cuenta.numero_cuenta ,
+                nombre = fichaAfiliacion.nombre + " " +fichaAfiliacion.apellido_paterno ,
+                sexo = fichaAfiliacion.sexo ,
+                estado_afiliado = fichaAfiliacion.estado_afiliado ,
+                numero_tarjeta = tarjeta.numero_tarjeta ,
+                puntos = (int)cuenta.puntos ,
+                fecha_alta = (DateTime)fichaAfiliacion.fecha_alta  ,
+                tipo_documento = fichaAfiliacion.t_tipo_documento.tipo_documento   
+                 
+
+            };
+
+            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta);
+            List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
+            foreach (var item in asociados) {
+                t_tarjeta_afiliacion tarjetaAsociado = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.pk_cuenta && o.estado.Equals("A")).Single().t_tarjeta_afiliacion;
+                String numeroTarjeta = "";
+
+                if (tarjetaAsociado!=null)
+                {
+                    numeroTarjeta = tarjetaAsociado.numero_tarjeta;
+                }
+                DesasociarFichaAfiliacionViewModel asociado = new DesasociarFichaAfiliacionViewModel() {
+                    numero_documento = item.t_ficha_afiliacion.numero_documento ,
+                    numero_cuenta = item.numero_cuenta ,
+                    tipo_cuenta = item.t_tipo_cuenta.tipo_cuenta ,
+                    pk_numero_cuenta = item.pk_cuenta ,
+                    nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellido_paterno    ,
+                    numero_tarjeta = numeroTarjeta
+
+                };
+                lista.Add(asociado);
+            }
+            desasociarFicha.Asociados = lista;
+            ViewBag.fecha_alta = DateTime.Now;
+            return View(desasociarFicha);
         }
 
 
