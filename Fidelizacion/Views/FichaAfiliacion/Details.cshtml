@@ -91,10 +91,10 @@
 
 
         <div class="form-group">
-            @*Html.LabelFor(model => model.apellido_paterno, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <label class="control-label required-field col-md-2" for="apellido_paterno">Apellidos</label>
+            @*Html.LabelFor(model => model.apellidos, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label required-field col-md-2" for="apellidos">Apellidos</label>
             <div class="col-md-4">
-                @Html.EditorFor(model => model.apellido_paterno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.EditorFor(model => model.apellidos, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                
             </div>
         </div>
@@ -370,7 +370,7 @@
                     @foreach (var item in Model.Asociados)
                     {
 
-                        <tr id="@item.pk_numero_cuenta">
+                        <tr id="@item.id_numero_cuenta">
                             <td>@indice</td>
                             <td>@item.numero_documento</td>
                             <td>@item.numero_tarjeta</td>

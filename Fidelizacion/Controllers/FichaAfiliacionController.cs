@@ -68,13 +68,13 @@ namespace Fidelizacion.Controllers
                 return HttpNotFound();
             }
 
-            t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == fichaAfiliacion.pk_ficha_afiliacion).Single();  
+            t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == fichaAfiliacion.id_ficha_afiliacion).Single();  
             FichaAfiliacionViewModel ficha = new FichaAfiliacionViewModel()
             {
                 nombre=fichaAfiliacion.nombre,
                 numero_documento =fichaAfiliacion .numero_documento ,
                 fk_tipo_documento = (int)fichaAfiliacion.fk_tipo_documento ,
-                apellido_paterno = fichaAfiliacion.apellido_paterno ,
+                apellidos = fichaAfiliacion.apellidos ,
                 fecha_nacimiento = (DateTime)fichaAfiliacion.fecha_nacimiento ,
                 sexo = fichaAfiliacion.sexo ,
                 estado_civil = "Soltero",
@@ -112,7 +112,7 @@ namespace Fidelizacion.Controllers
                     ficha.estado = "Activo";
                 }
 
-                t_tarjera_afiliacion_cuenta tarjetaAfiliacionCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta).Single();
+                t_tarjera_afiliacion_cuenta tarjetaAfiliacionCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).Single();
 
                 if (tarjetaAfiliacionCuenta!= null) {
                     t_tarjeta_afiliacion tarjeta = tarjetaAfiliacionCuenta.t_tarjeta_afiliacion;
@@ -141,11 +141,11 @@ namespace Fidelizacion.Controllers
                 }
             }
 
-            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta);
+            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta);
             List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
             foreach (var item in asociados)
             {
-                t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.pk_cuenta).Single();
+                t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.id_cuenta).Single();
 
                 t_tarjeta_afiliacion tarjetaAsociado = null;
 
@@ -164,8 +164,8 @@ namespace Fidelizacion.Controllers
                     numero_documento = item.t_ficha_afiliacion.numero_documento,
                     numero_cuenta = item.numero_cuenta,
                     tipo_cuenta = item.t_tipo_cuenta.tipo_cuenta,
-                    pk_numero_cuenta = item.pk_cuenta,
-                    nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellido_paterno,
+                    id_numero_cuenta = item.id_cuenta,
+                    nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellidos,
                     numero_tarjeta = numeroTarjeta,
                     estado_afiliado = item.t_ficha_afiliacion.estado_afiliado
 
