@@ -83,37 +83,105 @@ namespace Fidelizacion.Controllers
             return View();
         }
 
-        public ActionResult ValidarCuentaAsociado(int? pk_cuenta) {
-            RespuestaViewModel respuesta = new RespuestaViewModel() {
+        public ActionResult ValidarCuentaAsociado(int? pk_cuenta)
+        {
+            RespuestaViewModel respuesta = new RespuestaViewModel()
+            {
                 operacion = false,
                 mensaje = "No se proceso la solicitud, Intentelo más tarde."
             };
-            try {
-            
-            t_cuenta t_cuenta = db.t_cuenta.Find(pk_cuenta);
-            if (t_cuenta != null) {
+            try
+            {
 
-                    t_cuenta cuentaJson = new t_cuenta() {
+                t_cuenta t_cuenta = db.t_cuenta.Find(pk_cuenta);
+                if (t_cuenta != null)
+                {
+
+                    t_cuenta cuentaJson = new t_cuenta()
+                    {
                         pk_cuenta = t_cuenta.pk_cuenta,
                         numero_cuenta = t_cuenta.numero_cuenta
                     };
-                if (t_cuenta.estado_cuenta.Equals("I"))
-                {
-                    respuesta.operacion = true;
-                    respuesta.objeto = cuentaJson;
-                }
-                else {
-                    respuesta.operacion = false;
-                         respuesta.objeto = cuentaJson;
-                        respuesta.mensaje = "La cuenta " + t_cuenta.numero_cuenta + " se encuentra activa.";
+                    if (t_cuenta.t_ficha_afiliacion.estado_afiliado.Equals("I"))
+                    {
+                        if (t_cuenta.puntos > 0)
+                        {
+                            respuesta.operacion = false;
+                            respuesta.mensaje = "La cuenta con número " + t_cuenta.numero_cuenta + " posee " + t_cuenta.puntos + " puntos";
+                        }
+                        else {
+                            respuesta.operacion = true;
+                            respuesta.objeto = cuentaJson;
+                        }
+                        
+                    }
+                    else {
+                        respuesta.operacion = false;
+                        respuesta.objeto = cuentaJson;
+                        respuesta.mensaje = "La ficha afiliacion de " + t_cuenta.t_ficha_afiliacion.nombre + " " + t_cuenta.t_ficha_afiliacion.apellido_paterno + " se encuentra activa.";
+                    }
                 }
             }
-            }  catch (
-            Exception e)
+            catch (
+         Exception e)
             {
                 respuesta.operacion = false;
                 respuesta.mensaje = e.Message;
             }
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GrabarDesafiliacion(String desasociados) {
+            RespuestaViewModel respuesta = new RespuestaViewModel()
+            {
+                operacion = false,
+                mensaje = "No se proceso la solicitud, Intentelo más tarde."
+            };
+
+            try
+            {
+                String[] listaDesasociados = null;
+
+                if (desasociados != null && !desasociados.Trim().Equals(""))
+                {
+                    listaDesasociados = desasociados.Split(',');
+                }
+               
+                if (listaDesasociados != null && listaDesasociados.Length > 0)
+                {
+                    foreach (var item in listaDesasociados)
+                    {
+
+                        t_cuenta cuenta = db.t_cuenta.Find(Int32.Parse(item));
+
+                        if (cuenta != null)
+                        {
+
+                            cuenta.estado_cuenta = "I";
+                            db.Entry(cuenta).State = EntityState.Modified;
+
+                            db.SaveChanges();
+
+                           
+                        }
+                        
+
+                    }
+                    respuesta.operacion = true;
+                }
+                else {
+                    respuesta.operacion = false;
+                    respuesta.mensaje = "No se encontró los registros a desasociar.";
+                }
+            }
+            catch (Exception e) {
+
+                respuesta.operacion = false;
+                respuesta.mensaje = e.Message;
+            }
+
+          
+           
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
@@ -140,7 +208,13 @@ namespace Fidelizacion.Controllers
             var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta);
             List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
             foreach (var item in asociados) {
-                t_tarjeta_afiliacion tarjetaAsociado = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.pk_cuenta && o.estado.Equals("A")).Single().t_tarjeta_afiliacion;
+                t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.pk_cuenta).Single();
+
+                t_tarjeta_afiliacion tarjetaAsociado = null;
+
+                if (tarjetaAsociadoCuenta != null ) {
+                    tarjetaAsociado = tarjetaAsociadoCuenta.t_tarjeta_afiliacion;
+                }
                 String numeroTarjeta = "";
 
                 if (tarjetaAsociado!=null)
@@ -153,7 +227,8 @@ namespace Fidelizacion.Controllers
                     tipo_cuenta = item.t_tipo_cuenta.tipo_cuenta ,
                     pk_numero_cuenta = item.pk_cuenta ,
                     nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellido_paterno    ,
-                    numero_tarjeta = numeroTarjeta
+                    numero_tarjeta = numeroTarjeta,
+                    estado_afiliado = item.t_ficha_afiliacion.estado_afiliado
 
                 };
                 lista.Add(asociado);

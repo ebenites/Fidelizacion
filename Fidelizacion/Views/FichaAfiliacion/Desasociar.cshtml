@@ -6,55 +6,114 @@
     <script type="text/javascript">
 
     $(function () {
-
-
+       $("#alertaSucces").hide();
+        
     });
 
     function grabar(){
-        bootbox.confirm("¿Está seguro que desea confirmar la trasferencia?", function (result) {
+        bootbox.confirm("¿Está seguro que desea confirmar la operación?", function (result) {
             if (result) {
-                alert("Exito");
+                var lista_desasociados = $("#lista_desasociado").val();
                
+
+                if (lista_desasociados == null || lista_desasociados == '') {
+                    bootbox.alert("Debe seleccionar al menos un asociado");
+                    return;
+                }
+
+               
+                $.ajax({
+                    url: '@Url.Content("~/FichaAfiliacion/GrabarDesafiliacion")',
+                    type: "GET",
+                    contentType: "application/json",
+                    data: { 'desasociados': lista_desasociados },
+                    dataType: "json",
+                    success: function (response) {
+                        try {
+
+                            
+
+                            if (response.operacion) {
+
+                                $("#alertaSucces").html("Se realizo la desafilción de tus asociados.");
+                                $("#alertaSucces").show();
+                            } else {
+                               
+                                bootbox.alert(response.mensaje);
+
+                            }
+
+                        } catch (e) {
+                            bootbox.alert(e.message)
+                        }
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        bootbox.alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde" + errorThrown);
+
+                    }
+
+
+                });
             }
         });
-       
+        $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
+        $('div.bootbox-confirm [data-bb-handler="cancel"]').text('Cancelar');
     }
 
     function desasociar(id){
 
-        $.ajax({
-            url: '@Url.Content("~/FichaAfiliacion/ValidarCuentaAsociado")',
-            type: "GET",
-            contentType: "application/json",
-            data: { pk_cuenta: id },
-            dataType: "json",
-            success: function (response) {
-                try {
+        
+
+        bootbox.confirm("¿Está seguro de desvincular al afiliado asociado?", function (result) {
+              if (result) {
+                  $.ajax({
+                      url: '@Url.Content("~/FichaAfiliacion/ValidarCuentaAsociado")',
+                      type: "GET",
+                      contentType: "application/json",
+                      data: { pk_cuenta: id },
+                      dataType: "json",
+                      success: function (response) {
+                          try {
 
 
 
-                    if (response.operacion) {
-                        alert(response.objeto.numero_cuenta);
-                        $("#" + id).hide();
+                              if (response.operacion) {
 
-                    } else {
-                        alert(response.mensaje)
-                       
+                                  $("#" + id).hide();
+                                  var lista_desasociados = $("#lista_desasociado").val();
 
-                    }
+                                  if (lista_desasociados == null || lista_desasociados == '') {
+                                      lista_desasociados += id;
+                                  } else {
+                                      lista_desasociados += "," + id;
+                                  }
 
-                } catch (e) {
-                    alert(e.message)
-                }
-
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde" + errorThrown);
-
-            }
+                                  $("#lista_desasociado").attr("value", lista_desasociados);
+                              } else {
+                                  bootbox.alert(response.mensaje)
 
 
-        });
+                              }
+
+                          } catch (e) {
+                              bootbox.alert(e.message)
+                          }
+
+                      },
+                      error: function (XMLHttpRequest, textStatus, errorThrown) {
+                          bootbox.alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde" + errorThrown);
+
+                      }
+
+
+                  });
+              }
+          });
+
+        $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
+        $('div.bootbox-confirm [data-bb-handler="cancel"]').text('Cancelar');
+       
         
     }
 
@@ -80,32 +139,34 @@
         <hr />
         
         @Html.ValidationMessage("ERROR_MESSAGE", "", new { @class = "text-danger" })
+
+        <input type="hidden"  id="lista_desasociado"  />
         <div class="form-group">
             @Html.LabelFor(model => model.tipo_documento, htmlAttributes: new { @class = "control-label col-md-2" })
            
-            <label class="control-label col-md-2">
+            <p class="form-control-static col-md-1">
                 @Html.DisplayFor(model => model.tipo_documento)
-            </label>
+                </p>
 
-            @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label col-md-2" })
-            @*<div class="col-md-2">*@
+                @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label col-md-2" })
+                @*<div class="col-md-2">*@
                 @*@Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control" } })*@
-                <label class="control-label col-md-2">
-                    @Html.DisplayFor(model => model.numero_documento)
-                </label>
-@*</div>*@
+<p class="form-control-static col-md-1">
+                @Html.DisplayFor(model => model.numero_documento)
+                </p>
+                @*</div>*@
 
-            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
-           
-            <label class="control-label col-md-2">
+                @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label col-md-2" })
+
+<p class="form-control-static col-md-1">
                 @Html.DisplayFor(model => model.numero_cuenta)
-            </label>
-             @*<div class="col-md-2">
+                </p>
+                @*<div class="col-md-2">
                 @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
 
             </div>*@
 
-        </div>
+</div>
 
       
 
@@ -115,16 +176,16 @@
                 @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
                 
             </div>*@
-            <label class="control-label col-md-2">
+            <p class="form-control-static col-md-1">
                 @Html.DisplayFor(model => model.nombre)
-            </label>
+                </p>
 
-            @Html.LabelFor(model => model.sexo, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.sexo, htmlAttributes: new { @class = "control-label col-md-2" })
 
-            <label class="control-label col-md-2">
+<p class="form-control-static col-md-1">
                 @Html.DisplayFor(model => model.sexo)
-            </label>
-            @*<div class="col-md-2">
+                </p>
+                @*<div class="col-md-2">
                 @Html.DropDownListFor(model => model.sexo, new SelectList(
                   new List<Object>{
 
@@ -137,25 +198,25 @@
 
             </div>*@
 
-            @Html.LabelFor(model => model.estado_afiliado, htmlAttributes: new { @class = "control-label col-md-2" })
-            @*<div class="col-md-2">
+                @Html.LabelFor(model => model.estado_afiliado, htmlAttributes: new { @class = "control-label col-md-2" })
+                @*<div class="col-md-2">
                 @Html.EditorFor(model => model.estado_afiliado, new { htmlAttributes = new { @class = "form-control" } })
 
             </div>*@
-            @if (Model.estado_afiliado.Equals("A"))
-            {
-                <label class="control-label col-md-2">
-                    Activo
-                </label>
-            }
-            else {
-                <label class="control-label col-md-2">
+                @if (Model.estado_afiliado.Equals("A"))
+                {
+<p class="form-control-static col-md-1">
+                                Activo
+                                </p>
+                        }
+                        else {
+<p class="form-control-static col-md-1">
                     Inactivo
-                </label>
+                    </p>
             }
 
 
-        </div>
+</div>
 
       
 
@@ -163,32 +224,33 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
             
-            <label class="control-label col-md-2">
+            <p class="form-control-static col-md-1">
                 @Html.DisplayFor(model => model.numero_tarjeta)
-            </label>
-            @*<div class="col-md-2">
+            </p>
+                @*<div class="col-md-2">
                 @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
 
             </div>*@
-            @Html.LabelFor(model => model.puntos, htmlAttributes: new { @class = "control-label col-md-2" })
-           
-            <label class="control-label col-md-2">
+                @Html.LabelFor(model => model.puntos, htmlAttributes: new { @class = "control-label col-md-2" })
+
+<p class="form-control-static col-md-1">
                 @Html.DisplayFor(model => model.puntos)
-            </label>
-             @*<div class="col-md-2">
+            </p>
+                @*<div class="col-md-2">
                 @Html.EditorFor(model => model.puntos, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
 
             </div>*@
-            @Html.LabelFor(model => model.fecha_alta, htmlAttributes: new { @class = "control-label col-md-2" })
-            <label class="control-label col-md-2">
-                @Html.DisplayFor(model => model.fecha_alta)
-            </label>
+                @Html.LabelFor(model => model.fecha_alta, htmlAttributes: new { @class = "control-label col-md-2" })
+<p class="form-control-static col-md-1">@Html.DisplayFor(model => model.fecha_alta)</p>
+
+            
             
         </div>
 
         
 
       
+        <br />
         <br />
 
       
@@ -203,6 +265,7 @@
                     <td>Cuenta</td>
                     <td>Nombres Afiliado</td>
                     <td>Tipo Cuenta</td>
+                    <td>Estado Afiliado</td>
                     <td>Opciones</td>
                 </tr>
             </thead>
@@ -213,7 +276,7 @@
                        int indice = 1;
                        foreach (var item in Model.Asociados)
                        {
-                          
+
                     <tr  id="@item.pk_numero_cuenta">
                         <td>@indice</td>
                         <td>@item.numero_documento</td>
@@ -221,8 +284,16 @@
                         <td>@item.numero_cuenta</td>
                         <td>@item.nombre</td>
                         <td>@item.tipo_cuenta</td>
+                        @if (item.estado_afiliado.Equals("I"))
+                        {
+                            <td>Inactivo</td>
+                        }
+                        else {
+                            <td>Activo</td>
+                        }
                         
-                        <td><input type="button" value="Desasociar" onclick="desasociar(@item.pk_numero_cuenta)" /></td>
+                        
+                        <td><input type="button" class="btn btn-default"  value="Desasociar" onclick="desasociar(@item.pk_numero_cuenta)"  /></td>
                     </tr>
                            indice++;
                        }
@@ -236,10 +307,14 @@
 
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="button" value="Grabar" class="btn btn-primary" onclick="procesarFormulario();"/>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="col-md-offset-3 col-md-9">
+                <input type="button" value="Grabar" class="btn btn-primary" onclick="grabar()"/>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'"/>
             </div>
+        </div>
+
+        <div id="alertaSucces" class="alert alert-success">
+           
         </div>
     </div>
 }
