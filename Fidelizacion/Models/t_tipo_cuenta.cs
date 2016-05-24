@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_cuenta = new HashSet<t_cuenta>();
         }
     
-        public int pk_tipo_cuenta { get; set; }
+        public int id_tipo_cuenta { get; set; }
         public string tipo_cuenta { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

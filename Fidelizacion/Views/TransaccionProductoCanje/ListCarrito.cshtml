@@ -13,7 +13,7 @@
         </div>
         <label class="col-sm-2 form-control-label text-right">Afiliado</label>
         <div class="col-sm-2 form-inline">
-            <input type="text" class="form-control" value="@ViewBag.cuenta.t_ficha_afiliacion.nombre @ViewBag.cuenta.t_ficha_afiliacion.apellido_paterno @ViewBag.cuenta.t_ficha_afiliacion.apellido_materno" readonly />
+            <input type="text" class="form-control" value="@ViewBag.cuenta.t_ficha_afiliacion.nombre @ViewBag.cuenta.t_ficha_afiliacion.apellidos" readonly />
         </div>
         <label class="col-sm-2 form-control-label text-right">Fecha de Canje</label>
         <div class="col-sm-2 form-inline">
@@ -57,7 +57,7 @@
             foreach (CarritoItem item in ViewBag.carrito.getItems())
             {
                 <tr>
-                    <td>@item.getModalidad().t_producto_canje.pk_producto_canje</td>
+                    <td>@item.getModalidad().t_producto_canje.id_producto_canje</td>
                     <td>@item.getModalidad().t_producto_canje.nombre_producto</td>
                     <td>@item.getCantidad()</td>
                     <td>@item.getModalidad().punto_canje</td>
@@ -65,7 +65,7 @@
                     <td>@item.getSubTotalPuntos()</td>
                     <td>@string.Format("{0:C}", item.getSubTotalImporte())</td>
                     <td class="text-center">
-                        <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="eliminarCarrito('@item.getModalidad().pk_modalidad_canje')"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="eliminarCarrito('@item.getModalidad().id_modalidad_canje')"><span class="glyphicon glyphicon-remove"></span></a>
                     </td>
                 </tr>
             }

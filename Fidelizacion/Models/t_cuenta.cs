@@ -17,13 +17,14 @@ namespace Fidelizacion.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public t_cuenta()
         {
+            this.t_contrato = new HashSet<t_contrato>();
             this.t_cuenta1 = new HashSet<t_cuenta>();
-            this.t_ticket_transferencia = new HashSet<t_ticket_transferencia>();
             this.t_tarjera_afiliacion_cuenta = new HashSet<t_tarjera_afiliacion_cuenta>();
             this.t_ticket_canje = new HashSet<t_ticket_canje>();
+            this.t_ticket_transferencia = new HashSet<t_ticket_transferencia>();
         }
     
-        public int pk_cuenta { get; set; }
+        public int id_cuenta { get; set; }
         public string numero_cuenta { get; set; }
         public Nullable<System.DateTime> fecha_alta { get; set; }
         public Nullable<System.DateTime> fecha_baja { get; set; }
@@ -34,17 +35,18 @@ namespace Fidelizacion.Models
         public Nullable<int> fk_ficha_afiliacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_contrato> t_contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_cuenta> t_cuenta1 { get; set; }
         public virtual t_cuenta t_cuenta2 { get; set; }
         public virtual t_ficha_afiliacion t_ficha_afiliacion { get; set; }
         public virtual t_tipo_cuenta t_tipo_cuenta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<t_ticket_transferencia> t_ticket_transferencia { get; set; }
-        public virtual t_contrato t_contrato { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_ticket_canje> t_ticket_canje { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_ticket_transferencia> t_ticket_transferencia { get; set; }
 
         public Nullable<decimal> getPuntosMaximosTransferir()
         {

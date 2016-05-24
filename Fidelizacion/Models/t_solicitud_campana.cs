@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_campana = new HashSet<t_campana>();
         }
     
-        public int pk_solicitud_campana { get; set; }
+        public int id_solicitud_campana { get; set; }
         public string nombre_campana { get; set; }
         public string descripcion_campana { get; set; }
         public string tipo_campana { get; set; }

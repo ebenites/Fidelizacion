@@ -38,7 +38,7 @@ namespace Fidelizacion.Controllers
             {
                 ViewBag.puntos = cuenta.puntos;
                 ViewBag.tipo_cuenta = cuenta.fk_tipo_cuenta;
-                Session["CUENTA_ACTUAL"] = cuenta.pk_cuenta;
+                Session["CUENTA_ACTUAL"] = cuenta.id_cuenta;
             }
 
             // Empty Carrito
@@ -198,7 +198,7 @@ namespace Fidelizacion.Controllers
             ViewBag.carrito = carrito;
 
             
-            t_ticket_canje ticket = transaccionProductoCanjeService.grabarTicket(idcuenta, tienda.pk_tienda, carrito);
+            t_ticket_canje ticket = transaccionProductoCanjeService.grabarTicket(idcuenta, tienda.id_tienda, carrito);
             ViewBag.ticket = ticket;
             
             t_cuenta cuenta = transaccionProductoCanjeService.getCuenta(idcuenta);

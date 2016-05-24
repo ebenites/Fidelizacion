@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_detalle_ticket_canje = new HashSet<t_detalle_ticket_canje>();
         }
     
-        public int pk_ticket_canje { get; set; }
+        public int id_ticket_canje { get; set; }
         public string numero_ticket { get; set; }
         public Nullable<System.DateTime> fecha_ticket { get; set; }
         public Nullable<int> fk_cuenta { get; set; }

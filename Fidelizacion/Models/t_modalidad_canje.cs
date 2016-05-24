@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_detalle_ticket_canje = new HashSet<t_detalle_ticket_canje>();
         }
     
-        public int pk_modalidad_canje { get; set; }
+        public int id_modalidad_canje { get; set; }
         public int fk_producto_canje { get; set; }
         public string nombre_modalidad_canje { get; set; }
         public string tipo_canje { get; set; }

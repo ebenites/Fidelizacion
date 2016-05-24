@@ -56,7 +56,7 @@ namespace Fidelizacion.Controllers
         // GET: TarjetaAfiliacion/Create
         public ActionResult Create()
         {
-            ViewBag.pk_tarteja_afiliacion = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta");
+            ViewBag.id_tarteja_afiliacion = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta");
             //ViewBag.fechaEmision = DateTime.Now;
             TarjetaAfiliacionViewModels tarjeta = new TarjetaAfiliacionViewModels()
             {
@@ -98,7 +98,7 @@ namespace Fidelizacion.Controllers
                 return RedirectToAction("Index");
             }
 
-            //ViewBag.pk_tarteja_afiliacion = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", models.pk_tarteja_afiliacion);
+            //ViewBag.id_tarteja_afiliacion = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta", models.id_tarteja_afiliacion);
 
             return View();
         }
@@ -118,13 +118,13 @@ namespace Fidelizacion.Controllers
             {
                 return HttpNotFound();
             }
-            //ViewBag.pk_tarteja_afiliacion = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_tarjeta_afiliacion.pk_tarteja_afiliacion);
+            //ViewBag.id_tarteja_afiliacion = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta", t_tarjeta_afiliacion.id_tarteja_afiliacion);
             TarjetaAfiliacionEditViewModels tarjetaView = new TarjetaAfiliacionEditViewModels()
             {
                 numeroTarjeta = t_tarjeta_afiliacion.numero_tarjeta,
                 fechaEmision = (DateTime) t_tarjeta_afiliacion.fecha_emision ,
                  fechaVencimiento = (DateTime)t_tarjeta_afiliacion.fecha_vencimiento ,
-                 Codigo = t_tarjeta_afiliacion.pk_tarteja_afiliacion  ,
+                 Codigo = t_tarjeta_afiliacion.id_tarteja_afiliacion  ,
                   Estado = t_tarjeta_afiliacion.estado  
             };
             return View(tarjetaView);
@@ -165,14 +165,14 @@ namespace Fidelizacion.Controllers
                     numeroTarjeta = t_tarjeta_afiliacion_mo.numero_tarjeta,
                     fechaEmision = (DateTime)t_tarjeta_afiliacion_mo.fecha_emision,
                     fechaVencimiento = (DateTime)t_tarjeta_afiliacion_mo.fecha_vencimiento,
-                    Codigo = t_tarjeta_afiliacion_mo.pk_tarteja_afiliacion,
+                    Codigo = t_tarjeta_afiliacion_mo.id_tarteja_afiliacion,
                     Estado = t_tarjeta_afiliacion_mo.estado
                 };
                 //db.Entry(t_tarjeta_afiliacion_mo).State = EntityState.Modified;
                 //db.SaveChanges();
                 return RedirectToAction("Index");
             }
-           // ViewBag.pk_tarteja_afiliacion = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_tarjeta_afiliacion.Codigo);
+           // ViewBag.id_tarteja_afiliacion = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta", t_tarjeta_afiliacion.Codigo);
             return View(t_tarjeta_afiliacion);
         }
 

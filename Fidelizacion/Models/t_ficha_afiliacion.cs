@@ -21,9 +21,8 @@ namespace Fidelizacion.Models
             this.t_solicitud_atencion = new HashSet<t_solicitud_atencion>();
         }
     
-        public int pk_ficha_afiliacion { get; set; }
-        public string apellido_paterno { get; set; }
-        public string apellido_materno { get; set; }
+        public int id_ficha_afiliacion { get; set; }
+        public string apellidos { get; set; }
         public string nombre { get; set; }
         public string numero_documento { get; set; }
         public string sexo { get; set; }
@@ -33,6 +32,12 @@ namespace Fidelizacion.Models
         public Nullable<System.DateTime> fecha_nacimiento { get; set; }
         public string estado_afiliado { get; set; }
         public Nullable<System.DateTime> fecha_baja { get; set; }
+        public string estado_civil { get; set; }
+        public string direccion { get; set; }
+        public string celular { get; set; }
+        public string departamento { get; set; }
+        public string distrito { get; set; }
+        public string provincia { get; set; }
         public Nullable<int> fk_tipo_documento { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

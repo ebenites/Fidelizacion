@@ -14,7 +14,7 @@ namespace Fidelizacion.Models
     
     public partial class t_ticket_transferencia
     {
-        public int pk_transferencia { get; set; }
+        public int id_transferencia { get; set; }
         public Nullable<int> puntos_transferidos { get; set; }
         public string numero_ticket { get; set; }
         public Nullable<System.DateTime> fecha_transferencia { get; set; }

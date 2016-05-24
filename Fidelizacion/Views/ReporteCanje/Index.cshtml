@@ -73,7 +73,7 @@
                             <option value="0">-- Todos --</option>
                             @foreach (t_tienda tienda in ViewBag.tiendas)
                             {
-                                <option value="@tienda.pk_tienda")>@tienda.nombre_tienda</option>
+                                <option value="@tienda.id_tienda")>@tienda.nombre_tienda</option>
                             }
                         </select>
                     </div>
@@ -112,7 +112,7 @@
                             <option value="0">-- Todos --</option>
                             @foreach (t_categoria_producto_canje categoria in ViewBag.categorias)
                             {
-                                <option value="@categoria.pk_categoria_producto_canje" )>@categoria.nombre_categoria_producto</option>
+                                <option value="@categoria.id_categoria_producto_canje" )>@categoria.nombre_categoria_producto</option>
                             }
                         </select>
                     </div>

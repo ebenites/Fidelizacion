@@ -48,7 +48,7 @@ else
                 <tr>
                     <td>@cuenta.t_ficha_afiliacion.numero_documento</td>
                     <td>@cuenta.t_ficha_afiliacion.nombre</td>
-                    <td>@cuenta.t_ficha_afiliacion.apellido_paterno @cuenta.t_ficha_afiliacion.apellido_materno</td>
+                    <td>@cuenta.t_ficha_afiliacion.apellidos</td>
                     <td>@cuenta.numero_cuenta</td>
                     <td>@cuenta.puntos</td>
                     <td><span id="origen-puntos" style="font-weight:bold; color:red;"></span></td>
@@ -58,7 +58,7 @@ else
                     </td>
                     <td class="text-center">
                         <a href="javascript:void(0)" class="btn btn-success" onclick="transferir()"><span class="glyphicon glyphicon-transfer"></span></a>
-                        <input type="hidden" id="origen-id" value="@cuenta.pk_cuenta"/>
+                        <input type="hidden" id="origen-id" value="@cuenta.id_cuenta"/>
                     </td>
                 </tr>
             }

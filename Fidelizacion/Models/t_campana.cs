@@ -14,7 +14,7 @@ namespace Fidelizacion.Models
     
     public partial class t_campana
     {
-        public int pk_campana { get; set; }
+        public int id_campana { get; set; }
         public string nombre_campana { get; set; }
         public Nullable<System.DateTime> fecha_alta { get; set; }
         public Nullable<System.DateTime> fecha_baja { get; set; }

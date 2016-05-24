@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_ficha_afiliacion = new HashSet<t_ficha_afiliacion>();
         }
     
-        public int pk_tipo_documento { get; set; }
+        public int id_tipo_documento { get; set; }
         public string tipo_documento { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

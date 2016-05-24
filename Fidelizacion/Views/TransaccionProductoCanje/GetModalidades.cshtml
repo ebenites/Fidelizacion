@@ -20,7 +20,7 @@ else
                 <label class="col-sm-4 form-control-label text-right">Producto</label>
                 <div class="col-sm-8 form-inline">
                     <input type="text" class="form-control" value="@ViewBag.producto.nombre_producto" readonly />
-                    <input type="hidden" name="idproducto" value="@ViewBag.producto.pk_producto_canje"/>
+                    <input type="hidden" name="idproducto" value="@ViewBag.producto.id_producto_canje"/>
                 </div>
             </div>
             <div class="row form-group">
@@ -33,7 +33,7 @@ else
             <div class="row form-group">
                 <label class="col-sm-4 form-control-label text-right">Stock</label>
                 <div class="col-sm-8 form-inline">
-                    <input type="text" class="form-control" name="maximo" value="@ViewBag.producto.getStockByTienda(ViewBag.tienda.pk_tienda)" readonly />
+                    <input type="text" class="form-control" name="maximo" value="@ViewBag.producto.getStockByTienda(ViewBag.tienda.id_tienda)" readonly />
                 </div>
             </div>
             <div class="row form-group">
@@ -45,7 +45,7 @@ else
 
         </div>
         <div class="col-sm-4">
-            <img src="@Url.Content("~/Content/productos/"+ViewBag.producto.pk_producto_canje+".jpg")" height="150" alt="producto" />
+            <img src="@Url.Content("~/Content/productos/"+ViewBag.producto.id_producto_canje+".jpg")" height="150" alt="producto" />
         </div>
     </div>
 
@@ -69,7 +69,7 @@ else
             @foreach (t_modalidad_canje modalidad in ViewBag.producto.t_modalidad_canje)
             {
             <tr>
-                <td class="text-center"><input type="radio" name="modalidad" class="" value="@modalidad.pk_modalidad_canje" /></td>
+                <td class="text-center"><input type="radio" name="modalidad" class="" value="@modalidad.id_modalidad_canje" /></td>
                 <td>@modalidad.nombre_modalidad_canje</td>
                 <td>@modalidad.punto_canje</td>
                 <td>@modalidad.importe_canje</td>

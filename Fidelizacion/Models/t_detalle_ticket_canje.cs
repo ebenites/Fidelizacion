@@ -14,8 +14,8 @@ namespace Fidelizacion.Models
     
     public partial class t_detalle_ticket_canje
     {
-        public int fk_ticket_canje { get; set; }
-        public int fk_modalidad_canje { get; set; }
+        public int id_ticket_canje { get; set; }
+        public int id_modalidad_canje { get; set; }
         public Nullable<decimal> cantidad { get; set; }
         public Nullable<decimal> subtotal_puntos { get; set; }
         public Nullable<decimal> subtotal_importe { get; set; }

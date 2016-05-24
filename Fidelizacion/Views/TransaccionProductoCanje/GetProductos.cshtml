@@ -17,7 +17,7 @@
                 <option value="0"></option>
                 @foreach (var categoria in ViewBag.categorias)
                 {
-                    <option value="@categoria.pk_categoria_producto_canje" @(ViewBag.idcategoria == categoria.pk_categoria_producto_canje ? "selected" : "")>@categoria.nombre_categoria_producto</option>
+                    <option value="@categoria.id_categoria_producto_canje" @(ViewBag.idcategoria == categoria.id_categoria_producto_canje ? "selected" : "")>@categoria.nombre_categoria_producto</option>
                 }
             </select>
         </div>
@@ -65,13 +65,13 @@ else
             @foreach (t_producto_canje producto in ViewBag.productos)
             {
                 <tr>
-                    <td>@producto.pk_producto_canje</td>
+                    <td>@producto.id_producto_canje</td>
                     <td>@producto.nombre_producto</td>
                     <td>@producto.t_categoria_producto_canje.nombre_categoria_producto</td>
                     <td>
-                        @if (producto.getStockByTienda(ViewBag.tienda.pk_tienda) > 0)
+                        @if (producto.getStockByTienda(ViewBag.tienda.id_tienda) > 0)
                         {
-                            @producto.getStockByTienda(ViewBag.tienda.pk_tienda)
+                            @producto.getStockByTienda(ViewBag.tienda.id_tienda)
                         }else
                         {
                             <strong style="color:red">AGOTADO</strong>
@@ -80,9 +80,9 @@ else
                     <td>@producto.fecha_inicio_vigencia.Value.ToString("dd/MM/yyyy")</td>
                     <td>@producto.fecha_fin_vigencia.Value.ToString("dd/MM/yyyy")</td>
                     <td class="text-center">
-                        @if (producto.getStockByTienda(ViewBag.tienda.pk_tienda) > 0)
+                        @if (producto.getStockByTienda(ViewBag.tienda.id_tienda) > 0)
                         {
-                            <a href="javascript:void(0)" class="btn btn-success btn-xs" onclick="varModalidades('@producto.pk_producto_canje')"><span class="glyphicon glyphicon-search"></span></a>
+                            <a href="javascript:void(0)" class="btn btn-success btn-xs" onclick="varModalidades('@producto.id_producto_canje')"><span class="glyphicon glyphicon-search"></span></a>
                         }
                     </td>
                 </tr>

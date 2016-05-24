@@ -20,7 +20,7 @@ namespace Fidelizacion.DAO
 
         public t_tienda get(int id)
         {
-            return db.t_tienda.Where(o => o.pk_tienda == id).Single();
+            return db.t_tienda.Where(o => o.id_tienda == id).Single();
         }
     }
 }

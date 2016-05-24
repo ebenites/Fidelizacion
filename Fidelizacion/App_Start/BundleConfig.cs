@@ -57,7 +57,7 @@ namespace Fidelizacion
                       "~/Scripts/highcharts.js",
                       "~/Scripts/exporting.js",
                       "~/Scripts/offline-exporting.js",
-                      "~/Scripts/jquery.highchartTable-min.js"));
+                      "~/Scripts/jquery.highchartTable.js"));
 
             // gml resources
             bundles.Add(new ScriptBundle("~/bundles/js").Include(

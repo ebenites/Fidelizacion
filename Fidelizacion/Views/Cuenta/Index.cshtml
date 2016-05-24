@@ -31,13 +31,10 @@
             @Html.DisplayNameFor(model => model.t_cuenta2.numero_cuenta)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.t_ficha_afiliacion.apellido_paterno)
+            @Html.DisplayNameFor(model => model.t_ficha_afiliacion.apellidos)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.t_tipo_cuenta.tipo_cuenta)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.t_contrato.condiciones)
         </th>
         <th></th>
     </tr>
@@ -63,18 +60,15 @@
             @Html.DisplayFor(modelItem => item.t_cuenta2.numero_cuenta)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.t_ficha_afiliacion.apellido_paterno)
+            @Html.DisplayFor(modelItem => item.t_ficha_afiliacion.apellidos)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.t_tipo_cuenta.tipo_cuenta)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.t_contrato.condiciones)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.pk_cuenta }) |
-            @Html.ActionLink("Details", "Details", new { id=item.pk_cuenta }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.pk_cuenta })
+            @Html.ActionLink("Edit", "Edit", new { id=item.id_cuenta }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id_cuenta }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id_cuenta })
         </td>
     </tr>
 }

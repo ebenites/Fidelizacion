@@ -22,10 +22,10 @@ namespace Fidelizacion.Models
 
         public void agregar(CarritoItem item)
         {
-            bool contains = this.items.Any(o => o.getModalidad().pk_modalidad_canje == item.getModalidad().pk_modalidad_canje);
+            bool contains = this.items.Any(o => o.getModalidad().id_modalidad_canje == item.getModalidad().id_modalidad_canje);
             if (contains)
             {
-                CarritoItem current = this.items.Single(o => o.getModalidad().pk_modalidad_canje == item.getModalidad().pk_modalidad_canje);
+                CarritoItem current = this.items.Single(o => o.getModalidad().id_modalidad_canje == item.getModalidad().id_modalidad_canje);
                 current.setCantidad(current.getCantidad() + item.getCantidad());
             }
             else
@@ -36,12 +36,12 @@ namespace Fidelizacion.Models
 
         public CarritoItem obtener(int idmodalidad)
         {
-            return this.items.Single(o => o.getModalidad().pk_modalidad_canje == idmodalidad);
+            return this.items.Single(o => o.getModalidad().id_modalidad_canje == idmodalidad);
         }
 
         public void eliminar(int idmodalidad)
         {
-            CarritoItem item = this.items.Single(o => o.getModalidad().pk_modalidad_canje == idmodalidad);
+            CarritoItem item = this.items.Single(o => o.getModalidad().id_modalidad_canje == idmodalidad);
             this.items.Remove(item);
         }
 

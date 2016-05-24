@@ -14,7 +14,7 @@ namespace Fidelizacion.Models
     
     public partial class t_solicitud_atencion
     {
-        public string pk_solicitud { get; set; }
+        public string id_solicitud { get; set; }
         public Nullable<System.DateTime> fecha { get; set; }
         public Nullable<int> fk_ficha_afiliacion { get; set; }
         public Nullable<int> fk_tienda { get; set; }

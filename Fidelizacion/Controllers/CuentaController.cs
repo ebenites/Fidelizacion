@@ -39,10 +39,10 @@ namespace Fidelizacion.Controllers
         // GET: Cuenta/Create
         public ActionResult Create()
         {
-            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta");
-            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno");
-            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta");
-            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones");
+            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta");
+            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "id_ficha_afiliacion", "apellidos");
+            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "id_tipo_cuenta", "tipo_cuenta");
+            ViewBag.id_cuenta = new SelectList(db.t_contrato, "id_contrato", "condiciones");
             return View();
         }
 
@@ -51,7 +51,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "pk_cuenta,numero_cuenta,fecha_alta,fecha_baja,puntos,estado_cuenta,fk_tipo_cuenta,fk_cuenta,fk_ficha_afiliacion")] t_cuenta t_cuenta)
+        public ActionResult Create([Bind(Include = "id_cuenta,numero_cuenta,fecha_alta,fecha_baja,puntos,estado_cuenta,fk_tipo_cuenta,fk_cuenta,fk_ficha_afiliacion")] t_cuenta t_cuenta)
         {
             if (ModelState.IsValid)
             {
@@ -60,10 +60,10 @@ namespace Fidelizacion.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
-            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno", t_cuenta.fk_ficha_afiliacion);
-            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
-            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones", t_cuenta.pk_cuenta);
+            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
+            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "id_ficha_afiliacion", "apellidos", t_cuenta.fk_ficha_afiliacion);
+            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "id_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
+            ViewBag.id_cuenta = new SelectList(db.t_contrato, "id_contrato", "condiciones", t_cuenta.id_cuenta);
             return View(t_cuenta);
         }
 
@@ -79,10 +79,10 @@ namespace Fidelizacion.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
-            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno", t_cuenta.fk_ficha_afiliacion);
-            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
-            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones", t_cuenta.pk_cuenta);
+            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
+            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "id_ficha_afiliacion", "apellidos", t_cuenta.fk_ficha_afiliacion);
+            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "id_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
+            ViewBag.id_cuenta = new SelectList(db.t_contrato, "id_contrato", "condiciones", t_cuenta.id_cuenta);
             return View(t_cuenta);
         }
 
@@ -91,7 +91,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "pk_cuenta,numero_cuenta,fecha_alta,fecha_baja,puntos,estado_cuenta,fk_tipo_cuenta,fk_cuenta,fk_ficha_afiliacion")] t_cuenta t_cuenta)
+        public ActionResult Edit([Bind(Include = "id_cuenta,numero_cuenta,fecha_alta,fecha_baja,puntos,estado_cuenta,fk_tipo_cuenta,fk_cuenta,fk_ficha_afiliacion")] t_cuenta t_cuenta)
         {
             if (ModelState.IsValid)
             {
@@ -99,10 +99,10 @@ namespace Fidelizacion.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "pk_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
-            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "pk_ficha_afiliacion", "apellido_paterno", t_cuenta.fk_ficha_afiliacion);
-            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "pk_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
-            ViewBag.pk_cuenta = new SelectList(db.t_contrato, "pk_contrato", "condiciones", t_cuenta.pk_cuenta);
+            ViewBag.fk_cuenta = new SelectList(db.t_cuenta, "id_cuenta", "numero_cuenta", t_cuenta.fk_cuenta);
+            ViewBag.fk_ficha_afiliacion = new SelectList(db.t_ficha_afiliacion, "id_ficha_afiliacion", "apellidos", t_cuenta.fk_ficha_afiliacion);
+            ViewBag.fk_tipo_cuenta = new SelectList(db.t_tipo_cuenta, "id_tipo_cuenta", "tipo_cuenta", t_cuenta.fk_tipo_cuenta);
+            ViewBag.id_cuenta = new SelectList(db.t_contrato, "id_contrato", "condiciones", t_cuenta.id_cuenta);
             return View(t_cuenta);
         }
 

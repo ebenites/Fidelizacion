@@ -26,7 +26,7 @@ namespace Fidelizacion.DAO
         public t_cuenta getCuenta(int idcuenta)
         {
             t_cuenta cuenta = db.t_cuenta.Include(o => o.t_ficha_afiliacion).Include(o => o.t_tipo_cuenta)
-                .Where(o => o.pk_cuenta == idcuenta).Single();
+                .Where(o => o.id_cuenta == idcuenta).Single();
             return cuenta;
         }
 
@@ -86,10 +86,10 @@ namespace Fidelizacion.DAO
             t_producto_canje producto = db.t_producto_canje
                 .Include(o => o.t_categoria_producto_canje)
                 .Include(o => o.t_reporte_stock_producto_canje)
-                .Where(o => o.pk_producto_canje == idproducto)
+                .Where(o => o.id_producto_canje == idproducto)
                 .Single();
 
-            List<t_modalidad_canje> modalidades = db.t_modalidad_canje.Where(o => o.estado == "A" && o.fk_producto_canje == producto.pk_producto_canje).ToList();
+            List<t_modalidad_canje> modalidades = db.t_modalidad_canje.Where(o => o.estado == "A" && o.fk_producto_canje == producto.id_producto_canje).ToList();
             producto.t_modalidad_canje = modalidades;
 
             return producto;
@@ -99,7 +99,7 @@ namespace Fidelizacion.DAO
         {
             t_modalidad_canje modalidad = db.t_modalidad_canje
                 .Include(o => o.t_producto_canje)
-                .Where(o => o.fk_producto_canje == idproducto && o.pk_modalidad_canje == idmodalidad)
+                .Where(o => o.fk_producto_canje == idproducto && o.id_modalidad_canje == idmodalidad)
                 .Single();
             
             return modalidad;
@@ -115,7 +115,7 @@ namespace Fidelizacion.DAO
 
                     // Descontar puntos a la cuenta
                     t_cuenta cuenta = db.t_cuenta.Include(o => o.t_ficha_afiliacion).Include(o => o.t_tipo_cuenta)
-                                        .Where(o => o.pk_cuenta == idcuenta).Single();
+                                        .Where(o => o.id_cuenta == idcuenta).Single();
 
                     cuenta.puntos = cuenta.puntos - carrito.getTotalPuntos();
 
@@ -152,7 +152,7 @@ namespace Fidelizacion.DAO
 
                     // Actualizando el numero de ricket
 
-                    ticket.numero_ticket = "PVCANJE-" + DateTime.Now.ToString("yyyy-MM-") + ticket.pk_ticket_canje.ToString("D4");
+                    ticket.numero_ticket = "PVCANJE-" + DateTime.Now.ToString("yyyy-MM-") + ticket.id_ticket_canje.ToString("D4");
                     
                     db.SaveChanges();
 
@@ -161,8 +161,8 @@ namespace Fidelizacion.DAO
                     foreach (CarritoItem item in carrito.getItems())
                     {
                         t_detalle_ticket_canje detalle = new t_detalle_ticket_canje();
-                        detalle.fk_ticket_canje = ticket.pk_ticket_canje;
-                        detalle.fk_modalidad_canje = item.getModalidad().pk_modalidad_canje;
+                        detalle.id_ticket_canje = ticket.id_ticket_canje;
+                        detalle.id_modalidad_canje = item.getModalidad().id_modalidad_canje;
                         detalle.cantidad = item.getCantidad();
                         detalle.subtotal_puntos = item.getSubTotalPuntos();
                         detalle.subtotal_importe = item.getSubTotalImporte();

@@ -14,7 +14,7 @@ namespace Fidelizacion.Models
     
     public partial class t_reporte_stock_producto_canje
     {
-        public int pk_reporte_stock_producto_canje { get; set; }
+        public int id_reporte_stock_producto_canje { get; set; }
         public Nullable<int> fk_producto_canje { get; set; }
         public Nullable<int> fk_tienda { get; set; }
         public Nullable<decimal> stock { get; set; }

@@ -60,11 +60,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.t_ficha_afiliacion.apellido_paterno)
+            @Html.DisplayNameFor(model => model.t_ficha_afiliacion.apellidos)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.t_ficha_afiliacion.apellido_paterno)
+            @Html.DisplayFor(model => model.t_ficha_afiliacion.apellidos)
         </dd>
 
         <dt>
@@ -86,6 +86,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.pk_cuenta }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_cuenta }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

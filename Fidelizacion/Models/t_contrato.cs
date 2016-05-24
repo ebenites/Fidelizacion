@@ -14,7 +14,7 @@ namespace Fidelizacion.Models
     
     public partial class t_contrato
     {
-        public int pk_contrato { get; set; }
+        public int id_contrato { get; set; }
         public Nullable<System.DateTime> fecha_contrato { get; set; }
         public Nullable<System.DateTime> fecha_firma { get; set; }
         public Nullable<int> fk_cuenta { get; set; }

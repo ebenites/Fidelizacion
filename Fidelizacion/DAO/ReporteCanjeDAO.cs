@@ -22,12 +22,12 @@ namespace Fidelizacion.DAO
         public List<ReporteCanje> reporteProductoCanje(int idtienda, int anio, int trimestre, int idcategoria)
         {
 
-            string sql = "select cast(sum(d.cantidad) AS INT) as cantidad, p.pk_producto_canje, p.nombre_producto as nombre, c.nombre_categoria_producto " +
+            string sql = "select cast(sum(d.cantidad) AS INT) as cantidad, p.id_producto_canje, p.nombre_producto as nombre, c.nombre_categoria_producto " +
                 "from t_detalle_ticket_canje d " +
-                "inner join t_modalidad_canje m on m.pk_modalidad_canje = d.fk_modalidad_canje " +
-                "inner join t_producto_canje p on p.pk_producto_canje = m.fk_producto_canje " +
-                "inner join t_categoria_producto_canje c on c.pk_categoria_producto_canje = p.fk_categoria_producto_canje " +
-                "inner join t_ticket_canje t on t.pk_ticket_canje = d.fk_ticket_canje " +
+                "inner join t_modalidad_canje m on m.id_modalidad_canje = d.id_modalidad_canje " +
+                "inner join t_producto_canje p on p.id_producto_canje = m.fk_producto_canje " +
+                "inner join t_categoria_producto_canje c on c.id_categoria_producto_canje = p.fk_categoria_producto_canje " +
+                "inner join t_ticket_canje t on t.id_ticket_canje = d.id_ticket_canje " +
                 "where 1=1 ";
 
             if (idtienda != 0)
@@ -50,7 +50,7 @@ namespace Fidelizacion.DAO
                 sql += "and p.fk_categoria_producto_canje = @idcategoria ";
             }
 
-            sql += "group by p.pk_producto_canje, p.nombre_producto, c.nombre_categoria_producto ";
+            sql += "group by p.id_producto_canje, p.nombre_producto, c.nombre_categoria_producto ";
 
             List<ReporteCanje> reporte = db.Database.SqlQuery<ReporteCanje>(sql, new SqlParameter("idtienda", idtienda), new SqlParameter("anio", anio), new SqlParameter("trimestre", trimestre), new SqlParameter("idcategoria", idcategoria)).ToList();
 
@@ -60,12 +60,12 @@ namespace Fidelizacion.DAO
         public List<ReporteCanje> reporteCategoriaCanje(int idtienda, int anio, int trimestre, int idcategoria)
         {
 
-            string sql = "select cast(sum(d.cantidad) AS INT) as cantidad, c.pk_categoria_producto_canje, c.nombre_categoria_producto as nombre " +
+            string sql = "select cast(sum(d.cantidad) AS INT) as cantidad, c.id_categoria_producto_canje, c.nombre_categoria_producto as nombre " +
                 "from t_detalle_ticket_canje d "+
-                "inner join t_modalidad_canje m on m.pk_modalidad_canje = d.fk_modalidad_canje "+
-                "inner join t_producto_canje p on p.pk_producto_canje = m.fk_producto_canje "+
-                "inner join t_categoria_producto_canje c on c.pk_categoria_producto_canje = p.fk_categoria_producto_canje "+
-                "inner join t_ticket_canje t on t.pk_ticket_canje = d.fk_ticket_canje "+
+                "inner join t_modalidad_canje m on m.id_modalidad_canje = d.id_modalidad_canje "+
+                "inner join t_producto_canje p on p.id_producto_canje = m.fk_producto_canje "+
+                "inner join t_categoria_producto_canje c on c.id_categoria_producto_canje = p.fk_categoria_producto_canje "+
+                "inner join t_ticket_canje t on t.id_ticket_canje = d.id_ticket_canje "+
                 "where 1=1 ";
 
             if (idtienda != 0)
@@ -88,7 +88,7 @@ namespace Fidelizacion.DAO
                 sql += "and p.fk_categoria_producto_canje = @idcategoria ";
             }
 
-            sql += "group by c.pk_categoria_producto_canje, c.nombre_categoria_producto ";
+            sql += "group by c.id_categoria_producto_canje, c.nombre_categoria_producto ";
 
             List<ReporteCanje> reporte = db.Database.SqlQuery<ReporteCanje>(sql, new SqlParameter("idtienda", idtienda), new SqlParameter("anio", anio), new SqlParameter("trimestre", trimestre), new SqlParameter("idcategoria", idcategoria)).ToList();
 

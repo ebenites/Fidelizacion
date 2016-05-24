@@ -33,7 +33,7 @@ namespace Fidelizacion.DAO
 
         public t_cuenta getCuenta(int cuentaid)
         {
-            var cuenta = db.t_cuenta.Include(o => o.t_ficha_afiliacion).Single(o => o.pk_cuenta == cuentaid);
+            var cuenta = db.t_cuenta.Include(o => o.t_ficha_afiliacion).Single(o => o.id_cuenta == cuentaid);
             return cuenta;
         }
 
@@ -47,12 +47,12 @@ namespace Fidelizacion.DAO
             .Select(vk => vk.kursnamn); 
             */
 
-            t_cuenta origen = db.t_cuenta.Where(o => o.pk_cuenta == idorigen).Single();
+            t_cuenta origen = db.t_cuenta.Where(o => o.id_cuenta == idorigen).Single();
             System.Diagnostics.Debug.WriteLine(origen.numero_cuenta);
 
             origen.puntos = origen.puntos - puntos;
 
-            t_cuenta destino = db.t_cuenta.Where(o => o.pk_cuenta == iddestino).Single();
+            t_cuenta destino = db.t_cuenta.Where(o => o.id_cuenta == iddestino).Single();
             System.Diagnostics.Debug.WriteLine(destino.numero_cuenta);
 
             destino.puntos = destino.puntos + puntos;
@@ -72,7 +72,7 @@ namespace Fidelizacion.DAO
 
             // Actualizando el numero de Ticket
 
-            ticket.numero_ticket = "TRAN-" + ticket.pk_transferencia.ToString("D5");
+            ticket.numero_ticket = "TRAN-" + ticket.id_transferencia.ToString("D5");
             System.Diagnostics.Debug.WriteLine(ticket.numero_ticket);
 
             // Grabando cambios

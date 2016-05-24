@@ -47,7 +47,7 @@ namespace Fidelizacion.DAO
             db.t_tarjeta_afiliacion.Add(models);
             db.SaveChanges();
 
-            return getPorId(models.pk_tarteja_afiliacion);
+            return getPorId(models.id_tarteja_afiliacion);
         }
 
         public t_tarjeta_afiliacion modificar(TarjetaAfiliacionViewModels t_tarjeta_afiliacion)

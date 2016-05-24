@@ -14,7 +14,7 @@ namespace Fidelizacion.Models
     
     public partial class t_tarjera_afiliacion_cuenta
     {
-        public int pk_tarjeta_afiliacion_cuenta { get; set; }
+        public int id_tarjeta_afiliacion_cuenta { get; set; }
         public Nullable<int> fk_tarjeta_afiliacion { get; set; }
         public Nullable<int> fk_cuenta { get; set; }
         public Nullable<System.DateTime> fecha_afiliacion { get; set; }

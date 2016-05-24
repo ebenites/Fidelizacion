@@ -71,7 +71,7 @@
                       url: '@Url.Content("~/FichaAfiliacion/ValidarCuentaAsociado")',
                       type: "GET",
                       contentType: "application/json",
-                      data: { pk_cuenta: id },
+                      data: { id_cuenta: id },
                       dataType: "json",
                       success: function (response) {
                           try {
@@ -277,7 +277,7 @@
                        foreach (var item in Model.Asociados)
                        {
 
-                    <tr  id="@item.pk_numero_cuenta">
+                    <tr  id="@item.id_numero_cuenta">
                         <td>@indice</td>
                         <td>@item.numero_documento</td>
                         <td>@item.numero_tarjeta</td>
@@ -293,7 +293,7 @@
                         }
                         
                         
-                        <td><input type="button" class="btn btn-default"  value="Desasociar" onclick="desasociar(@item.pk_numero_cuenta)"  /></td>
+                        <td><input type="button" class="btn btn-default"  value="Desasociar" onclick="desasociar(@item.id_numero_cuenta)"  /></td>
                     </tr>
                            indice++;
                        }

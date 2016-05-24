@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_tarjera_afiliacion_cuenta = new HashSet<t_tarjera_afiliacion_cuenta>();
         }
     
-        public int pk_tarteja_afiliacion { get; set; }
+        public int id_tarteja_afiliacion { get; set; }
         public Nullable<System.DateTime> fecha_vencimiento { get; set; }
         public string numero_tarjeta { get; set; }
         public Nullable<System.DateTime> fecha_emision { get; set; }

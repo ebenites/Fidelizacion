@@ -20,7 +20,7 @@ namespace Fidelizacion.Models
             this.t_producto_canje = new HashSet<t_producto_canje>();
         }
     
-        public int pk_categoria_producto_canje { get; set; }
+        public int id_categoria_producto_canje { get; set; }
         public string nombre_categoria_producto { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

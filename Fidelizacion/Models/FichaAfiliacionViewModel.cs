@@ -20,13 +20,10 @@ namespace Fidelizacion.Models
         public string nombre { get; set; }
 
 
-        [Display(Name = "Apellido Paterno")]
+        [Display(Name = "Apellidos")]
         [Required]
-        public string apellido_paterno { get; set; }
-
-        [Display(Name = "Apellido Materno")]
-        public string apellido_materno { get; set; }
-
+        public string apellidos { get; set; }
+        
         [Display(Name = "Fecha Nacimiento")]
         [Required]
         [DataType(DataType.Date)]
@@ -121,7 +118,7 @@ namespace Fidelizacion.Models
         
         public int? fk_cuenta_titular { get; set; }
 
-        public int pk_ficha_afiliacion { get; set; }
+        public int id_ficha_afiliacion { get; set; }
            public DateTime fecha_baja { get; set; }
       public String tipo_afiliado { get; set; }
     }
@@ -141,7 +138,7 @@ namespace Fidelizacion.Models
 
 
         [Display(Name = "Apellido Paterno")]
-        public string apellido_paterno { get; set; }
+        public string apellidos { get; set; }
 
 
         public IEnumerable<DesasociarFichaAfiliacionViewModel> Asociados { get; set; }
@@ -179,7 +176,7 @@ namespace Fidelizacion.Models
 
         public String tipo_cuenta { get; set; }
 
-        public int pk_numero_cuenta { get; set; }
+        public int id_numero_cuenta { get; set; }
 
     }
 }

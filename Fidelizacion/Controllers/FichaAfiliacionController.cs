@@ -28,14 +28,14 @@ namespace Fidelizacion.Controllers
             foreach (var item in t_afiliado)
             {
                 //t_ficha_afiliacion fichaafiliacion = db.t_ficha_afiliacion.Find(item.fk_ficha_afiliacion); 
-                t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == item.pk_ficha_afiliacion).Single(); 
+                t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == item.id_ficha_afiliacion).Single(); 
                 ficha = new FichaAfiliacionViewModel() {
                     numero_documento  = item.numero_documento ,
-                    nombre = item.nombre + " " + item.apellido_paterno + " " + item.apellido_paterno ,
+                    nombre = item.nombre + " " + item.apellidos ,
                     estado_afiliado = item.estado_afiliado ,
                      
                     tipo_afiliado = cuenta.t_tipo_cuenta.tipo_cuenta  ,
-                    pk_ficha_afiliacion = item.pk_ficha_afiliacion 
+                    id_ficha_afiliacion = item.id_ficha_afiliacion 
 
 
 
@@ -77,13 +77,13 @@ namespace Fidelizacion.Controllers
         // GET: FichaAfiliacion/Create
         public ActionResult Create()
         {
-            //ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento");
+            //ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "id_tipo_documento", "tipo_documento");
            
             ViewBag.fecha_alta = DateTime.Now;
             return View();
         }
 
-        public ActionResult ValidarCuentaAsociado(int? pk_cuenta)
+        public ActionResult ValidarCuentaAsociado(int? id_cuenta)
         {
             RespuestaViewModel respuesta = new RespuestaViewModel()
             {
@@ -93,13 +93,13 @@ namespace Fidelizacion.Controllers
             try
             {
 
-                t_cuenta t_cuenta = db.t_cuenta.Find(pk_cuenta);
+                t_cuenta t_cuenta = db.t_cuenta.Find(id_cuenta);
                 if (t_cuenta != null)
                 {
 
                     t_cuenta cuentaJson = new t_cuenta()
                     {
-                        pk_cuenta = t_cuenta.pk_cuenta,
+                        id_cuenta = t_cuenta.id_cuenta,
                         numero_cuenta = t_cuenta.numero_cuenta
                     };
                     if (t_cuenta.t_ficha_afiliacion.estado_afiliado.Equals("I"))
@@ -118,7 +118,7 @@ namespace Fidelizacion.Controllers
                     else {
                         respuesta.operacion = false;
                         respuesta.objeto = cuentaJson;
-                        respuesta.mensaje = "La ficha afiliacion de " + t_cuenta.t_ficha_afiliacion.nombre + " " + t_cuenta.t_ficha_afiliacion.apellido_paterno + " se encuentra activa.";
+                        respuesta.mensaje = "La ficha afiliacion de " + t_cuenta.t_ficha_afiliacion.nombre + " " + t_cuenta.t_ficha_afiliacion.apellidos + " se encuentra activa.";
                     }
                 }
             }
@@ -189,12 +189,12 @@ namespace Fidelizacion.Controllers
 
             t_ficha_afiliacion fichaAfiliacion = db.t_ficha_afiliacion.Find(id);
 
-            t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == fichaAfiliacion.pk_ficha_afiliacion).Single();
-            t_tarjeta_afiliacion tarjeta =  db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta && o.estado.Equals("A")).Single().t_tarjeta_afiliacion;   
+            t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == fichaAfiliacion.id_ficha_afiliacion).Single();
+            t_tarjeta_afiliacion tarjeta =  db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta && o.estado.Equals("A")).Single().t_tarjeta_afiliacion;   
             DesasociarFichaAfiliacionViewModel desasociarFicha = new DesasociarFichaAfiliacionViewModel() {
                 numero_documento = fichaAfiliacion.numero_documento,
                 numero_cuenta = cuenta.numero_cuenta ,
-                nombre = fichaAfiliacion.nombre + " " +fichaAfiliacion.apellido_paterno ,
+                nombre = fichaAfiliacion.nombre + " " +fichaAfiliacion.apellidos,
                 sexo = fichaAfiliacion.sexo ,
                 estado_afiliado = fichaAfiliacion.estado_afiliado ,
                 numero_tarjeta = tarjeta.numero_tarjeta ,
@@ -205,10 +205,10 @@ namespace Fidelizacion.Controllers
 
             };
 
-            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta);
+            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta);
             List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
             foreach (var item in asociados) {
-                t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.pk_cuenta).Single();
+                t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.id_cuenta).Single();
 
                 t_tarjeta_afiliacion tarjetaAsociado = null;
 
@@ -225,8 +225,8 @@ namespace Fidelizacion.Controllers
                     numero_documento = item.t_ficha_afiliacion.numero_documento ,
                     numero_cuenta = item.numero_cuenta ,
                     tipo_cuenta = item.t_tipo_cuenta.tipo_cuenta ,
-                    pk_numero_cuenta = item.pk_cuenta ,
-                    nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellido_paterno    ,
+                    id_numero_cuenta = item.id_cuenta ,
+                    nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellidos    ,
                     numero_tarjeta = numeroTarjeta,
                     estado_afiliado = item.t_ficha_afiliacion.estado_afiliado
 
@@ -275,7 +275,7 @@ namespace Fidelizacion.Controllers
                             {
 
                                 numero_cuenta = cuentaLista.numero_cuenta ,
-                                pk_cuenta = cuentaLista.pk_cuenta 
+                                id_cuenta = cuentaLista.id_cuenta 
                             };
 
                     }
@@ -348,7 +348,7 @@ namespace Fidelizacion.Controllers
                             {
 
                                 numero_tarjeta = cuentaLista.numero_tarjeta,
-                                pk_tarteja_afiliacion = cuentaLista.pk_tarteja_afiliacion
+                                id_tarteja_afiliacion = cuentaLista.id_tarteja_afiliacion
                             };
 
                         }
@@ -387,7 +387,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta")] FichaAfiliacionViewModel fichaAfiliacionView)
+        public ActionResult Create([Bind(Include = "apellidos,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta")] FichaAfiliacionViewModel fichaAfiliacionView)
         {
             if (ModelState.IsValid)
             {
@@ -404,10 +404,10 @@ namespace Fidelizacion.Controllers
                         t_cuenta cuentaAfiliado = null;
                         if (fichaAfiliacionView.tipo_cuenta.Equals("2")) {
                            
-                            cuentaAfiliado = db.t_cuenta.Where(o => o.pk_cuenta == fichaAfiliacionView.fk_cuenta_titular).Single();
+                            cuentaAfiliado = db.t_cuenta.Where(o => o.id_cuenta == fichaAfiliacionView.fk_cuenta_titular).Single();
                             if (cuentaAfiliado != null)
                             {
-                                if (cuentaAfiliado.t_tipo_cuenta.pk_tipo_cuenta.CompareTo(2)==0) {
+                                if (cuentaAfiliado.t_tipo_cuenta.id_tipo_cuenta.CompareTo(2)==0) {
                                     ModelState.AddModelError("ERROR_MESSAGE", "El numero de tarjeta " + fichaAfiliacionView.numero_tarjeta + " es Asociado.");
                                     return View(fichaAfiliacionView);
                                 }
@@ -421,7 +421,7 @@ namespace Fidelizacion.Controllers
 
                         int? fk_cuenta_afiliado = null;
                         if (cuentaAfiliado!= null) {
-                            fk_cuenta_afiliado = cuentaAfiliado.pk_cuenta;
+                            fk_cuenta_afiliado = cuentaAfiliado.id_cuenta;
                         }
                        
                         t_tarjera_afiliacion_cuenta t_tarjeta = new t_tarjera_afiliacion_cuenta()  {
@@ -434,8 +434,7 @@ namespace Fidelizacion.Controllers
                             puntos = fichaAfiliacionView.puntos,
                             estado_cuenta = "A",
                             t_ficha_afiliacion = new t_ficha_afiliacion() {
-                                apellido_materno = fichaAfiliacionView.apellido_paterno,
-                                apellido_paterno = fichaAfiliacionView.apellido_paterno,
+                                apellidos = fichaAfiliacionView.apellidos,
                                 nombre = fichaAfiliacionView.nombre,
                                 numero_documento = fichaAfiliacionView.numero_documento,
                                 sexo = fichaAfiliacionView.sexo,
@@ -494,7 +493,7 @@ namespace Fidelizacion.Controllers
                
               
             }
-            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", fichaAfiliacionView.fk_tipo_documento);
+            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "id_tipo_documento", "tipo_documento", fichaAfiliacionView.fk_tipo_documento);
             return View(fichaAfiliacionView);
         }
 
@@ -510,7 +509,7 @@ namespace Fidelizacion.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
+            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "id_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
             return View(t_ficha_afiliacion);
         }
 
@@ -519,7 +518,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "pk_ficha_afiliacion,apellido_paterno,apellido_materno,nombre,numero_documento,sexo,correo,numero_telefono,fecha_alta,fecha_nacimiento,estado_afiliado,fecha_baja,fk_tipo_documento")] t_ficha_afiliacion t_ficha_afiliacion)
+        public ActionResult Edit([Bind(Include = "id_ficha_afiliacion,apellidos,nombre,numero_documento,sexo,correo,numero_telefono,fecha_alta,fecha_nacimiento,estado_afiliado,fecha_baja,fk_tipo_documento")] t_ficha_afiliacion t_ficha_afiliacion)
         {
             if (ModelState.IsValid)
             {
@@ -527,7 +526,7 @@ namespace Fidelizacion.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "pk_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
+            ViewBag.fk_tipo_documento = new SelectList(db.t_tipo_documento, "id_tipo_documento", "tipo_documento", t_ficha_afiliacion.fk_tipo_documento);
             return View(t_ficha_afiliacion);
         }
 
