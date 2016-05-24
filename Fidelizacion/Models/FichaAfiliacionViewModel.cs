@@ -93,7 +93,7 @@ namespace Fidelizacion.Models
         public String cuenta_titular { get; set; }
 
         [Display(Name = "Estado")]
-        public int estado { get; set; }
+        public String estado { get; set; }
 
         //Datos Tarjeta
 
@@ -109,7 +109,7 @@ namespace Fidelizacion.Models
 
 
         [Display(Name = "Estado")]
-        public int estado_tarjeta { get; set; }
+        public String estado_tarjeta { get; set; }
 
 
         [Display(Name = "Motivo")]
@@ -124,6 +124,8 @@ namespace Fidelizacion.Models
         public int pk_ficha_afiliacion { get; set; }
            public DateTime fecha_baja { get; set; }
       public String tipo_afiliado { get; set; }
+
+        public IEnumerable<DesasociarFichaAfiliacionViewModel> Asociados { get; set; }
     }
 
 
