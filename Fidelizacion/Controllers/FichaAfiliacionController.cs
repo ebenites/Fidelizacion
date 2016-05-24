@@ -62,15 +62,117 @@ namespace Fidelizacion.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            t_ficha_afiliacion t_ficha_afiliacion = db.t_ficha_afiliacion.Find(id);
-            if (t_ficha_afiliacion == null)
+            t_ficha_afiliacion fichaAfiliacion = db.t_ficha_afiliacion.Find(id);
+            if (fichaAfiliacion == null)
             {
                 return HttpNotFound();
             }
+
+            t_cuenta cuenta = db.t_cuenta.Where(o => o.fk_ficha_afiliacion == fichaAfiliacion.pk_ficha_afiliacion).Single();  
             FichaAfiliacionViewModel ficha = new FichaAfiliacionViewModel()
             {
-                nombre=t_ficha_afiliacion.nombre
+                nombre=fichaAfiliacion.nombre,
+                numero_documento =fichaAfiliacion .numero_documento ,
+                fk_tipo_documento = (int)fichaAfiliacion.fk_tipo_documento ,
+                apellido_paterno = fichaAfiliacion.apellido_paterno ,
+                fecha_nacimiento = (DateTime)fichaAfiliacion.fecha_nacimiento ,
+                sexo = fichaAfiliacion.sexo ,
+                estado_civil = "Soltero",
+                correo = fichaAfiliacion.correo ,
+                numero_telefono = fichaAfiliacion.numero_telefono ,
+                celular = fichaAfiliacion.numero_telefono ,
+                direccion = fichaAfiliacion.numero_telefono ,
+                provincia = "Lima",
+                distrito = "Lima",
+                //estado_afiliado = fichaAfiliacion.estado_afiliado ,
+                fecha_alta = (DateTime)fichaAfiliacion.fecha_alta ,
+
+                 
+
+                
             };
+
+            if (fichaAfiliacion.estado_afiliado.Equals("I"))
+            {
+                ficha.estado_afiliado = "Inactivo";
+            }
+            else {
+                ficha.estado_afiliado = "Activo";
+            }
+
+            if (cuenta != null) {
+                ficha.numero_cuenta = cuenta.numero_cuenta;
+                ficha.puntos = (int)cuenta.puntos;
+                ficha.tipo_cuenta = (int)cuenta.fk_tipo_cuenta;
+
+                if (cuenta.estado_cuenta.Equals("I")) {
+                    ficha.estado = "Inactivo";
+                }
+                else {
+                    ficha.estado = "Activo";
+                }
+
+                t_tarjera_afiliacion_cuenta tarjetaAfiliacionCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta).Single();
+
+                if (tarjetaAfiliacionCuenta!= null) {
+                    t_tarjeta_afiliacion tarjeta = tarjetaAfiliacionCuenta.t_tarjeta_afiliacion;
+                    if (tarjeta!= null) {
+                        ficha.numero_tarjeta = tarjeta.numero_tarjeta;
+                        ficha.fecha_asignacion =  (DateTime)tarjetaAfiliacionCuenta.fecha_afiliacion;
+
+                        if (tarjeta.estado.Equals("I"))
+                        {
+                            ficha.estado_tarjeta = "Inactivo";
+                        }
+                        else {
+                            ficha.estado_tarjeta = "Activo";
+                        }
+                        ficha.motivo = "prueba";
+                    } 
+                }
+
+
+                if (cuenta.fk_cuenta != null) {
+                    t_cuenta cuentaTitular = db.t_cuenta.Find(cuenta.fk_cuenta);
+                    if (cuentaTitular!= null)
+                    {
+                        ficha.cuenta_titular = cuentaTitular.numero_cuenta;
+                    } 
+                }
+            }
+
+            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.pk_cuenta);
+            List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
+            foreach (var item in asociados)
+            {
+                t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.pk_cuenta).Single();
+
+                t_tarjeta_afiliacion tarjetaAsociado = null;
+
+                if (tarjetaAsociadoCuenta != null)
+                {
+                    tarjetaAsociado = tarjetaAsociadoCuenta.t_tarjeta_afiliacion;
+                }
+                String numeroTarjeta = "";
+
+                if (tarjetaAsociado != null)
+                {
+                    numeroTarjeta = tarjetaAsociado.numero_tarjeta;
+                }
+                DesasociarFichaAfiliacionViewModel asociado = new DesasociarFichaAfiliacionViewModel()
+                {
+                    numero_documento = item.t_ficha_afiliacion.numero_documento,
+                    numero_cuenta = item.numero_cuenta,
+                    tipo_cuenta = item.t_tipo_cuenta.tipo_cuenta,
+                    pk_numero_cuenta = item.pk_cuenta,
+                    nombre = item.t_ficha_afiliacion.nombre + " " + item.t_ficha_afiliacion.apellido_paterno,
+                    numero_tarjeta = numeroTarjeta,
+                    estado_afiliado = item.t_ficha_afiliacion.estado_afiliado
+
+                };
+                lista.Add(asociado);
+            }
+            ficha.Asociados = lista;
             return View(ficha);
         }
 
