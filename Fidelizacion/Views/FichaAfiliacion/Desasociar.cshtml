@@ -6,11 +6,57 @@
     <script type="text/javascript">
 
     $(function () {
-      
+
 
     });
 
-   
+    function grabar(){
+        bootbox.confirm("¿Está seguro que desea confirmar la trasferencia?", function (result) {
+            if (result) {
+                alert("Exito");
+               
+            }
+        });
+       
+    }
+
+    function desasociar(id){
+
+        $.ajax({
+            url: '@Url.Content("~/FichaAfiliacion/ValidarCuentaAsociado")',
+            type: "GET",
+            contentType: "application/json",
+            data: { pk_cuenta: id },
+            dataType: "json",
+            success: function (response) {
+                try {
+
+
+
+                    if (response.operacion) {
+                        alert(response.objeto.numero_cuenta);
+                        $("#" + id).hide();
+
+                    } else {
+                        alert(response.mensaje)
+                       
+
+                    }
+
+                } catch (e) {
+                    alert(e.message)
+                }
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde" + errorThrown);
+
+            }
+
+
+        });
+        
+    }
 
     </script>
 }
@@ -146,7 +192,7 @@
         <br />
 
       
-        <table class="table">
+        <table class="table" id="table">
             <thead>
 
                 <tr>
@@ -168,7 +214,7 @@
                        foreach (var item in Model.Asociados)
                        {
                           
-                    <tr>
+                    <tr  id="@item.pk_numero_cuenta">
                         <td>@indice</td>
                         <td>@item.numero_documento</td>
                         <td>@item.numero_tarjeta</td>
@@ -176,7 +222,7 @@
                         <td>@item.nombre</td>
                         <td>@item.tipo_cuenta</td>
                         
-                        <td><input type="button" value="Desasociar" onclick="desasociar(this)" /></td>
+                        <td><input type="button" value="Desasociar" onclick="desasociar(@item.pk_numero_cuenta)" /></td>
                     </tr>
                            indice++;
                        }

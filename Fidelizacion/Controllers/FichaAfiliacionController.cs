@@ -83,6 +83,40 @@ namespace Fidelizacion.Controllers
             return View();
         }
 
+        public ActionResult ValidarCuentaAsociado(int? pk_cuenta) {
+            RespuestaViewModel respuesta = new RespuestaViewModel() {
+                operacion = false,
+                mensaje = "No se proceso la solicitud, Intentelo más tarde."
+            };
+            try {
+            
+            t_cuenta t_cuenta = db.t_cuenta.Find(pk_cuenta);
+            if (t_cuenta != null) {
+
+                    t_cuenta cuentaJson = new t_cuenta() {
+                        pk_cuenta = t_cuenta.pk_cuenta,
+                        numero_cuenta = t_cuenta.numero_cuenta
+                    };
+                if (t_cuenta.estado_cuenta.Equals("I"))
+                {
+                    respuesta.operacion = true;
+                    respuesta.objeto = cuentaJson;
+                }
+                else {
+                    respuesta.operacion = false;
+                         respuesta.objeto = cuentaJson;
+                        respuesta.mensaje = "La cuenta " + t_cuenta.numero_cuenta + " se encuentra activa.";
+                }
+            }
+            }  catch (
+            Exception e)
+            {
+                respuesta.operacion = false;
+                respuesta.mensaje = e.Message;
+            }
+            return Json(respuesta, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Desasociar(int id) {
 
             t_ficha_afiliacion fichaAfiliacion = db.t_ficha_afiliacion.Find(id);
