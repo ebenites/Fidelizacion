@@ -41,7 +41,7 @@ namespace Fidelizacion.Controllers
             System.Diagnostics.Debug.WriteLine("anio:" + anio);
             System.Diagnostics.Debug.WriteLine("trimestre:" + trimestre);
             System.Diagnostics.Debug.WriteLine("idcategoria:" + idcategoria);
-
+            
             List<ReporteCanje> reporte = reporteCanjeService.reporteProductoCanje(idtienda, anio, trimestre, idcategoria);
             ViewBag.reporte = reporte;
             ViewBag.nreporte = reporte.Count;
@@ -62,6 +62,25 @@ namespace Fidelizacion.Controllers
             System.Diagnostics.Debug.WriteLine("idcategoria:" + idcategoria);
 
             List<ReporteCanje> reporte = reporteCanjeService.reporteCategoriaCanje(idtienda, anio, trimestre, idcategoria);
+            ViewBag.reporte = reporte;
+            ViewBag.nreporte = reporte.Count;
+
+            return View();
+        }
+
+        public ActionResult ReporteRotacion()
+        {
+            int idtienda = int.Parse(Request.Params["idtienda"]);
+            int anio = int.Parse(Request.Params["anio"]);
+            int trimestre = int.Parse(Request.Params["trimestre"]);
+            int idcategoria = int.Parse(Request.Params["idcategoria"]);
+
+            System.Diagnostics.Debug.WriteLine("idtienda:" + idtienda);
+            System.Diagnostics.Debug.WriteLine("anio:" + anio);
+            System.Diagnostics.Debug.WriteLine("trimestre:" + trimestre);
+            System.Diagnostics.Debug.WriteLine("idcategoria:" + idcategoria);
+
+            List<ReporteCanje> reporte = reporteCanjeService.reporteProductoCanje(idtienda, anio, trimestre, idcategoria);
             ViewBag.reporte = reporte;
             ViewBag.nreporte = reporte.Count;
 

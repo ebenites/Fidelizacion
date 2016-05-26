@@ -4,7 +4,19 @@
     Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Ranking de Categorías</h3>
+<div>
+    <div id="table-title">
+        <div class="row">
+            <div class="col-xs-6">
+                <h3>Ranking de Categorías</h3>
+            </div>
+            <div class="col-xs-6 text-right">
+                <img src="@Url.Content("~/Content/logo.jpg")" height="56" />
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
 
 @if (ViewBag.nreporte == 0)
 {
@@ -16,9 +28,30 @@ else
 {
 
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-3">
+            <div id="table-detail">
+                <div class="row">
+                    <div class="col-xs-2" style="width:90px;"><b>Tienda: </b></div>
+                    <div class="col-xs-8"><span id="txt-tienda"></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2" style="width:90px;"><b>Año: </b></div>
+                    <div class="col-xs-8"><span id="txt-anio"></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2" style="width:90px;"><b>Trimestre: </b></div>
+                    <div class="col-xs-8"><span id="txt-trimestre"></span></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2" style="width:90px;"><b>Categoría: </b></div>
+                    <div class="col-xs-8"><span id="txt-idcategoria"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
 
             <table class="table table-hover table-bordered highchart" style="display:none" data-graph-container-before="1" data-graph-type="pie" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
+                <caption>Ranking de Categorías</caption>
                 <colgroup>
                     <col />
                     <col />
@@ -43,9 +76,19 @@ else
         </div>
         <div class="col-md-2">
 
-            <button class="btn btn-default" onclick="saveGraph()" style="width:100px">Guardar</button><br />
-            <button class="btn btn-default" onclick="printGraph()" style="width:100px">Imprimir</button><br />
+            <button class="btn btn-default" onclick="saveGraph()" style="width:100px">Guardar</button>
+            <button class="btn btn-default" onclick="printGraph()" style="width:100px">Imprimir</button>
 
+        </div>
+    </div>
+
+    <div>
+        <div id="table-foot">
+            <br />
+            <div class="row">
+                <div class="col-xs-3" style="width:180px;"><b>Fecha: </b>@DateTime.Now.ToString("dd/MM/yyyy")</div>
+                <div class="col-xs-9 text-right info" style="display: none">Información confidencial para uso exclusivo de Mercados Peruanos</div>
+            </div>
         </div>
     </div>
 

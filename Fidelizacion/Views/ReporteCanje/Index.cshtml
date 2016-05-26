@@ -22,40 +22,135 @@
                 url = '@Url.Content("~/ReporteCanje/ReporteProductos")';
             } else if (tipo == 'C') {
                 url = '@Url.Content("~/ReporteCanje/ReporteCategorias")';
+            } else if (tipo == 'R') {
+                url = '@Url.Content("~/ReporteCanje/ReporteRotacion")';
             }
 
             $.post(url, params, function (data) {
                 $('#reporte-table').html(data);
-                $('#reporte-table table.highchart').highchartTable();
+                $('#reporte-table table.highchart')
+                    
+                    .highchartTable();
+
+                // Show detail filters
+                var tienda = $('[name="tienda"] option:selected').text().replace(/--/g, '');
+                $('#txt-tienda').text(tienda);
+
+                var anio = $('[name="anio"] option:selected').text().replace(/--/g, '');
+                $('#txt-anio').text(anio);
+
+                var trimestre = $('[name="trimestre"] option:selected').text().replace(/--/g, '');
+                $('#txt-trimestre').text(trimestre);
+
+                var idcategoria = $('[name="idcategoria"] option:selected').text().replace(/--/g, '');
+                $('#txt-idcategoria').text(idcategoria);
+
+                //
+
             });
 
         }
 
         function saveGraph() {
-            var chart = Highcharts.charts[Highcharts.charts.length - 1];
+            //var chart = Highcharts.charts[Highcharts.charts.length - 1];
+            var chart = Highcharts.lastChart;
+            
             chart.exportChart({
                 type: 'application/pdf',
                 filename: 'Reporte'
-            });
+            }, 
+                {
+                    chart: {
+                        events: {
+                            load: function () {
+                                this.renderer.image('http://www.uneteaspsa.pe/images/plaza_vea.jpg', 10, 10, 80, 27).add();
+                                this.renderer.text('<b>Fecha: </b>@DateTime.Now.ToString("dd/MM/yyyy")', 480, 20).add();
+                            }
+                        }
+                    }
+                }
+            );
         }
 
         function printGraph() {
-            console.log()
-            var chart = Highcharts.charts[Highcharts.charts.length-1];
-            chart.print();
+            //var chart = Highcharts.charts[Highcharts.charts.length-1];
+            var chart = Highcharts.lastChart;
+            //chart.print();
+            printCharts([chart])
         }
+
+        function printCharts(charts) {
+
+            var origDisplay = [],
+                origParent = [],
+                body = document.body,
+                childNodes = body.childNodes;
+
+            // hide all body content
+            Highcharts.each(childNodes, function (node, i) {
+                if (node.nodeType === 1) {
+                    origDisplay[i] = node.style.display;
+                    node.style.display = "none";
+                }
+            });
+
+            // put the chart detail
+            origParent[0] = $('#table-title').get(0).parentNode;
+            body.appendChild($('#table-title').get(0));
+            origParent[1] = $('#table-detail').get(0).parentNode;
+            body.appendChild($('#table-detail').get(0));
+
+            // put the charts back in
+            $.each(charts, function (i, chart) {
+                origParent[i + 2] = chart.container.parentNode;
+                body.appendChild(chart.container);
+            });
+
+            // put the chart detail (foot)
+            origParent.push($('#table-foot').get(0).parentNode);
+            body.appendChild($('#table-foot').get(0));
+            $('#table-foot div.info').show();
+
+            // print
+            window.print();
+
+            // allow the browser to prepare before reverting
+            setTimeout(function () {
+
+                // put the charts back in
+                origParent[0].appendChild($('#table-title').get(0));
+                origParent[1].appendChild($('#table-detail').get(0));
+
+                // put the chart back in
+                $.each(charts, function (i, chart) {
+                    origParent[i + 2].appendChild(chart.container);
+                });
+
+                // put the charts back in
+                origParent[origParent.length - 1].appendChild($('#table-foot').get(0));
+                $('#table-foot div.info').hide();
+
+                // restore all body content
+                Highcharts.each(childNodes, function (node, i) {
+                    if (node.nodeType === 1) {
+                        node.style.display = origDisplay[i];
+                    }
+                });
+            }, 500);
+        }
+
     </script>
 }
 
 <ol class="breadcrumb">
     <li><a href="#">Inicio</a></li>
     <li><a href="#">Reportes</a></li>
-    <li class="active">Reporte de Producto Canje</li>
+    <li class="active">Reporte de Canjes</li>
 </ol>
 
 <div class="page-header">
-    <h2>Reporte de Producto Canje</h2>
-    @{ViewBag.Title = "Reporte de Producto Canje";}
+    <h2>Reporte de Canjes</h2>
+    @{ViewBag.Title = "Reporte de Canjes";}
 </div>
 
 <form onsubmit="return false;">
@@ -132,6 +227,12 @@
                         <label>
                             <input type="radio" name="tipo" id="tipo" value="C">
                             Ranking de categorias
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="tipo" id="tipo" value="R">
+                            Productos con baja rotación
                         </label>
                     </div>
                 </div>

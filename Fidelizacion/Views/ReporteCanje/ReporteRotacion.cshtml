@@ -8,7 +8,7 @@
     <div id="table-title">
         <div class="row">
             <div class="col-xs-6">
-                <h3>Ranking de Productos</h3>
+                <h3>Productos con Baja Rotación</h3>
             </div>
             <div class="col-xs-6 text-right">
                 <img src="@Url.Content("~/Content/logo.jpg")" height="56" />
@@ -50,8 +50,8 @@ else
         </div>
         <div class="col-md-7">
 
-            <table class="table table-hover table-bordered highchart" style="display:none" data-graph-container-before="1" data-graph-type="pie" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
-                <caption>Ranking de Productos</caption>
+            <table class="table table-hover table-bordered highchart" data-graph-container="#graphcontainer" data-graph-type="pie" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
+                <caption>Productos con Baja Rotación</caption>
                 <colgroup>
                     <col />
                     <col />
@@ -59,7 +59,8 @@ else
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Cantidad</th>
+                        <th>Stock Inicial</th>
+                        <th>Canjes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,11 +68,17 @@ else
                     {
                         <tr>
                             <td>@producto.nombre</td>
+                            <td>@(producto.cantidad*10)</td>
                             <td data-graph-name="@producto.nombre">@producto.cantidad</td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+            <div>
+                <div id="graphcontainer">
+                </div>
+            </div> 
 
         </div>
         <div class="col-md-2">

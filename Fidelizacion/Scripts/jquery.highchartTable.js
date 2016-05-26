@@ -482,7 +482,7 @@
       };
 
       $table.trigger('highchartTable.beforeRender', highChartConfig);
-      new Highcharts.Chart(highChartConfig);
+      Highcharts.lastChart = new Highcharts.Chart(highChartConfig);
 
     });
     //for fluent api
