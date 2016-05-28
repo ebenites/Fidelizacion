@@ -25,5 +25,10 @@ namespace Fidelizacion.Services
         {
             return reporteCanjeDAO.reporteCategoriaCanje(idtienda, anio, trimestre, idcategoria);
         }
+
+        public List<ReporteCanje> reporteRotacion(int anio, int idcategoria)
+        {
+            return reporteCanjeDAO.reporteRotacion(anio, idcategoria);
+        }
     }
 }

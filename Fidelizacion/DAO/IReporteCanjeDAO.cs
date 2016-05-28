@@ -14,5 +14,7 @@ namespace Fidelizacion.DAO
         List<ReporteCanje> reporteProductoCanje(int idtienda, int anio, int trimestre, int idcategoria);
 
         List<ReporteCanje> reporteCategoriaCanje(int idtienda, int anio, int trimestre, int idcategoria);
+
+        List<ReporteCanje> reporteRotacion(int anio, int idcategoria);
     }
 }

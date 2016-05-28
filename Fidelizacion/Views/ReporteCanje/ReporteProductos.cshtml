@@ -28,27 +28,7 @@ else
 {
 
     <div class="row">
-        <div class="col-md-3">
-            <div id="table-detail">
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Tienda: </b></div>
-                    <div class="col-xs-8"><span id="txt-tienda"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Año: </b></div>
-                    <div class="col-xs-8"><span id="txt-anio"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Trimestre: </b></div>
-                    <div class="col-xs-8"><span id="txt-trimestre"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Categoría: </b></div>
-                    <div class="col-xs-8"><span id="txt-idcategoria"></span></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-7">
+        <div class="col-md-10">
 
             <table class="table table-hover table-bordered highchart" style="display:none" data-graph-container-before="1" data-graph-type="pie" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
                 <caption>Ranking de Productos</caption>
@@ -75,6 +55,29 @@ else
 
         </div>
         <div class="col-md-2">
+
+            <div>
+                <div id="table-detail">
+                    <div class="row">
+                        <div class="col-xs-2" style="width:90px;"><b>Tienda: </b></div>
+                        <div class="col-xs-8"><span id="txt-tienda"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2" style="width:90px;"><b>Año: </b></div>
+                        <div class="col-xs-8"><span id="txt-anio"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2" style="width:90px;"><b>Trimestre: </b></div>
+                        <div class="col-xs-8"><span id="txt-trimestre"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2" style="width:90px;"><b>Categoría: </b></div>
+                        <div class="col-xs-8"><span id="txt-idcategoria"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
 
             <button class="btn btn-default" onclick="saveGraph()" style="width:100px">Guardar</button>
             <button class="btn btn-default" onclick="printGraph()" style="width:100px">Imprimir</button>

@@ -28,29 +28,9 @@ else
 {
 
     <div class="row">
-        <div class="col-md-3">
-            <div id="table-detail">
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Tienda: </b></div>
-                    <div class="col-xs-8"><span id="txt-tienda"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Año: </b></div>
-                    <div class="col-xs-8"><span id="txt-anio"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Trimestre: </b></div>
-                    <div class="col-xs-8"><span id="txt-trimestre"></span></div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2" style="width:90px;"><b>Categoría: </b></div>
-                    <div class="col-xs-8"><span id="txt-idcategoria"></span></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-7">
+        <div class="col-md-10">
 
-            <table class="table table-hover table-bordered highchart" data-graph-container="#graphcontainer" data-graph-type="pie" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
+            <table class="table table-hover table-bordered highchart" data-graph-container="#graphcontainer" data-graph-type="column" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
                 <caption>Productos con Baja Rotación</caption>
                 <colgroup>
                     <col />
@@ -59,17 +39,21 @@ else
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Stock Inicial</th>
                         <th>Canjes</th>
+                        <th data-graph-type="line">Stock Inicial</th>
+                        <th data-graph-skip="1">Ratio Rotación</th>
+                        <th data-graph-skip="1">Cumple Meta</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (ReporteCanje producto in ViewBag.reporte)
                     {
-                        <tr>
+                        <tr class="@((producto.isMeta())?"":"danger")">
                             <td>@producto.nombre</td>
-                            <td>@(producto.cantidad*10)</td>
-                            <td data-graph-name="@producto.nombre">@producto.cantidad</td>
+                            <td>@producto.cantidad</td>
+                            <td>@producto.stock_inicial</td>
+                            <td>@String.Format("{0:P2}.", producto.getRatio())</td>
+                            <td class="text-center"><span class="glyphicon @((producto.isMeta())?"glyphicon-ok":"glyphicon-remove")"></span></td>
                         </tr>
                     }
                 </tbody>
@@ -82,6 +66,21 @@ else
 
         </div>
         <div class="col-md-2">
+
+            <div>
+                <div id="table-detail">
+                    <div class="row">
+                        <div class="col-xs-2" style="width:90px;"><b>Año: </b></div>
+                        <div class="col-xs-8"><span id="txt-anio"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2" style="width:90px;"><b>Categoría: </b></div>
+                        <div class="col-xs-8"><span id="txt-idcategoria"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
 
             <button class="btn btn-default" onclick="saveGraph()" style="width:100px">Guardar</button>
             <button class="btn btn-default" onclick="printGraph()" style="width:100px">Imprimir</button>

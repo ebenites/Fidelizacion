@@ -95,5 +95,29 @@ namespace Fidelizacion.DAO
             return reporte;
         }
 
+        public List<ReporteCanje> reporteRotacion(int anio, int idcategoria)
+        {
+
+            string sql = "select cast(sum(d.cantidad) AS INT) as cantidad, r.stock_inicial, p.id_producto_canje, p.nombre_producto as nombre, c.nombre_categoria_producto " +
+                "from t_detalle_ticket_canje d " +
+                "inner join t_modalidad_canje m on m.id_modalidad_canje = d.id_modalidad_canje " +
+                "inner join t_producto_canje p on p.id_producto_canje = m.fk_producto_canje " +
+                "inner join t_categoria_producto_canje c on c.id_categoria_producto_canje = p.fk_categoria_producto_canje " +
+                "inner join t_ticket_canje t on t.id_ticket_canje = d.id_ticket_canje " +
+                "left join t_reporte_stock_anual r on r.fk_producto_canje = p.id_producto_canje and r.anio=@anio " +
+                "where year(t.fecha_ticket) = @anio "; //and cantidad/stock_inicial < 0.6
+
+            if (idcategoria != 0)
+            {
+                sql += "and p.fk_categoria_producto_canje = @idcategoria ";
+            }
+
+            sql += "group by p.id_producto_canje, p.nombre_producto, c.nombre_categoria_producto, r.stock_inicial ";
+
+            List<ReporteCanje> reporte = db.Database.SqlQuery<ReporteCanje>(sql, new SqlParameter("anio", anio), new SqlParameter("idcategoria", idcategoria)).ToList();
+
+            return reporte;
+        }
+
     }
 }
