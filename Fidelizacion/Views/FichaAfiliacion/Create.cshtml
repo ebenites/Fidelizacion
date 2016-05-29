@@ -5,6 +5,61 @@
     
     <script type="text/javascript">
 
+        function limpiarDatosPersonales() {
+                //alert("entro");
+                //alert($('#numero_documento'));
+                //alert($('#numero_documento').val());
+            $('#numero_documento').val('')
+            $('#nombre').val('')
+            $('#numero_documento').val('')
+            $('#apellidos').val('')
+            $('#fecha_nacimiento').val('')
+            $('#correo').val('')
+            $('#numero_telefono').val('')
+            $('#direccion').val('')
+            $('#celular').val('')
+            //$('#distrito option[value="Lima"]')
+            $("#distrito").val("Lima").change();
+            $("#provincia").val("Lima").change();
+            $("#fk_tipo_documento").val("1").change();
+            $("#sexo").val("M").change();
+            $("#estado_civil").val("S").change();
+           // $('#provincia').attr("value", "Lima");
+            //$('#distrito').attr("value", "Lima");
+        
+        }
+
+        function limpiarDatosGenerarCuenta() {
+            
+            $('#numero_cuenta').val('')
+            $('#puntos').val('')
+            $('#tipo_cuenta').val("1").change();
+            $('#cuenta_titular').val('')
+            $('#fk_cuenta_titular').val('')
+            $('#cuenta_titular').attr("readonly", true);
+            $('#generarbtn').prop('disabled', false);
+
+           // $('#cuenta_titular').attr("readonly", true);
+            $('#buscar_cuentatitular').attr("disabled", true);
+
+            $('#labelCuentaTitular').removeClass("required-field");
+            //
+            // $('#provincia').attr("value", "Lima");
+            //$('#distrito').attr("value", "Lima");
+
+        }
+
+
+        function limpiarDatosTarjeta() {
+
+            alert($('#numero_cuenta').val());
+            $('#numero_cuenta').val('')
+            $('#numero_tarjeta').val('')
+            $('#fk_tarjeta_afiliacion').val('')
+           
+
+        }
+
         function procesarFormulario() {
 
             var tarjeta_afiliacion = $('#fk_tarjeta_afiliacion').val()
@@ -146,12 +201,18 @@
 
 
             if (tipoCuenta == "2") {
-               
+
                 $('#cuenta_titular').attr("readonly", false);
                 $('#buscar_cuentatitular').attr("disabled", false);
-                
+
                 $('#labelCuentaTitular').addClass("required-field");
-                
+
+            } else {
+                $('#cuenta_titular').attr("readonly", true);
+                $('#buscar_cuentatitular').attr("disabled", true);
+
+                $('#labelCuentaTitular').removeClass("required-field");
+
             }
 
 
@@ -178,10 +239,12 @@
 
     });
 
-    function generar() {
+    function generar(obj) {
         var ncuenta = Math.round(Math.random() * 10000000000000000);
         $('[name="numero_cuenta"]').val(ncuenta);
         $('[name="puntos"]').val(100);
+
+        obj.disabled = true;
     }
 
     </script>
@@ -236,7 +299,7 @@
 
             </div>
             <div class="col-md-1">
-                <input type="button"  value="Limpiar" class="btn btn-default" onclick="this.form.reset()"/>
+                <input type="button"  value="Limpiar" class="btn btn-default" onclick="javascirpt:limpiarDatosPersonales()"/>
             </div>
         </div>
 
@@ -410,10 +473,10 @@
             </div>
 
             <div class="col-md-1">
-                <input type="button" value="Generar" class="btn btn-default" onclick="generar()"/>
+                <input type="button" id="generarbtn" value="Generar" class="btn btn-default" onclick="generar(this)"/>
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default" onclick="this.form.reset()"/>
+                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascript:limpiarDatosGenerarCuenta()"/>
             </div>
         </div>
 
@@ -500,7 +563,7 @@
                 <input type="button" value="Buscar" class="btn btn-default" onclick="buscarNumeroTarjeta()" />
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default"  onclick="this.form.reset()"/>
+                <input type="button" value="Limpiar" class="btn btn-default"  onclick="javascript: limpiarDatosTarjeta()"/>
             </div>
         </div>
         <div class="form-group">
