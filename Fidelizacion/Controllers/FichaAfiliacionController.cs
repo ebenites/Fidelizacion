@@ -450,7 +450,7 @@ namespace Fidelizacion.Controllers
                             {
 
                                 numero_tarjeta = cuentaLista.numero_tarjeta,
-                                id_tarteja_afiliacion = cuentaLista.id_tarteja_afiliacion
+                                id_tarjeta_afiliacion = cuentaLista.id_tarjeta_afiliacion
                             };
 
                         }

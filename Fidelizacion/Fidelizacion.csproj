@@ -253,6 +253,9 @@
     <Compile Include="Models\t_producto_canje.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\t_reporte_stock_anual.cs">
+      <DependentUpon>FidelizacionModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\t_reporte_stock_producto_canje.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
@@ -281,6 +284,9 @@
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\t_tipo_documento.cs">
+      <DependentUpon>FidelizacionModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\t_zona.cs">
       <DependentUpon>FidelizacionModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

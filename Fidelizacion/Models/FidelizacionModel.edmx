@@ -110,6 +110,15 @@
           <Property Name="fecha_fin_vigencia" Type="date" />
           <Property Name="estado" Type="char" MaxLength="1" />
         </EntityType>
+        <EntityType Name="t_reporte_stock_anual">
+          <Key>
+            <PropertyRef Name="id_reporte_stock_anual" />
+          </Key>
+          <Property Name="id_reporte_stock_anual" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_producto_canje" Type="int" Nullable="false" />
+          <Property Name="anio" Type="int" Nullable="false" />
+          <Property Name="stock_inicial" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+        </EntityType>
         <EntityType Name="t_reporte_stock_producto_canje">
           <Key>
             <PropertyRef Name="id_reporte_stock_producto_canje" />
@@ -152,9 +161,9 @@
         </EntityType>
         <EntityType Name="t_tarjeta_afiliacion">
           <Key>
-            <PropertyRef Name="id_tarteja_afiliacion" />
+            <PropertyRef Name="id_tarjeta_afiliacion" />
           </Key>
-          <Property Name="id_tarteja_afiliacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_tarjeta_afiliacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="fecha_vencimiento" Type="datetime" />
           <Property Name="numero_tarjeta" Type="nchar" MaxLength="12" />
           <Property Name="fecha_emision" Type="datetime" />
@@ -200,6 +209,10 @@
           <Property Name="departamento" Type="varchar" MaxLength="50" />
           <Property Name="tipo_tienda" Type="nchar" MaxLength="1" />
           <Property Name="pais" Type="nvarchar" MaxLength="25" />
+          <Property Name="descripcopn_tienda" Type="nvarchar(max)" />
+          <Property Name="latitud" Type="real" />
+          <Property Name="id_zona" Type="int" />
+          <Property Name="longitud" Type="real" />
           <Property Name="horario" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="t_tipo_cuenta">
@@ -215,6 +228,13 @@
           </Key>
           <Property Name="id_tipo_documento" Type="int" Nullable="false" />
           <Property Name="tipo_documento" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="t_zona">
+          <Key>
+            <PropertyRef Name="id_zona" />
+          </Key>
+          <Property Name="id_zona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion_zona" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_SOLICITUD_AFILIACION_TIENDA">
           <End Role="t_tienda" Type="Self.t_tienda" Multiplicity="0..1" />
@@ -360,6 +380,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_reporte_stock_anual_t_producto_canje">
+          <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="1" />
+          <End Role="t_reporte_stock_anual" Type="Self.t_reporte_stock_anual" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_producto_canje">
+              <PropertyRef Name="id_producto_canje" />
+            </Principal>
+            <Dependent Role="t_reporte_stock_anual">
+              <PropertyRef Name="fk_producto_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_t_reporte_stock_producto_canje_t_producto_canje">
           <End Role="t_producto_canje" Type="Self.t_producto_canje" Multiplicity="0..1" />
           <End Role="t_reporte_stock_producto_canje" Type="Self.t_reporte_stock_producto_canje" Multiplicity="*" />
@@ -413,7 +445,7 @@
           <End Role="t_tarjera_afiliacion_cuenta" Type="Self.t_tarjera_afiliacion_cuenta" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_tarjeta_afiliacion">
-              <PropertyRef Name="id_tarteja_afiliacion" />
+              <PropertyRef Name="id_tarjeta_afiliacion" />
             </Principal>
             <Dependent Role="t_tarjera_afiliacion_cuenta">
               <PropertyRef Name="fk_tarjeta_afiliacion" />
@@ -456,6 +488,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_t_tienda_t_zona">
+          <End Role="t_zona" Type="Self.t_zona" Multiplicity="0..1" />
+          <End Role="t_tienda" Type="Self.t_tienda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_zona">
+              <PropertyRef Name="id_zona" />
+            </Principal>
+            <Dependent Role="t_tienda">
+              <PropertyRef Name="id_zona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="plazaveaModelStoreContainer">
           <EntitySet Name="t_campana" EntityType="Self.t_campana" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_categoria_producto_canje" EntityType="Self.t_categoria_producto_canje" Schema="dbo" store:Type="Tables" />
@@ -465,6 +509,7 @@
           <EntitySet Name="t_ficha_afiliacion" EntityType="Self.t_ficha_afiliacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_modalidad_canje" EntityType="Self.t_modalidad_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_producto_canje" EntityType="Self.t_producto_canje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_reporte_stock_anual" EntityType="Self.t_reporte_stock_anual" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_reporte_stock_producto_canje" EntityType="Self.t_reporte_stock_producto_canje" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_solicitud_atencion" EntityType="Self.t_solicitud_atencion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_solicitud_campana" EntityType="Self.t_solicitud_campana" Schema="dbo" store:Type="Tables" />
@@ -475,6 +520,7 @@
           <EntitySet Name="t_tienda" EntityType="Self.t_tienda" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tipo_cuenta" EntityType="Self.t_tipo_cuenta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="t_tipo_documento" EntityType="Self.t_tipo_documento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="t_zona" EntityType="Self.t_zona" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_SOLICITUD_AFILIACION_TIENDA" Association="Self.FK_SOLICITUD_AFILIACION_TIENDA">
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
@@ -523,6 +569,10 @@
             <End Role="t_categoria_producto_canje" EntitySet="t_categoria_producto_canje" />
             <End Role="t_producto_canje" EntitySet="t_producto_canje" />
           </AssociationSet>
+          <AssociationSet Name="FK_t_reporte_stock_anual_t_producto_canje" Association="Self.FK_t_reporte_stock_anual_t_producto_canje">
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+            <End Role="t_reporte_stock_anual" EntitySet="t_reporte_stock_anual" />
+          </AssociationSet>
           <AssociationSet Name="FK_t_reporte_stock_producto_canje_t_producto_canje" Association="Self.FK_t_reporte_stock_producto_canje_t_producto_canje">
             <End Role="t_producto_canje" EntitySet="t_producto_canje" />
             <End Role="t_reporte_stock_producto_canje" EntitySet="t_reporte_stock_producto_canje" />
@@ -555,6 +605,10 @@
             <End Role="t_cuenta" EntitySet="t_cuenta" />
             <End Role="t_ticket_transferencia" EntitySet="t_ticket_transferencia" />
           </AssociationSet>
+          <AssociationSet Name="FK_t_tienda_t_zona" Association="Self.FK_t_tienda_t_zona">
+            <End Role="t_zona" EntitySet="t_zona" />
+            <End Role="t_tienda" EntitySet="t_tienda" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -573,8 +627,6 @@
           <EntitySet Name="t_reporte_stock_producto_canje" EntityType="plazaveaModel.t_reporte_stock_producto_canje" />
           <EntitySet Name="t_solicitud_atencion" EntityType="plazaveaModel.t_solicitud_atencion" />
           <EntitySet Name="t_solicitud_campana" EntityType="plazaveaModel.t_solicitud_campana" />
-          <EntitySet Name="t_tarjera_afiliacion_cuenta" EntityType="plazaveaModel.t_tarjera_afiliacion_cuenta" />
-          <EntitySet Name="t_tarjeta_afiliacion" EntityType="plazaveaModel.t_tarjeta_afiliacion" />
           <EntitySet Name="t_ticket_canje" EntityType="plazaveaModel.t_ticket_canje" />
           <EntitySet Name="t_ticket_transferencia" EntityType="plazaveaModel.t_ticket_transferencia" />
           <EntitySet Name="t_tienda" EntityType="plazaveaModel.t_tienda" />
@@ -606,10 +658,6 @@
           <AssociationSet Name="FK_t_cuenta_t_tipo_cuenta" Association="plazaveaModel.FK_t_cuenta_t_tipo_cuenta">
             <End Role="t_tipo_cuenta" EntitySet="t_tipo_cuenta" />
             <End Role="t_cuenta" EntitySet="t_cuenta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta" Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta">
-            <End Role="t_cuenta" EntitySet="t_cuenta" />
-            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
           </AssociationSet>
           <AssociationSet Name="FK_t_ticket_canje_t_cuenta" Association="plazaveaModel.FK_t_ticket_canje_t_cuenta">
             <End Role="t_cuenta" EntitySet="t_cuenta" />
@@ -651,13 +699,29 @@
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_solicitud_atencion" EntitySet="t_solicitud_atencion" />
           </AssociationSet>
-          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
-            <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
-            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
-          </AssociationSet>
           <AssociationSet Name="FK_t_ticket_canje_t_tienda" Association="plazaveaModel.FK_t_ticket_canje_t_tienda">
             <End Role="t_tienda" EntitySet="t_tienda" />
             <End Role="t_ticket_canje" EntitySet="t_ticket_canje" />
+          </AssociationSet>
+          <EntitySet Name="t_reporte_stock_anual" EntityType="plazaveaModel.t_reporte_stock_anual" />
+          <EntitySet Name="t_zona" EntityType="plazaveaModel.t_zona" />
+          <AssociationSet Name="FK_t_reporte_stock_anual_t_producto_canje" Association="plazaveaModel.FK_t_reporte_stock_anual_t_producto_canje">
+            <End Role="t_producto_canje" EntitySet="t_producto_canje" />
+            <End Role="t_reporte_stock_anual" EntitySet="t_reporte_stock_anual" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_tienda_t_zona" Association="plazaveaModel.FK_t_tienda_t_zona">
+            <End Role="t_zona" EntitySet="t_zona" />
+            <End Role="t_tienda" EntitySet="t_tienda" />
+          </AssociationSet>
+          <EntitySet Name="t_tarjera_afiliacion_cuenta" EntityType="plazaveaModel.t_tarjera_afiliacion_cuenta" />
+          <EntitySet Name="t_tarjeta_afiliacion" EntityType="plazaveaModel.t_tarjeta_afiliacion" />
+          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta" Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta">
+            <End Role="t_cuenta" EntitySet="t_cuenta" />
+            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
+            <End Role="t_tarjeta_afiliacion" EntitySet="t_tarjeta_afiliacion" />
+            <End Role="t_tarjera_afiliacion_cuenta" EntitySet="t_tarjera_afiliacion_cuenta" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="t_tipo_cuenta">
@@ -719,9 +783,9 @@
           <NavigationProperty Name="t_cuenta2" Relationship="plazaveaModel.FK_t_cuenta_t_cuenta" FromRole="t_cuenta1" ToRole="t_cuenta" />
           <NavigationProperty Name="t_ficha_afiliacion" Relationship="plazaveaModel.FK_t_cuenta_t_ficha_afiliacion" FromRole="t_cuenta" ToRole="t_ficha_afiliacion" />
           <NavigationProperty Name="t_tipo_cuenta" Relationship="plazaveaModel.FK_t_cuenta_t_tipo_cuenta" FromRole="t_cuenta" ToRole="t_tipo_cuenta" />
-          <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_cuenta" ToRole="t_tarjera_afiliacion_cuenta" />
           <NavigationProperty Name="t_ticket_canje" Relationship="plazaveaModel.FK_t_ticket_canje_t_cuenta" FromRole="t_cuenta" ToRole="t_ticket_canje" />
           <NavigationProperty Name="t_ticket_transferencia" Relationship="plazaveaModel.FK_t_ticket_transferencia_t_cuenta" FromRole="t_cuenta" ToRole="t_ticket_transferencia" />
+          <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_cuenta" ToRole="t_tarjera_afiliacion_cuenta" />
         </EntityType>
         <EntityType Name="t_detalle_ticket_canje">
           <Key>
@@ -794,6 +858,7 @@
           <NavigationProperty Name="t_categoria_producto_canje" Relationship="plazaveaModel.FK_t_producto_canje_t_categoria_producto_canje" FromRole="t_producto_canje" ToRole="t_categoria_producto_canje" />
           <NavigationProperty Name="t_modalidad_canje" Relationship="plazaveaModel.FK_t_modalidad_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_modalidad_canje" />
           <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_producto_canje" FromRole="t_producto_canje" ToRole="t_reporte_stock_producto_canje" />
+          <NavigationProperty Name="t_reporte_stock_anual" Relationship="plazaveaModel.FK_t_reporte_stock_anual_t_producto_canje" FromRole="t_producto_canje" ToRole="t_reporte_stock_anual" />
         </EntityType>
         <EntityType Name="t_reporte_stock_producto_canje">
           <Key>
@@ -829,30 +894,6 @@
           <Property Name="fecha_inicio" Type="DateTime" Precision="3" />
           <Property Name="fecha_fina" Type="DateTime" Precision="3" />
           <NavigationProperty Name="t_campana" Relationship="plazaveaModel.FK_t_campana_t_solicitud_campana" FromRole="t_solicitud_campana" ToRole="t_campana" />
-        </EntityType>
-        <EntityType Name="t_tarjera_afiliacion_cuenta">
-          <Key>
-            <PropertyRef Name="id_tarjeta_afiliacion_cuenta" />
-          </Key>
-          <Property Name="id_tarjeta_afiliacion_cuenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fk_tarjeta_afiliacion" Type="Int32" />
-          <Property Name="fk_cuenta" Type="Int32" />
-          <Property Name="fecha_afiliacion" Type="DateTime" Precision="3" />
-          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_cuenta" />
-          <NavigationProperty Name="t_tarjeta_afiliacion" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_tarjeta_afiliacion" />
-        </EntityType>
-        <EntityType Name="t_tarjeta_afiliacion">
-          <Key>
-            <PropertyRef Name="id_tarteja_afiliacion" />
-          </Key>
-          <Property Name="id_tarteja_afiliacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fecha_vencimiento" Type="DateTime" Precision="3" />
-          <Property Name="numero_tarjeta" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
-          <Property Name="fecha_emision" Type="DateTime" Precision="3" />
-          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="motivo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjeta_afiliacion" ToRole="t_tarjera_afiliacion_cuenta" />
         </EntityType>
         <EntityType Name="t_ticket_canje">
           <Key>
@@ -902,6 +943,11 @@
           <NavigationProperty Name="t_reporte_stock_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda" FromRole="t_tienda" ToRole="t_reporte_stock_producto_canje" />
           <NavigationProperty Name="t_solicitud_atencion" Relationship="plazaveaModel.FK_SOLICITUD_AFILIACION_TIENDA" FromRole="t_tienda" ToRole="t_solicitud_atencion" />
           <NavigationProperty Name="t_ticket_canje" Relationship="plazaveaModel.FK_t_ticket_canje_t_tienda" FromRole="t_tienda" ToRole="t_ticket_canje" />
+          <Property Name="descripcopn_tienda" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="latitud" Type="Single" />
+          <Property Name="id_zona" Type="Int32" />
+          <Property Name="longitud" Type="Single" />
+          <NavigationProperty Name="t_zona" Relationship="plazaveaModel.FK_t_tienda_t_zona" FromRole="t_tienda" ToRole="t_zona" />
         </EntityType>
         <EntityType Name="t_tipo_documento">
           <Key>
@@ -992,18 +1038,6 @@
             </Principal>
             <Dependent Role="t_cuenta">
               <PropertyRef Name="fk_tipo_cuenta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta">
-          <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="0..1" />
-          <End Type="plazaveaModel.t_tarjera_afiliacion_cuenta" Role="t_tarjera_afiliacion_cuenta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_cuenta">
-              <PropertyRef Name="id_cuenta" />
-            </Principal>
-            <Dependent Role="t_tarjera_afiliacion_cuenta">
-              <PropertyRef Name="fk_cuenta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1127,18 +1161,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
-          <End Type="plazaveaModel.t_tarjeta_afiliacion" Role="t_tarjeta_afiliacion" Multiplicity="0..1" />
-          <End Type="plazaveaModel.t_tarjera_afiliacion_cuenta" Role="t_tarjera_afiliacion_cuenta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_tarjeta_afiliacion">
-              <PropertyRef Name="id_tarteja_afiliacion" />
-            </Principal>
-            <Dependent Role="t_tarjera_afiliacion_cuenta">
-              <PropertyRef Name="fk_tarjeta_afiliacion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_t_ticket_canje_t_tienda">
           <End Type="plazaveaModel.t_tienda" Role="t_tienda" Multiplicity="0..1" />
           <End Type="plazaveaModel.t_ticket_canje" Role="t_ticket_canje" Multiplicity="*" />
@@ -1148,6 +1170,96 @@
             </Principal>
             <Dependent Role="t_ticket_canje">
               <PropertyRef Name="fk_tienda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="t_reporte_stock_anual">
+          <Key>
+            <PropertyRef Name="id_reporte_stock_anual" />
+          </Key>
+          <Property Name="id_reporte_stock_anual" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_producto_canje" Type="Int32" Nullable="false" />
+          <Property Name="anio" Type="Int32" Nullable="false" />
+          <Property Name="stock_inicial" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="t_producto_canje" Relationship="plazaveaModel.FK_t_reporte_stock_anual_t_producto_canje" FromRole="t_reporte_stock_anual" ToRole="t_producto_canje" />
+        </EntityType>
+        <EntityType Name="t_zona">
+          <Key>
+            <PropertyRef Name="id_zona" />
+          </Key>
+          <Property Name="id_zona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion_zona" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="t_tienda" Relationship="plazaveaModel.FK_t_tienda_t_zona" FromRole="t_zona" ToRole="t_tienda" />
+        </EntityType>
+        <Association Name="FK_t_reporte_stock_anual_t_producto_canje">
+          <End Type="plazaveaModel.t_producto_canje" Role="t_producto_canje" Multiplicity="1" />
+          <End Type="plazaveaModel.t_reporte_stock_anual" Role="t_reporte_stock_anual" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_producto_canje">
+              <PropertyRef Name="id_producto_canje" />
+            </Principal>
+            <Dependent Role="t_reporte_stock_anual">
+              <PropertyRef Name="fk_producto_canje" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_tienda_t_zona">
+          <End Type="plazaveaModel.t_zona" Role="t_zona" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_tienda" Role="t_tienda" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_zona">
+              <PropertyRef Name="id_zona" />
+            </Principal>
+            <Dependent Role="t_tienda">
+              <PropertyRef Name="id_zona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="t_tarjera_afiliacion_cuenta">
+          <Key>
+            <PropertyRef Name="id_tarjeta_afiliacion_cuenta" />
+          </Key>
+          <Property Name="id_tarjeta_afiliacion_cuenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_tarjeta_afiliacion" Type="Int32" />
+          <Property Name="fk_cuenta" Type="Int32" />
+          <Property Name="fecha_afiliacion" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_cuenta" />
+          <NavigationProperty Name="t_tarjeta_afiliacion" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjera_afiliacion_cuenta" ToRole="t_tarjeta_afiliacion" />
+        </EntityType>
+        <EntityType Name="t_tarjeta_afiliacion">
+          <Key>
+            <PropertyRef Name="id_tarjeta_afiliacion" />
+          </Key>
+          <Property Name="id_tarjeta_afiliacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fecha_vencimiento" Type="DateTime" Precision="3" />
+          <Property Name="numero_tarjeta" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="fecha_emision" Type="DateTime" Precision="3" />
+          <Property Name="estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="motivo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="t_tarjera_afiliacion_cuenta" Relationship="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" FromRole="t_tarjeta_afiliacion" ToRole="t_tarjera_afiliacion_cuenta" />
+        </EntityType>
+        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_cuenta">
+          <End Type="plazaveaModel.t_cuenta" Role="t_cuenta" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_tarjera_afiliacion_cuenta" Role="t_tarjera_afiliacion_cuenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_cuenta">
+              <PropertyRef Name="id_cuenta" />
+            </Principal>
+            <Dependent Role="t_tarjera_afiliacion_cuenta">
+              <PropertyRef Name="fk_cuenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion">
+          <End Type="plazaveaModel.t_tarjeta_afiliacion" Role="t_tarjeta_afiliacion" Multiplicity="0..1" />
+          <End Type="plazaveaModel.t_tarjera_afiliacion_cuenta" Role="t_tarjera_afiliacion_cuenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_tarjeta_afiliacion">
+              <PropertyRef Name="id_tarjeta_afiliacion" />
+            </Principal>
+            <Dependent Role="t_tarjera_afiliacion_cuenta">
+              <PropertyRef Name="fk_tarjeta_afiliacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1310,29 +1422,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="t_tarjera_afiliacion_cuenta">
-            <EntityTypeMapping TypeName="plazaveaModel.t_tarjera_afiliacion_cuenta">
-              <MappingFragment StoreEntitySet="t_tarjera_afiliacion_cuenta">
-                <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="fecha_afiliacion" ColumnName="fecha_afiliacion" />
-                <ScalarProperty Name="fk_cuenta" ColumnName="fk_cuenta" />
-                <ScalarProperty Name="fk_tarjeta_afiliacion" ColumnName="fk_tarjeta_afiliacion" />
-                <ScalarProperty Name="id_tarjeta_afiliacion_cuenta" ColumnName="id_tarjeta_afiliacion_cuenta" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_tarjeta_afiliacion">
-            <EntityTypeMapping TypeName="plazaveaModel.t_tarjeta_afiliacion">
-              <MappingFragment StoreEntitySet="t_tarjeta_afiliacion">
-                <ScalarProperty Name="motivo" ColumnName="motivo" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
-                <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
-                <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
-                <ScalarProperty Name="id_tarteja_afiliacion" ColumnName="id_tarteja_afiliacion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="t_ticket_canje">
             <EntityTypeMapping TypeName="plazaveaModel.t_ticket_canje">
               <MappingFragment StoreEntitySet="t_ticket_canje">
@@ -1364,6 +1453,10 @@
           <EntitySetMapping Name="t_tienda">
             <EntityTypeMapping TypeName="plazaveaModel.t_tienda">
               <MappingFragment StoreEntitySet="t_tienda">
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="id_zona" ColumnName="id_zona" />
+                <ScalarProperty Name="latitud" ColumnName="latitud" />
+                <ScalarProperty Name="descripcopn_tienda" ColumnName="descripcopn_tienda" />
                 <ScalarProperty Name="horario" ColumnName="horario" />
                 <ScalarProperty Name="pais" ColumnName="pais" />
                 <ScalarProperty Name="tipo_tienda" ColumnName="tipo_tienda" />
@@ -1382,6 +1475,47 @@
               <MappingFragment StoreEntitySet="t_tipo_documento">
                 <ScalarProperty Name="tipo_documento" ColumnName="tipo_documento" />
                 <ScalarProperty Name="id_tipo_documento" ColumnName="id_tipo_documento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_reporte_stock_anual">
+            <EntityTypeMapping TypeName="plazaveaModel.t_reporte_stock_anual">
+              <MappingFragment StoreEntitySet="t_reporte_stock_anual">
+                <ScalarProperty Name="stock_inicial" ColumnName="stock_inicial" />
+                <ScalarProperty Name="anio" ColumnName="anio" />
+                <ScalarProperty Name="fk_producto_canje" ColumnName="fk_producto_canje" />
+                <ScalarProperty Name="id_reporte_stock_anual" ColumnName="id_reporte_stock_anual" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_zona">
+            <EntityTypeMapping TypeName="plazaveaModel.t_zona">
+              <MappingFragment StoreEntitySet="t_zona">
+                <ScalarProperty Name="descripcion_zona" ColumnName="descripcion_zona" />
+                <ScalarProperty Name="id_zona" ColumnName="id_zona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_tarjera_afiliacion_cuenta">
+            <EntityTypeMapping TypeName="plazaveaModel.t_tarjera_afiliacion_cuenta">
+              <MappingFragment StoreEntitySet="t_tarjera_afiliacion_cuenta">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_afiliacion" ColumnName="fecha_afiliacion" />
+                <ScalarProperty Name="fk_cuenta" ColumnName="fk_cuenta" />
+                <ScalarProperty Name="fk_tarjeta_afiliacion" ColumnName="fk_tarjeta_afiliacion" />
+                <ScalarProperty Name="id_tarjeta_afiliacion_cuenta" ColumnName="id_tarjeta_afiliacion_cuenta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_tarjeta_afiliacion">
+            <EntityTypeMapping TypeName="plazaveaModel.t_tarjeta_afiliacion">
+              <MappingFragment StoreEntitySet="t_tarjeta_afiliacion">
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_emision" ColumnName="fecha_emision" />
+                <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
+                <ScalarProperty Name="fecha_vencimiento" ColumnName="fecha_vencimiento" />
+                <ScalarProperty Name="id_tarjeta_afiliacion" ColumnName="id_tarjeta_afiliacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

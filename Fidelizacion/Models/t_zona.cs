@@ -12,22 +12,18 @@ namespace Fidelizacion.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class t_tarjeta_afiliacion
+    public partial class t_zona
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public t_tarjeta_afiliacion()
+        public t_zona()
         {
-            this.t_tarjera_afiliacion_cuenta = new HashSet<t_tarjera_afiliacion_cuenta>();
+            this.t_tienda = new HashSet<t_tienda>();
         }
     
-        public int id_tarjeta_afiliacion { get; set; }
-        public Nullable<System.DateTime> fecha_vencimiento { get; set; }
-        public string numero_tarjeta { get; set; }
-        public Nullable<System.DateTime> fecha_emision { get; set; }
-        public string estado { get; set; }
-        public string motivo { get; set; }
+        public int id_zona { get; set; }
+        public string descripcion_zona { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }
+        public virtual ICollection<t_tienda> t_tienda { get; set; }
     }
 }

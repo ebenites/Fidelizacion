@@ -19,6 +19,7 @@ namespace Fidelizacion.Models
         {
             this.t_modalidad_canje = new HashSet<t_modalidad_canje>();
             this.t_reporte_stock_producto_canje = new HashSet<t_reporte_stock_producto_canje>();
+            this.t_reporte_stock_anual = new HashSet<t_reporte_stock_anual>();
         }
     
         public int id_producto_canje { get; set; }
@@ -36,20 +37,7 @@ namespace Fidelizacion.Models
         public virtual ICollection<t_modalidad_canje> t_modalidad_canje { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_reporte_stock_producto_canje> t_reporte_stock_producto_canje { get; set; }
-
-        public int getStockByTienda(int idtienda)
-        {
-            if (this.t_reporte_stock_producto_canje != null)
-            {
-                foreach (t_reporte_stock_producto_canje reporte_stock in this.t_reporte_stock_producto_canje)
-                {
-                    if (reporte_stock.fk_tienda == idtienda)
-                    {
-                        return (int)reporte_stock.stock;
-                    }
-                }
-            }
-            return 0;
-        }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<t_reporte_stock_anual> t_reporte_stock_anual { get; set; }
     }
 }

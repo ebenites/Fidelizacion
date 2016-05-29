@@ -33,6 +33,10 @@ namespace Fidelizacion.Models
         public string tipo_tienda { get; set; }
         public string pais { get; set; }
         public string horario { get; set; }
+        public string descripcopn_tienda { get; set; }
+        public Nullable<float> latitud { get; set; }
+        public Nullable<int> id_zona { get; set; }
+        public Nullable<float> longitud { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_campana> t_campana { get; set; }
@@ -42,5 +46,6 @@ namespace Fidelizacion.Models
         public virtual ICollection<t_solicitud_atencion> t_solicitud_atencion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_ticket_canje> t_ticket_canje { get; set; }
+        public virtual t_zona t_zona { get; set; }
     }
 }

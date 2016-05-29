@@ -108,7 +108,7 @@
                             if (response.operacion) {
                                 alert(response.objeto.numero_tarjeta)
                                 $('#irAdministrar').css('display', 'none');
-                                $('#fk_tarjeta_afiliacion').attr('value', response.objeto.id_tarteja_afiliacion);
+                                $('#fk_tarjeta_afiliacion').attr('value', response.objeto.id_tarjeta_afiliacion);
                                 alert($('#fk_tarjeta_afiliacion').val());
                             } else {
                                 alert(response.mensaje)
