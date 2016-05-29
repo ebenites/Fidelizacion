@@ -64,7 +64,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly" })
+                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
 
                 
 
@@ -119,7 +119,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly" })
+                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
                 
             </div>
         </div>
@@ -138,7 +138,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly" })
+                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
 
                 
             </div>
@@ -191,7 +191,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly" })
+                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
                
             </div>
         </div>
@@ -208,7 +208,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly" })
+                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
                 
             </div>
         </div>
@@ -231,7 +231,7 @@
         </div>
 
         <br />
-        <h4>Generar Cuenta</h4>
+        <h4>Datos de la Cuenta</h4>
         <hr />
 
         <div class="form-group">
@@ -265,23 +265,24 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly" })
+                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
 
 
                
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2", @id = "labelCuentaTitular" })
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.cuenta_titular, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-               
+        @if (Model.tipo_cuenta == 2)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2", @id = "labelCuentaTitular" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.cuenta_titular, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                </div>
             </div>
-
-            
-        </div>
-
+        }
+        
         <div class="form-group">
             @Html.LabelFor(model => model.estado, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
@@ -291,54 +292,44 @@
         </div>
 
         <br />
-        <h4>Asignar Tarjeta</h4>
+        <h4>Datos de la Tarjeta</h4>
         <hr />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-               
+        @if (Model.numero_tarjeta != null)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fecha_asignacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.fecha_asignacion, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                </div>
             </div>
 
+            <div class="form-group">
+                @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.EditorFor(model => model.estado_tarjeta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
 
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                
-               
-               
+                </div>
             </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">La cuenta no presenta alguna tarjeta de crédito activa.</div>
+        }
 
-           
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.fecha_asignacion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.fecha_asignacion, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-              
-            </div>
-        </div>
+        
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.estado_tarjeta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-
-               
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.motivo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.motivo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                
-            </div>
-        </div>
 @if (Model.Asociados != null)
 {
     int indice = 1;
@@ -400,7 +391,7 @@
         <div class="form-group">
             <div class="col-md-offset-5 col-md-7">
                 
-                <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'" />
+                <input type="button" value="Regresar" class="btn btn-default" onclick="window.history.back();" />
             </div>
         </div>
     </div>
