@@ -3,7 +3,15 @@
     <script type="text/javascript">
         $(function () {
 
-
+            $('input[name="tipo"]').click(function () {
+                if ($(this).val() == 'R') {
+                    $('[name="tienda"]').parent().parent().hide();
+                    $('[name="trimestre"]').parent().parent().hide();
+                } else {
+                    $('[name="tienda"]').parent().parent().show();
+                    $('[name="trimestre"]').parent().parent().show();
+                }
+            });
 
         });
 
@@ -23,13 +31,19 @@
             } else if (tipo == 'C') {
                 url = '@Url.Content("~/ReporteCanje/ReporteCategorias")';
             } else if (tipo == 'R') {
+
+                if (anio == 0) {
+                    bootbox.alert("Debe de seleccionar el año para generar el reporte.");
+                    return;
+                }
+
                 url = '@Url.Content("~/ReporteCanje/ReporteRotacion")';
             }
 
             $.post(url, params, function (data) {
                 $('#reporte-table').html(data);
                 $('#reporte-table table.highchart')
-                    
+
                     .highchartTable();
 
                 // Show detail filters
@@ -54,22 +68,200 @@
         function saveGraph() {
             //var chart = Highcharts.charts[Highcharts.charts.length - 1];
             var chart = Highcharts.lastChart;
-            
-            chart.exportChart({
-                type: 'application/pdf',
-                filename: 'Reporte'
-            }, 
+
+            if ($('#table-rotacion').length) {
+
+                chart.exportChart({
+                    type: 'application/pdf',
+                    filename: 'Reporte'
+                },
                 {
+                    legend: {
+                        y: -300
+                    },
                     chart: {
+                        height: 700,
                         events: {
                             load: function () {
                                 this.renderer.image('http://www.uneteaspsa.pe/images/plaza_vea.jpg', 10, 10, 80, 27).add();
                                 this.renderer.text('<b>Fecha: </b>@DateTime.Now.ToString("dd/MM/yyyy")', 480, 20).add();
+                                this.renderer.path(['M', 0, 400, 'L', 600, 400]).attr({ 'stroke': 'silver', 'stroke-width': 1 }).add();
+
+                                var anio = $('[name="anio"] option:selected').text().replace(/--/g, '');
+                                var idcategoria = $('[name="idcategoria"] option:selected').text().replace(/--/g, '');
+
+                                this.renderer.text('<b>Año: </b>' + anio, 20, 420).add();
+                                this.renderer.text('<b>Categoría: </b>' + idcategoria, 20, 440).add();
+
+                                // user options
+                                var tableTop = 460,
+                                    colWidth = 180,
+                                    tableLeft = 20,
+                                    rowHeight = 20,
+                                    cellPadding = 2.5,
+                                    valueDecimals = 0,
+                                    valueSuffix = '';
+
+                                // internal variables
+                                var chart = this,
+                                    series = chart.series,
+                                    renderer = chart.renderer,
+                                    cellLeft = tableLeft;
+
+                                // draw category labels
+                                $.each(chart.xAxis[0].categories, function (i, name) {
+                                    renderer.text(
+                                        name,
+                                        cellLeft + cellPadding,
+                                        tableTop + (i + 2) * rowHeight - cellPadding
+                                    )
+                                    .css({
+                                        fontWeight: 'bold'
+                                    })
+                                    .add();
+                                });
+
+                                $.each(series, function (i, serie) {
+                                    cellLeft += colWidth;
+
+                                    // Apply the cell text
+                                    renderer.text(
+                                            serie.name,
+                                            cellLeft - cellPadding + colWidth,
+                                            tableTop + rowHeight - cellPadding
+                                        )
+                                        .attr({
+                                            align: 'right'
+                                        })
+                                        .css({
+                                            fontWeight: 'bold'
+                                        })
+                                        .add();
+
+                                    $.each(serie.data, function (row, point) {
+
+                                        // Apply the cell text
+                                        renderer.text(
+                                                Highcharts.numberFormat(point.y, valueDecimals) + valueSuffix,
+                                                cellLeft + colWidth - cellPadding,
+                                                tableTop + (row + 2) * rowHeight - cellPadding
+                                            )
+                                            .attr({
+                                                align: 'right'
+                                            })
+                                            .add();
+
+                                        // horizontal lines
+                                        if (row == 0) {
+                                            Highcharts.tableLine( // top
+                                                renderer,
+                                                tableLeft,
+                                                tableTop + cellPadding,
+                                                cellLeft + colWidth,
+                                                tableTop + cellPadding
+                                            );
+                                            Highcharts.tableLine( // bottom
+                                                renderer,
+                                                tableLeft,
+                                                tableTop + (serie.data.length + 1) * rowHeight + cellPadding,
+                                                cellLeft + colWidth,
+                                                tableTop + (serie.data.length + 1) * rowHeight + cellPadding
+                                            );
+                                        }
+                                        // horizontal line
+                                        Highcharts.tableLine(
+                                            renderer,
+                                            tableLeft,
+                                            tableTop + row * rowHeight + rowHeight + cellPadding,
+                                            cellLeft + colWidth,
+                                            tableTop + row * rowHeight + rowHeight + cellPadding
+                                        );
+
+                                    });
+
+                                    // vertical lines        
+                                    if (i == 0) { // left table border  
+                                        Highcharts.tableLine(
+                                            renderer,
+                                            tableLeft,
+                                            tableTop + cellPadding,
+                                            tableLeft,
+                                            tableTop + (serie.data.length + 1) * rowHeight + cellPadding
+                                        );
+                                    }
+
+                                    Highcharts.tableLine(
+                                        renderer,
+                                        cellLeft,
+                                        tableTop + cellPadding,
+                                        cellLeft,
+                                        tableTop + (serie.data.length + 1) * rowHeight + cellPadding
+                                    );
+
+                                    if (i == series.length - 1) { // right table border    
+
+                                        Highcharts.tableLine(
+                                            renderer,
+                                            cellLeft + colWidth,
+                                            tableTop + cellPadding,
+                                            cellLeft + colWidth,
+                                            tableTop + (serie.data.length + 1) * rowHeight + cellPadding
+                                        );
+                                    }
+
+                                });
+
+
+                            }
+                        }
+                    }
+                });
+
+            } else {
+
+                chart.exportChart({
+                    type: 'application/pdf',
+                    filename: 'Reporte'
+                },
+                {
+                    legend: {
+                        y: -100
+                    },
+                    chart: {
+                        height: 500,
+                        events: {
+                            load: function () {
+                                this.renderer.image('http://www.uneteaspsa.pe/images/plaza_vea.jpg', 10, 10, 80, 27).add();
+                                this.renderer.text('<b>Fecha: </b>@DateTime.Now.ToString("dd/MM/yyyy")', 480, 20).add();
+                                this.renderer.path(['M', 0, 400, 'L', 600, 400]).attr({ 'stroke': 'silver', 'stroke-width': 1 }).add();
+
+                                var tienda = $('[name="tienda"] option:selected').text().replace(/--/g, '');
+                                var anio = $('[name="anio"] option:selected').text().replace(/--/g, '');
+                                var trimestre = $('[name="trimestre"] option:selected').text().replace(/--/g, '');
+                                var idcategoria = $('[name="idcategoria"] option:selected').text().replace(/--/g, '');
+
+                                this.renderer.text('<b>Tienda: </b>' + tienda, 20, 420).add();
+                                this.renderer.text('<b>Año: </b>' + anio, 20, 440).add();
+                                this.renderer.text('<b>Trimestre: </b>' + trimestre, 20, 460).add();
+                                this.renderer.text('<b>Categoría: </b>' + idcategoria, 20, 480).add();
+
                             }
                         }
                     }
                 }
             );
+
+            }
+
+        }
+
+        Highcharts.tableLine = function (renderer, x1, y1, x2, y2) {
+            renderer.path(['M', x1, y1, 'L', x2, y2])
+                .attr({
+                    'stroke': 'silver',
+                    'stroke-width': 1
+                })
+                .add();
         }
 
         function printGraph() {
@@ -106,6 +298,12 @@
                 body.appendChild(chart.container);
             });
 
+            // Rotation table
+            if ($('#table-rotacion').length) {
+                origParent.push($('#table-rotacion').get(0).parentNode);
+                body.appendChild($('#table-rotacion').get(0));
+            }
+
             // put the chart detail (foot)
             origParent.push($('#table-foot').get(0).parentNode);
             body.appendChild($('#table-foot').get(0));
@@ -125,6 +323,11 @@
                 $.each(charts, function (i, chart) {
                     origParent[i + 2].appendChild(chart.container);
                 });
+
+                // Rotation table
+                if ($('#table-rotacion').length) {
+                    origParent[origParent.length - 2].appendChild($('#table-rotacion').get(0));
+                }
 
                 // put the charts back in
                 origParent[origParent.length - 1].appendChild($('#table-foot').get(0));

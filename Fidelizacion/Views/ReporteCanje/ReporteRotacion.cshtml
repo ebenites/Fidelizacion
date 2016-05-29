@@ -30,34 +30,36 @@ else
     <div class="row">
         <div class="col-md-10">
 
-            <table class="table table-hover table-bordered highchart" data-graph-container="#graphcontainer" data-graph-type="column" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
-                <caption>Productos con Baja Rotación</caption>
-                <colgroup>
-                    <col />
-                    <col />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Canjes</th>
-                        <th data-graph-type="line">Stock Inicial</th>
-                        <th data-graph-skip="1">Ratio Rotación</th>
-                        <th data-graph-skip="1">Cumple Meta</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (ReporteCanje producto in ViewBag.reporte)
-                    {
-                        <tr class="@((producto.isMeta())?"":"danger")">
-                            <td>@producto.nombre</td>
-                            <td>@producto.cantidad</td>
-                            <td>@producto.stock_inicial</td>
-                            <td>@String.Format("{0:P2}.", producto.getRatio())</td>
-                            <td class="text-center"><span class="glyphicon @((producto.isMeta())?"glyphicon-ok":"glyphicon-remove")"></span></td>
+            <div>
+                <table id="table-rotacion" class="table table-hover table-bordered highchart" data-graph-container="#graphcontainer" data-graph-type="column" data-graph-datalabels-enabled="1" data-graph-pie-show-in-legend="1">
+                    <caption>Productos con Baja Rotación</caption>
+                    <colgroup>
+                        <col />
+                        <col />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Canjes</th>
+                            <th data-graph-type="line">Stock Inicial</th>
+                            <th data-graph-skip="1">Ratio Rotación</th>
+                            <th data-graph-skip="1">Cumple Meta</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (ReporteCanje producto in ViewBag.reporte)
+                        {
+                            <tr class="@((producto.isMeta())?"":"danger")">
+                                <td>@producto.nombre</td>
+                                <td>@producto.cantidad</td>
+                                <td>@producto.stock_inicial</td>
+                                <td>@String.Format("{0:P2}.", producto.getRatio())</td>
+                                <td class="text-center"><span class="glyphicon @((producto.isMeta())?"glyphicon-ok":"glyphicon-remove")"></span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
             <div>
                 <div id="graphcontainer">
