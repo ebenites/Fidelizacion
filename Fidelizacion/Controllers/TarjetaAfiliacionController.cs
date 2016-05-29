@@ -95,6 +95,9 @@ namespace Fidelizacion.Controllers
                 service.insertar(t_tarjeta_afiliacion);
                 //db.t_tarjeta_afiliacion.Add(models);
                 //db.SaveChanges();
+
+                TempData["Message"] = "Se ha concluído la grabación de la tarjeta.";
+
                 return RedirectToAction("Index");
             }
 

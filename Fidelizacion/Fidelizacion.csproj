@@ -431,6 +431,7 @@
     <Content Include="Views\ReporteCanje\ReporteCategorias.cshtml" />
     <Content Include="Views\FichaAfiliacion\Desasociar.cshtml" />
     <Content Include="Views\ReporteCanje\ReporteRotacion.cshtml" />
+    <Content Include="Views\FichaAfiliacion\GetTarjetas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

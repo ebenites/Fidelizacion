@@ -7,12 +7,15 @@ using System.Net;
 using System.Web.Mvc;
 using Fidelizacion.Models;
 using System.Data.Entity.Validation;
+using Fidelizacion.Services;
 
 namespace Fidelizacion.Controllers
 {
     public class FichaAfiliacionController : Controller
     {
         private plazaveaEntities db = new plazaveaEntities();
+
+        private ITarjetaAfiliacionService tarjetaAfiliacionService = new TarjetaAfiliacionService();
 
         public ActionResult Buscar(String numeroCuenta)
         {
@@ -142,10 +145,10 @@ namespace Fidelizacion.Controllers
                     } 
                 }
 
-
-                var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta);
+                
+                List<t_cuenta> asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).ToList();
                 List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
-                foreach (var item in asociados)
+                foreach (t_cuenta item in asociados)
                 {
                     t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.id_cuenta).SingleOrDefault();
 
@@ -320,9 +323,9 @@ namespace Fidelizacion.Controllers
 
             };
 
-            var asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta);
+            List<t_cuenta> asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).ToList();
             List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
-            foreach (var item in asociados) {
+            foreach (t_cuenta item in asociados) {
                 t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.id_cuenta).SingleOrDefault();
 
                 t_tarjeta_afiliacion tarjetaAsociado = null;
@@ -497,6 +500,13 @@ namespace Fidelizacion.Controllers
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetTarjetas(String numeroCuenta, String estado)
+        {
+            var t_tarjeta_afiliacion = tarjetaAfiliacionService.Buscar(numeroCuenta, estado);
+            
+            return View("GetTarjetas", t_tarjeta_afiliacion.ToList());
+        }
+
         // POST: FichaAfiliacion/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -570,14 +580,27 @@ namespace Fidelizacion.Controllers
 
                     };
 
-                        
-                        db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
+                    db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
                     
                
-                db.SaveChanges();
+                    db.SaveChanges();
 
 
+                        // Insert contrato
 
+                        t_contrato contrato = new t_contrato();
+                        contrato.fecha_contrato = DateTime.Now;
+                        contrato.fecha_firma = DateTime.Now;
+                        contrato.condiciones = "XYZ";
+                        contrato.fk_cuenta = t_tarjeta.t_cuenta.id_cuenta;
+
+                        db.t_contrato.Add(contrato);
+
+                        db.SaveChanges();
+
+                        TempData["Message"] = "Se ha concluído la grabación de la Ficha de Afiliación.";
+
+                        return RedirectToAction("Index");
 
                     }
                     else

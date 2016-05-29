@@ -28,7 +28,7 @@
                 $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
                 operacion = false;
             }
-            alert(tarjeta_afiliacion);
+            //bootbox.alert(tarjeta_afiliacion);
             if (operacion) {
                 $('#formularioCrear').submit();
             }
@@ -42,7 +42,7 @@
             var cuentaTitular2 = $('#cuenta_titular').val();
 
            
-            alert(cuentaTitular2)
+            //bootbox.alert(cuentaTitular2)
             var objeto = {
                 cuenta_titular: cuentaTitular2
             }
@@ -64,18 +64,18 @@
                             
                         } else
                         {
-                            alert(response.mensaje)
+                            bootbox.alert(response.mensaje)
                             $('#fk_cuenta_titular').attr('value', "");
 
                         }
                         
                     } catch (e) {
-                        alert(e.message)
+                        bootbox.alert(e.message)
                     }
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde");
+                    bootbox.alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde");
 
                 }
 
@@ -90,7 +90,7 @@
 
             var cuentaTitular2 = $('#numero_tarjeta').val();
 
-            alert(cuentaTitular2)
+            //bootbox.alert(cuentaTitular2)
             var objeto = {
                 cuenta_titular: cuentaTitular2
             }
@@ -106,12 +106,13 @@
 
                         if (response != null) {
                             if (response.operacion) {
-                                alert(response.objeto.numero_tarjeta)
+                                //bootbox.alert(response.objeto.numero_tarjeta)
                                 $('#irAdministrar').css('display', 'none');
                                 $('#fk_tarjeta_afiliacion').attr('value', response.objeto.id_tarjeta_afiliacion);
-                                alert($('#fk_tarjeta_afiliacion').val());
+                                //bootbox.alert($('#fk_tarjeta_afiliacion').val());
+                                bootbox.alert('Número de tarjeta encontrada.');
                             } else {
-                                alert(response.mensaje)
+                                bootbox.alert(response.mensaje)
                                 $('#fk_tarjeta_afiliacion').attr('value', "");
                             }
 
@@ -126,12 +127,12 @@
 
 
                     } catch (e) {
-                        alert(e.message)
+                        bootbox.alert(e.message)
                     }
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde");
+                    bootbox.alert("Se encontro un error al ejecutar la operacion, vuelva a intentarlo más tarde");
 
                 }
 
@@ -487,7 +488,7 @@
             <div class="col-md-4">
                 @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.numero_tarjeta, "", new { @class = "text-danger" })
-                <a href="@Url.Content("~/TarjetaAfiliacion/Create")" style="display:none" id="irAdministrar">Ingresar Administrar Tarjeta</a>
+                <a href="@Url.Content("~/TarjetaAfiliacion/Create")" style="display:none" id="irAdministrar" target="_blank">Ingresar Administrar Tarjeta</a>
                 @*<input type="text" name="fk_tarjeta_afiliacion" id="fk_tarjeta_afiliacion" />*@
                 @*@Html.LabelFor(model => model.fk_tarjeta_afiliacion, htmlAttributes: new { @class = "control-label required-field col-md-2" })
                @Html.EditorFor(model => model.fk_tarjeta_afiliacion, new { htmlAttributes = new { @class = "form-control" } })*@
