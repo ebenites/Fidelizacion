@@ -38,7 +38,7 @@
             $('#fk_cuenta_titular').val('')
             $('#cuenta_titular').attr("readonly", true);
             $('#generarbtn').prop('disabled', false);
-
+            $('[name="numero_cuenta"]').val('')
            // $('#cuenta_titular').attr("readonly", true);
             $('#buscar_cuentatitular').attr("disabled", true);
 
@@ -52,11 +52,11 @@
 
         function limpiarDatosTarjeta() {
 
-            alert($('#numero_cuenta').val());
+            
             $('#numero_cuenta').val('')
             $('#numero_tarjeta').val('')
             $('#fk_tarjeta_afiliacion').val('')
-           
+            $('[name="numero_cuenta"]').val('')
 
         }
 
@@ -221,7 +221,7 @@
         $('#estado_afiliado').val('Activo');
         $('#tipo_cuenta').val('1');
         $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
-
+        $("#fk_tipo_documento").val("1").change();
         $('#estado').val('A');
 
         $('#fecha_asignacion').datetimepicker({
