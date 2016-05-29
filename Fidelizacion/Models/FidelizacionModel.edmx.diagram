@@ -19,10 +19,8 @@
         <EntityTypeShape EntityType="plazaveaModel.t_solicitud_campana" Width="1.5" PointX="8.25" PointY="23.625" />
         <EntityTypeShape EntityType="plazaveaModel.t_ticket_canje" Width="1.5" PointX="10.5" PointY="6.25" />
         <EntityTypeShape EntityType="plazaveaModel.t_ticket_transferencia" Width="1.5" PointX="7.5" PointY="12" />
-        <EntityTypeShape EntityType="plazaveaModel.t_tienda" Width="1.5" PointX="8.25" PointY="1.875" />
         <EntityTypeShape EntityType="plazaveaModel.t_tipo_documento" Width="1.5" PointX="0.75" PointY="11.625" />
         <AssociationConnector Association="plazaveaModel.FK_t_campana_t_solicitud_campana" />
-        <AssociationConnector Association="plazaveaModel.FK_t_campana_t_tienda" />
         <AssociationConnector Association="plazaveaModel.FK_t_producto_canje_t_categoria_producto_canje" />
         <AssociationConnector Association="plazaveaModel.FK_t_contrato_t_cuenta" />
         <AssociationConnector Association="plazaveaModel.FK_t_cuenta_t_cuenta" />
@@ -36,17 +34,19 @@
         <AssociationConnector Association="plazaveaModel.FK_t_solicitud_atencion_t_ficha_afiliacion" />
         <AssociationConnector Association="plazaveaModel.FK_t_modalidad_canje_t_producto_canje" />
         <AssociationConnector Association="plazaveaModel.FK_t_reporte_stock_producto_canje_t_producto_canje" />
-        <AssociationConnector Association="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda" />
-        <AssociationConnector Association="plazaveaModel.FK_SOLICITUD_AFILIACION_TIENDA" />
-        <AssociationConnector Association="plazaveaModel.FK_t_ticket_canje_t_tienda" />
         <EntityTypeShape EntityType="plazaveaModel.t_reporte_stock_anual" Width="1.5" PointX="10.5" PointY="23.875" />
         <EntityTypeShape EntityType="plazaveaModel.t_zona" Width="1.5" PointX="6" PointY="22.375" />
         <AssociationConnector Association="plazaveaModel.FK_t_reporte_stock_anual_t_producto_canje" />
-        <AssociationConnector Association="plazaveaModel.FK_t_tienda_t_zona" />
         <EntityTypeShape EntityType="plazaveaModel.t_tarjera_afiliacion_cuenta" Width="1.5" PointX="7.5" PointY="7.625" />
         <EntityTypeShape EntityType="plazaveaModel.t_tarjeta_afiliacion" Width="1.5" PointX="5.25" PointY="1.625" />
         <AssociationConnector Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_cuenta" />
         <AssociationConnector Association="plazaveaModel.FK_t_tarjera_afiliacion_cuenta_t_tarjera_afiliacion" />
+        <EntityTypeShape EntityType="plazaveaModel.t_tienda" Width="1.5" PointX="8.25" PointY="26.875" />
+        <AssociationConnector Association="plazaveaModel.FK_t_campana_t_tienda" />
+        <AssociationConnector Association="plazaveaModel.FK_t_reporte_stock_producto_canje_t_tienda" />
+        <AssociationConnector Association="plazaveaModel.FK_SOLICITUD_AFILIACION_TIENDA" />
+        <AssociationConnector Association="plazaveaModel.FK_t_ticket_canje_t_tienda" />
+        <AssociationConnector Association="plazaveaModel.FK_t_tienda_t_zona" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

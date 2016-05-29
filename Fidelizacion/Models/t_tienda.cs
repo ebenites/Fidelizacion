@@ -32,11 +32,11 @@ namespace Fidelizacion.Models
         public string departamento { get; set; }
         public string tipo_tienda { get; set; }
         public string pais { get; set; }
-        public string horario { get; set; }
-        public string descripcopn_tienda { get; set; }
+        public string descripcion_tienda { get; set; }
         public Nullable<float> latitud { get; set; }
         public Nullable<int> id_zona { get; set; }
         public Nullable<float> longitud { get; set; }
+        public string horario { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_campana> t_campana { get; set; }

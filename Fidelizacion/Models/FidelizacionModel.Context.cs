@@ -39,11 +39,11 @@ namespace Fidelizacion.Models
         public virtual DbSet<t_solicitud_campana> t_solicitud_campana { get; set; }
         public virtual DbSet<t_ticket_canje> t_ticket_canje { get; set; }
         public virtual DbSet<t_ticket_transferencia> t_ticket_transferencia { get; set; }
-        public virtual DbSet<t_tienda> t_tienda { get; set; }
         public virtual DbSet<t_tipo_documento> t_tipo_documento { get; set; }
         public virtual DbSet<t_reporte_stock_anual> t_reporte_stock_anual { get; set; }
         public virtual DbSet<t_zona> t_zona { get; set; }
         public virtual DbSet<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }
         public virtual DbSet<t_tarjeta_afiliacion> t_tarjeta_afiliacion { get; set; }
+        public virtual DbSet<t_tienda> t_tienda { get; set; }
     }
 }
