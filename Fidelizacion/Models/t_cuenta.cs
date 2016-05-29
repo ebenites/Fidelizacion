@@ -47,5 +47,12 @@ namespace Fidelizacion.Models
         public virtual ICollection<t_ticket_transferencia> t_ticket_transferencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<t_tarjera_afiliacion_cuenta> t_tarjera_afiliacion_cuenta { get; set; }
+
+        public Nullable<decimal> getPuntosMaximosTransferir()
+        {
+            if (this.puntos != null)
+                return Math.Round((decimal)this.puntos * (decimal)0.8);
+            return null;
+        }
     }
 }
