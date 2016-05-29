@@ -112,7 +112,7 @@ namespace Fidelizacion.Controllers
                     ficha.estado = "Activo";
                 }
 
-                t_tarjera_afiliacion_cuenta tarjetaAfiliacionCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).Single();
+                t_tarjera_afiliacion_cuenta tarjetaAfiliacionCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).SingleOrDefault();
 
                 if (tarjetaAfiliacionCuenta!= null) {
                     t_tarjeta_afiliacion tarjeta = tarjetaAfiliacionCuenta.t_tarjeta_afiliacion;
