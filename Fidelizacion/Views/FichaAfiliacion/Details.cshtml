@@ -19,8 +19,28 @@
     });
 
   
-
     </script>
+
+
+    @{
+        string idContrato = TempData["idContrato"] as string;
+        if (true || idContrato != null)
+        {
+            <script type="text/javascript">
+                $(function () {
+
+                    $.post('@Url.Content("~/FichaAfiliacion/GetContrato/"+ idContrato)', null, function (data) {
+                        bootbox.dialog({
+                            message: data,
+                            title: ""
+                        });
+                    });
+
+                });
+            </script>
+        }
+    }
+
 }
 
 @{
@@ -330,7 +350,7 @@
 
         
 
-@if (Model.Asociados != null)
+@if (Model.Asociados != null && Model.tipo_cuenta == 1)
 {
     int indice = 1;
 
@@ -400,3 +420,4 @@
 @*<div>
         @Html.ActionLink("Back to List", "Index")
     </div>*@
+

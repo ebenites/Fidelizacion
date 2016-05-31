@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Fidelizacion.Models;
 using System.Data.Entity.Validation;
 using Fidelizacion.Services;
+using System.Diagnostics;
 
 namespace Fidelizacion.Controllers
 {
@@ -22,6 +23,8 @@ namespace Fidelizacion.Controllers
 
 
                    var t_afiliado = db.t_ficha_afiliacion .Where(o => o.numero_documento.Contains(numeroCuenta)).ToList();
+
+            ViewBag.numeroCuenta = numeroCuenta;
 
             //var t_afiliado = db.t_ficha_afiliacion.Include(t => t.t_tipo_documento);
 
@@ -40,6 +43,7 @@ namespace Fidelizacion.Controllers
                         nombre = item.nombre + " " + item.apellidos,
                         estado_afiliado = item.estado_afiliado,
 
+                        tipo_cuenta = (int)cuenta.fk_tipo_cuenta,
                         tipo_afiliado = cuenta.t_tipo_cuenta.tipo_cuenta,
                         id_ficha_afiliacion = item.id_ficha_afiliacion
 
@@ -375,9 +379,9 @@ namespace Fidelizacion.Controllers
 
 
                 IQueryable<t_cuenta> cuentaTitular = db.t_cuenta.Where(o => o.numero_cuenta == cuenta_titular);
+                    Debug.WriteLine(cuentaTitular.Count());
 
-
-                if (cuentaTitular != null || cuentaTitular.Count() > 0)
+                if (cuentaTitular != null && cuentaTitular.Count() > 0)
                 {
 
                     if (cuentaTitular.Count() > 1)
@@ -387,15 +391,35 @@ namespace Fidelizacion.Controllers
                     }
                     else if (cuentaTitular.Count() == 1)
                     {
-                        exitoOperacion = true;
+                        
                             var cuentaLista = cuentaTitular.ToList().ElementAt(0);
-                            cuenta = new t_cuenta()
+
+                            if(cuentaLista.fk_tipo_cuenta != 1)
+                            {
+                                mensaje = "El número de cuenta " + cuenta_titular + " no pertenece a una cuenta titular.";
+                                exitoOperacion = false;
+                            }
+                            else
                             {
 
-                                numero_cuenta = cuentaLista.numero_cuenta ,
-                                id_cuenta = cuentaLista.id_cuenta 
-                            };
+                                if(cuentaLista.t_cuenta1.Count() >= 5)
+                                {
+                                    mensaje = "El número de cuenta " + cuenta_titular + " ya cuenta con una cantidad límite de 5 asociados.";
+                                    exitoOperacion = false;
+                                }
+                                else
+                                {
+                                    exitoOperacion = true;
+                                    cuenta = new t_cuenta()
+                                    {
 
+                                        numero_cuenta = cuentaLista.numero_cuenta,
+                                        id_cuenta = cuentaLista.id_cuenta
+                                    };
+                                }
+                                
+                            }
+                            
                     }
                 }
                 else {
@@ -460,15 +484,23 @@ namespace Fidelizacion.Controllers
                         }
                         else if (listaTarjetaAfiliacion.Count() == 1)
                         {
-                            exitoOperacion = true;
                             var cuentaLista = listaTarjetaAfiliacion.ToList().ElementAt(0);
-                            cuenta = new t_tarjeta_afiliacion()
+
+                            if(cuentaLista.t_tarjera_afiliacion_cuenta.Count() != 0)
                             {
+                                mensaje = "Este número de tarjeta ya se encuentra asignada a la cuenta " + cuentaLista.t_tarjera_afiliacion_cuenta.ToList().ElementAt(0).t_cuenta.numero_cuenta;
+                                exitoOperacion = false;
+                            }else
+                            {
+                                exitoOperacion = true;
+                                cuenta = new t_tarjeta_afiliacion()
+                                {
 
-                                numero_tarjeta = cuentaLista.numero_tarjeta,
-                                id_tarjeta_afiliacion = cuentaLista.id_tarjeta_afiliacion
-                            };
-
+                                    numero_tarjeta = cuentaLista.numero_tarjeta,
+                                    id_tarjeta_afiliacion = cuentaLista.id_tarjeta_afiliacion
+                                };
+                            }
+                            
                         }
                     }
                     else {
@@ -488,6 +520,9 @@ namespace Fidelizacion.Controllers
             {
                 mensaje = e.Message;
                 exitoOperacion = false;
+
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.StackTrace);
             }
             RespuestaViewModel respuesta = new RespuestaViewModel()
             {
@@ -507,12 +542,26 @@ namespace Fidelizacion.Controllers
             return View("GetTarjetas", t_tarjeta_afiliacion.ToList());
         }
 
+        // GET: FichaAfiliacion/Details/5
+        public ActionResult GetContrato(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            
+            ViewBag.contrato = db.t_contrato.Find(id);
+
+            return View();
+        }
+
+
         // POST: FichaAfiliacion/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "apellidos,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta")] FichaAfiliacionViewModel fichaAfiliacionView)
+        public ActionResult Create([Bind(Include = "apellidos,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta,celular,direccion,provincia,distrito")] FichaAfiliacionViewModel fichaAfiliacionView)
         {
             if (ModelState.IsValid)
             {
@@ -527,9 +576,12 @@ namespace Fidelizacion.Controllers
                     if (tarjetaAfiliacion!= null ) {
                        
                         t_cuenta cuentaAfiliado = null;
-                        if (fichaAfiliacionView.tipo_cuenta.Equals("2")) {
+                        Debug.WriteLine("tipo:" + fichaAfiliacionView.tipo_cuenta);
+                        Debug.WriteLine("fk_cuenta_titular:" + fichaAfiliacionView.fk_cuenta_titular);
+                        if (fichaAfiliacionView.tipo_cuenta == 2) {
                            
                             cuentaAfiliado = db.t_cuenta.Where(o => o.id_cuenta == fichaAfiliacionView.fk_cuenta_titular).Single();
+                            Debug.WriteLine("cuentaAfiliado:" + cuentaAfiliado);
                             if (cuentaAfiliado != null)
                             {
                                 if (cuentaAfiliado.t_tipo_cuenta.id_tipo_cuenta.CompareTo(2)==0) {
@@ -548,7 +600,9 @@ namespace Fidelizacion.Controllers
                         if (cuentaAfiliado!= null) {
                             fk_cuenta_afiliado = cuentaAfiliado.id_cuenta;
                         }
-                       
+
+                        Debug.WriteLine("cuenta:" + fk_cuenta_afiliado);
+
                         t_tarjera_afiliacion_cuenta t_tarjeta = new t_tarjera_afiliacion_cuenta()  {
 
                         t_tarjeta_afiliacion = tarjetaAfiliacion,
@@ -565,6 +619,13 @@ namespace Fidelizacion.Controllers
                                 sexo = fichaAfiliacionView.sexo,
                                 correo = fichaAfiliacionView.correo,
                                 numero_telefono = fichaAfiliacionView.numero_telefono,
+                                estado_civil = fichaAfiliacionView.estado_civil,
+
+                                direccion = fichaAfiliacionView.direccion,
+                                celular = fichaAfiliacionView.celular,
+                                distrito = fichaAfiliacionView.distrito,
+                                provincia= fichaAfiliacionView.provincia,
+
                                 fecha_alta = DateTime.Now ,
                                 fecha_nacimiento = fichaAfiliacionView.fecha_nacimiento ,
                                 fk_tipo_documento = fichaAfiliacionView .fk_tipo_documento ,  
@@ -598,9 +659,12 @@ namespace Fidelizacion.Controllers
 
                         db.SaveChanges();
 
-                        TempData["Message"] = "Se ha concluído la grabación de la Ficha de Afiliación.";
+                        TempData["idContrato"] = contrato.id_contrato.ToString();
+                        //TempData["idContrato"] = "5";
 
-                        return RedirectToAction("Index");
+                        TempData["Message"] = "Se ha concluído la grabación de la Ficha de Afiliación.";
+                        
+                        return RedirectToAction("Details/"+ t_tarjeta.t_cuenta.t_ficha_afiliacion.id_ficha_afiliacion);
 
                     }
                     else

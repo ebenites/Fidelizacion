@@ -1,0 +1,71 @@
+﻿@using Fidelizacion.Models;
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12 text-center"><img src="@Url.Content("~/Content/logo.png")" height="48" /></div>
+</div>
+
+<br/>
+
+<div class="row">
+    <div class="col-sm-12 text-center"><strong>Contrato N° @ViewBag.contrato.fecha_contrato.ToString("yyyy")-@ViewBag.contrato.id_contrato.ToString("D6")</strong></string></div>
+</div>
+
+
+<hr/>
+
+
+<div class="row form-group">
+    <label class="col-xs-3 form-control-label">Fecha Inicio</label>
+    <div class="col-xs-3 form-inline">
+        @ViewBag.contrato.fecha_contrato.ToString("dd/MM/yyyy")
+    </div>
+    <label class="col-xs-3 form-control-label">Fecha Vigencia</label>
+    <div class="col-xs-3 form-inline">
+        @ViewBag.contrato.fecha_contrato.AddYears(5).ToString("dd/MM/yyyy")
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-12 form-control-label">Datos de Afiliado</label>
+</div>
+<div class="row form-group">
+    <label class="col-xs-3 form-control-label">Nombres</label>
+    <div class="col-xs-3 form-inline">
+        @ViewBag.contrato.t_cuenta.t_ficha_afiliacion.nombre @ViewBag.contrato.t_cuenta.t_ficha_afiliacion.apellidos
+    </div>
+    <label class="col-xs-3 form-control-label">N° Documento</label>
+    <div class="col-xs-3 form-inline">
+        @ViewBag.contrato.t_cuenta.t_ficha_afiliacion.numero_documento
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-12 form-control-label">Condiciones</label>
+</div>
+<div class="row form-group">
+    <div class="col-xs-12 form-inline">
+        <ul>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+        </ul>
+    </div>
+</div>
+<div class="row form-group">
+    <label class="col-xs-6 form-control-label text-right">Fecha de Firma</label>
+    <div class="col-xs-6 form-inline">
+        @ViewBag.contrato.fecha_firma.ToString("dd/MM/yyyy")
+    </div>
+</div>
+
+
+<hr/>
+
+
+<div class="form-group text-right">
+    <a href="@Url.Content("~/FichaAfiliacion/Index")" class="btn btn-danger" style="width:100px">Salir</a>
+</div>

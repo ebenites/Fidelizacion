@@ -74,12 +74,12 @@
           <Property Name="fecha_nacimiento" Type="date" />
           <Property Name="estado_afiliado" Type="char" MaxLength="1" />
           <Property Name="fecha_baja" Type="datetime" />
-          <Property Name="estado_civil" Type="nchar" MaxLength="10" />
-          <Property Name="direccion" Type="nchar" MaxLength="10" />
-          <Property Name="celular" Type="nchar" MaxLength="10" />
-          <Property Name="departamento" Type="nchar" MaxLength="10" />
-          <Property Name="distrito" Type="nchar" MaxLength="10" />
-          <Property Name="provincia" Type="nchar" MaxLength="10" />
+          <Property Name="estado_civil" Type="char" MaxLength="1" />
+          <Property Name="direccion" Type="nvarchar" MaxLength="100" />
+          <Property Name="celular" Type="nvarchar" MaxLength="30" />
+          <Property Name="departamento" Type="nvarchar" MaxLength="50" />
+          <Property Name="distrito" Type="nvarchar" MaxLength="50" />
+          <Property Name="provincia" Type="nvarchar" MaxLength="50" />
           <Property Name="fk_tipo_documento" Type="int" />
         </EntityType>
         <EntityType Name="t_modalidad_canje">
@@ -815,12 +815,12 @@
           <Property Name="fecha_nacimiento" Type="DateTime" Precision="0" />
           <Property Name="estado_afiliado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="fecha_baja" Type="DateTime" Precision="3" />
-          <Property Name="estado_civil" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="direccion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="celular" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="departamento" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="distrito" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="provincia" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="estado_civil" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="celular" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="departamento" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="distrito" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="provincia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fk_tipo_documento" Type="Int32" />
           <NavigationProperty Name="t_cuenta" Relationship="plazaveaModel.FK_t_cuenta_t_ficha_afiliacion" FromRole="t_ficha_afiliacion" ToRole="t_cuenta" />
           <NavigationProperty Name="t_tipo_documento" Relationship="plazaveaModel.FK_t_ficha_afiliacion_t_tipo_documento" FromRole="t_ficha_afiliacion" ToRole="t_tipo_documento" />

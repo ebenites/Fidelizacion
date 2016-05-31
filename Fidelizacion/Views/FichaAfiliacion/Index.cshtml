@@ -45,7 +45,7 @@
 
         <label for="numeroCuenta" class="col-sm-2 control-label">Afiliado</label>
         <div class="col-md-4">
-            <input type="text" name="numeroCuenta" class="form-control" placeholder="Ingresar número de documento de identidad" />
+            <input type="text" name="numeroCuenta" class="form-control" placeholder="Ingresar número de documento de identidad" value="@ViewBag.numeroCuenta"/>
         </div>
         <div class="col-md-1">
             <input type="submit" value="Buscar" class="btn btn-default" />
@@ -124,7 +124,11 @@
                         <td>
 
                             @Html.ActionLink("Ver", "Details", new { id = item.id_ficha_afiliacion }, new { @class = "btn btn-default", @role = "button" }) &nbsp;&nbsp;
-                            @Html.ActionLink("Desasociar", "Desasociar", new { id = item.id_ficha_afiliacion }, new { @class = "btn btn-default", @role = "button" })
+                            @if (item.tipo_cuenta == 1)
+                            {
+                                @Html.ActionLink("Desasociar", "Desasociar", new { id = item.id_ficha_afiliacion }, new { @class = "btn btn-default", @role = "button" })
+                            }
+
                             @*@Html.ActionLink("Delete", "Delete", new { id=item.id_ficha_afiliacion })*@
                         </td>
                     </tr>
@@ -135,4 +139,10 @@
 
     </div>
 
+}
+else if (Model != null && Model.Count() == 0)
+{
+    <div class="alert alert-danger">
+        No se encontraron resultados bajo estos criterios de búsqueda.
+    </div>
 }

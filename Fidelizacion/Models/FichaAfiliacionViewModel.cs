@@ -9,9 +9,10 @@ namespace Fidelizacion.Models
     {
         [Display(Name = "Tipo Documento de Identidad")]
         [Required]
+        //[Required(ErrorMessage = "Document Type is required")]
         public int fk_tipo_documento { get; set; }
 
-        [Display(Name = "Numero Documento de Identidad")]
+        [Display(Name = "Número Documento de Identidad")]
         [Required]
         public string numero_documento { get; set; }
 
@@ -47,7 +48,6 @@ namespace Fidelizacion.Models
 
 
         [Display(Name = "Teléfono")]
-        [Required]
         public string numero_telefono { get; set; }
 
         [Display(Name = "Celular")]

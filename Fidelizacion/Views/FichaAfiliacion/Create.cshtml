@@ -31,18 +31,22 @@
 
         function limpiarDatosGenerarCuenta() {
             
-            $('#numero_cuenta').val('')
-            $('#puntos').val('')
             $('#tipo_cuenta').val("1").change();
             $('#cuenta_titular').val('')
             $('#fk_cuenta_titular').val('')
             $('#cuenta_titular').attr("readonly", true);
-            $('#generarbtn').prop('disabled', false);
-            $('[name="numero_cuenta"]').val('')
+
+            //$('#puntos').val('')
+            //$('#numero_cuenta').val('')
+            //$('#generarbtn').prop('disabled', false);
+            //$('[name="numero_cuenta"]').val('');
+
            // $('#cuenta_titular').attr("readonly", true);
             $('#buscar_cuentatitular').attr("disabled", true);
 
             $('#labelCuentaTitular').removeClass("required-field");
+
+            $('#validacionfk_cuenta_titular').text('');
             //
             // $('#provincia').attr("value", "Lima");
             //$('#distrito').attr("value", "Lima");
@@ -53,42 +57,64 @@
         function limpiarDatosTarjeta() {
 
             
-            $('#numero_cuenta').val('')
+            //$('#numero_cuenta').val('')
             $('#numero_tarjeta').val('')
             $('#fk_tarjeta_afiliacion').val('')
-            $('[name="numero_cuenta"]').val('')
+            //$('[name="numero_cuenta"]').val('')
+
+            $('#validacionfk_tarjeta_afiliacion').text('');
 
         }
 
         function procesarFormulario() {
 
-            var tarjeta_afiliacion = $('#fk_tarjeta_afiliacion').val()
+            bootbox.confirm("¿Está seguro de grabar al afiliado y generar el contrato de afiliación?", function (result) {
+                if (result) {
 
-            var tip_cuenta = $('#tipo_cuenta').val()
-            var operacion = true;
+                    // Validar edad
+                    var fnacimiento = $('[name="fecha_nacimiento"]').val();
+                    var years = moment().diff(fnacimiento, 'years');
+                    if (years < 18) {
+                        bootbox.alert('El afiliado debe ser mayor de edad.');
+                        operacion = false;
+                    }
+                    //console.log(years)
+
+                    // ...
+
+                    var tarjeta_afiliacion = $('#fk_tarjeta_afiliacion').val()
+
+                    var tip_cuenta = $('#tipo_cuenta').val()
+                    var operacion = true;
          
-            if (tip_cuenta == '2') {
+                    if (tip_cuenta == '2') {
                
-                var fk_cuenta = $('#fk_cuenta_titular').val()
+                        var fk_cuenta = $('#fk_cuenta_titular').val()
                 
-                if (fk_cuenta == null || fk_cuenta == '' || fk_cuenta == '0') {
+                        if (fk_cuenta == null || fk_cuenta == '' || fk_cuenta == '0') {
                    
-                    $('#validacionfk_cuenta_titular').text("No se selecciono una cuenta titular.");
-                    operacion = false;
+                            $('#validacionfk_cuenta_titular').text("No se selecciono una cuenta titular.");
+                            operacion = false;
+                        }
+            
+                    }
+            
+                    if (tarjeta_afiliacion == null || tarjeta_afiliacion == '' || tarjeta_afiliacion == '0') {
+                        $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
+                        operacion = false;
+                    }
+                    //bootbox.alert(tarjeta_afiliacion);
+                    if (operacion) {
+
+                        $('#formularioCrear').submit();
+                    
+                    }
+            
                 }
-            
-            }
-            
-            if (tarjeta_afiliacion == null || tarjeta_afiliacion == '' || tarjeta_afiliacion == '0') {
-                $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
-                operacion = false;
-            }
-            //bootbox.alert(tarjeta_afiliacion);
-            if (operacion) {
-                $('#formularioCrear').submit();
-            }
-            
-            
+            });
+
+            // Fixed al boton
+            $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
         }
 
         function buscarCuentaTitular() {
@@ -115,11 +141,13 @@
                         if (response.operacion) {
                             
                             $('#fk_cuenta_titular').attr('value', response.objeto.id_cuenta);
-
+                            $('#validacionfk_cuenta_titular').text('');
+                            bootbox.alert('Número de cuenta de titular encontrada y asignada.');
                             
                         } else
                         {
                             bootbox.alert(response.mensaje)
+                            $('#validacionfk_cuenta_titular').text(response.mensaje);
                             $('#fk_cuenta_titular').attr('value', "");
 
                         }
@@ -164,10 +192,12 @@
                                 //bootbox.alert(response.objeto.numero_tarjeta)
                                 $('#irAdministrar').css('display', 'none');
                                 $('#fk_tarjeta_afiliacion').attr('value', response.objeto.id_tarjeta_afiliacion);
+                                $('#validacionfk_tarjeta_afiliacion').text('');
                                 //bootbox.alert($('#fk_tarjeta_afiliacion').val());
-                                bootbox.alert('Número de tarjeta encontrada.');
+                                bootbox.alert('Número de tarjeta encontrada y asignada.');
                             } else {
                                 bootbox.alert(response.mensaje)
+                                $('#validacionfk_tarjeta_afiliacion').text(response.mensaje);
                                 $('#fk_tarjeta_afiliacion').attr('value', "");
                             }
 
@@ -242,6 +272,8 @@
         });
         limpiarDatosGenerarCuenta();
         $('#motivo').val('Alta de Afiliado');
+
+        //$('[name="fecha_nacimiento"]').val(moment().subtract(18, 'years').format('YYYY-MM-DD'));
 
     });
 
@@ -391,7 +423,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.numero_telefono, htmlAttributes: new { @class = "control-label required-field col-md-2" })
+            @Html.LabelFor(model => model.numero_telefono, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.numero_telefono, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.numero_telefono, "", new { @class = "text-danger" })
@@ -521,7 +553,7 @@
                 @*@Html.ValidationMessageFor(model => model.cuenta_titular, "", new { @class = "text-danger" })*@
                 @Html.ValidationMessageFor(model => model.fk_cuenta_titular, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.fk_cuenta_titular, null)
-                @*<span class="field-validation-valid text-danger" data-valmsg-for="fk_cuenta_titular"  id="validacionfk_cuenta_titular"></span>*@
+                <span class="field-validation-valid text-danger" data-valmsg-for="fk_cuenta_titular"  id="validacionfk_cuenta_titular"></span>
             </div>
 
             <div class="col-md-1">
