@@ -2,13 +2,13 @@
 
 
 @section scripts {
-    
+
     <script type="text/javascript">
 
         function limpiarDatosPersonales() {
-                //alert("entro");
-                //alert($('#numero_documento'));
-                //alert($('#numero_documento').val());
+            //alert("entro");
+            //alert($('#numero_documento'));
+            //alert($('#numero_documento').val());
             $('#numero_documento').val('')
             $('#nombre').val('')
             $('#numero_documento').val('')
@@ -24,13 +24,13 @@
             $("#fk_tipo_documento").val("1").change();
             $("#sexo").val("M").change();
             $("#estado_civil").val("S").change();
-           // $('#provincia').attr("value", "Lima");
+            // $('#provincia').attr("value", "Lima");
             //$('#distrito').attr("value", "Lima");
-        
+
         }
 
         function limpiarDatosGenerarCuenta() {
-            
+
             $('#tipo_cuenta').val("1").change();
             $('#cuenta_titular').val('')
             $('#fk_cuenta_titular').val('')
@@ -41,7 +41,7 @@
             //$('#generarbtn').prop('disabled', false);
             //$('[name="numero_cuenta"]').val('');
 
-           // $('#cuenta_titular').attr("readonly", true);
+            // $('#cuenta_titular').attr("readonly", true);
             $('#buscar_cuentatitular').attr("disabled", true);
 
             $('#labelCuentaTitular').removeClass("required-field");
@@ -56,7 +56,7 @@
 
         function limpiarDatosTarjeta() {
 
-            
+
             //$('#numero_cuenta').val('')
             $('#numero_tarjeta').val('')
             $('#fk_tarjeta_afiliacion').val('')
@@ -86,19 +86,19 @@
 
                     var tip_cuenta = $('#tipo_cuenta').val()
                     var operacion = true;
-         
+
                     if (tip_cuenta == '2') {
-               
+
                         var fk_cuenta = $('#fk_cuenta_titular').val()
-                
+
                         if (fk_cuenta == null || fk_cuenta == '' || fk_cuenta == '0') {
-                   
+
                             $('#validacionfk_cuenta_titular').text("No se selecciono una cuenta titular.");
                             operacion = false;
                         }
-            
+
                     }
-            
+
                     if (tarjeta_afiliacion == null || tarjeta_afiliacion == '' || tarjeta_afiliacion == '0') {
                         $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
                         operacion = false;
@@ -107,9 +107,9 @@
                     if (operacion) {
 
                         $('#formularioCrear').submit();
-                    
+
                     }
-            
+
                 }
             });
 
@@ -119,10 +119,12 @@
 
         function buscarCuentaTitular() {
 
-           
-            var cuentaTitular2 = $('#cuenta_titular').val();
+            alert("Buscar");
 
-           
+            Window.popup("Prueba",@Url.Content("~/FichaAfiliacion/GetTitulares"));
+            @*var cuentaTitular2 = $('#cuenta_titular').val();
+
+
             //bootbox.alert(cuentaTitular2)
             var objeto = {
                 cuenta_titular: cuentaTitular2
@@ -136,14 +138,14 @@
                 success: function (response) {
                     try {
 
-                       
+
 
                         if (response.operacion) {
-                            
+
                             $('#fk_cuenta_titular').attr('value', response.objeto.id_cuenta);
                             $('#validacionfk_cuenta_titular').text('');
                             bootbox.alert('Número de cuenta de titular encontrada y asignada.');
-                            
+
                         } else
                         {
                             bootbox.alert(response.mensaje)
@@ -151,7 +153,7 @@
                             $('#fk_cuenta_titular').attr('value', "");
 
                         }
-                        
+
                     } catch (e) {
                         bootbox.alert(e.message)
                     }
@@ -163,7 +165,7 @@
                 }
 
 
-            });
+            });*@
 
         }
 
@@ -202,10 +204,10 @@
                             }
 
                             if (response.mostrarLink) {
-                                
+
                                 $('#irAdministrar').css('display', 'block');
                             }
-                            
+
                         }
 
 
@@ -227,6 +229,7 @@
         }
 
         function habilitarCuentaTitular(obj) {
+            alert(obj);
             var tipoCuenta = obj.value;
 
 
@@ -247,43 +250,43 @@
 
 
         }
-    $(function () {
-        $('#estado_afiliado').val('Activo');
-        $('#tipo_cuenta').val('1');
-        $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
-        $("#fk_tipo_documento").val("1").change();
-        $('#estado').val('A');
+        $(function () {
+            $('#estado_afiliado').val('Activo');
+            $('#tipo_cuenta').val('1');
+            $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
+            $("#fk_tipo_documento").val("1").change();
+            $('#estado').val('A');
 
-        $('#fecha_asignacion').datetimepicker({
-            format: "YYYY-MM-DD",
-            defaultDate: moment(),
-            locale: "es"
+            $('#fecha_asignacion').datetimepicker({
+                format: "YYYY-MM-DD",
+                defaultDate: moment(),
+                locale: "es"
+            });
+
+            $('input[name="fecha_nacimiento"]').datetimepicker({
+                format: "YYYY-MM-DD",
+                locale: "es"
+            });
+
+
+            $('input[name="fecha_alta"]').datetimepicker({
+                format: "YYYY-MM-DD",
+                locale: "es"
+            });
+            limpiarDatosGenerarCuenta();
+            $('#motivo').val('Alta de Afiliado');
+
+            //$('[name="fecha_nacimiento"]').val(moment().subtract(18, 'years').format('YYYY-MM-DD'));
+
         });
 
-        $('input[name="fecha_nacimiento"]').datetimepicker({
-            format: "YYYY-MM-DD",
-            locale: "es"
-        });
+        function generar(obj) {
+            var ncuenta = Math.round(Math.random() * 10000000000000000);
+            $('[name="numero_cuenta"]').val(ncuenta);
+            $('[name="puntos"]').val(100);
 
-
-        $('input[name="fecha_alta"]').datetimepicker({
-            format: "YYYY-MM-DD",
-            locale: "es"
-        });
-        limpiarDatosGenerarCuenta();
-        $('#motivo').val('Alta de Afiliado');
-
-        //$('[name="fecha_nacimiento"]').val(moment().subtract(18, 'years').format('YYYY-MM-DD'));
-
-    });
-
-    function generar(obj) {
-        var ncuenta = Math.round(Math.random() * 10000000000000000);
-        $('[name="numero_cuenta"]').val(ncuenta);
-        $('[name="puntos"]').val(100);
-
-        obj.disabled = true;
-    }
+            obj.disabled = true;
+        }
 
     </script>
 }
@@ -294,20 +297,19 @@
 }
 
 <style>
-
     .required-field:after {
-    color: #d00;
-    content: "(*)";
-    position: absolute;
-    margin-left: 3px;
-    top: 10px;
-}
+        color: #d00;
+        content: "(*)";
+        position: absolute;
+        margin-left: 3px;
+        top: 10px;
+    }
 </style>
 
 <h2>Nuevo Afiliado</h2>
 <br />
 
-@using (Html.BeginForm("Create", "FichaAfiliacion", FormMethod.Post, new { id = "formularioCrear" })) 
+@using (Html.BeginForm("Create", "FichaAfiliacion", FormMethod.Post, new { id = "formularioCrear" }))
 {
     @Html.AntiForgeryToken()
 
@@ -318,10 +320,10 @@
         @Html.ValidationMessage("ERROR_MESSAGE", "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.fk_tipo_documento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
-           
+
             <div class="col-md-4">
                 @*@Html.DropDownList("fk_tipo_documento", null, htmlAttributes: new { @class = "form-control" })*@
-              
+
                 @Html.DropDownListFor(model => model.fk_tipo_documento, new SelectList(
                   new List<Object>{
 
@@ -337,7 +339,7 @@
 
             </div>
             <div class="col-md-1">
-                <input type="button"  value="Limpiar" class="btn btn-default" onclick="javascirpt:limpiarDatosPersonales()"/>
+                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascirpt:limpiarDatosPersonales()" />
             </div>
         </div>
 
@@ -360,13 +362,13 @@
 
         <div class="form-group">
             @*Html.LabelFor(model => model.apellidos, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            <label class="control-label required-field col-md-2" for="apellidos" >Apellidos</label>
+            <label class="control-label required-field col-md-2" for="apellidos">Apellidos</label>
             <div class="col-md-4">
                 @Html.EditorFor(model => model.apellidos, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.apellidos, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.fecha_nacimiento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
@@ -395,9 +397,9 @@
 
 
         <div class="form-group">
-        @Html.LabelFor(model => model.estado_civil, htmlAttributes: new { @class = "control-label required-field col-md-2" })
-        <div class="col-md-4">
-            @Html.DropDownListFor(model => model.estado_civil, new SelectList(
+            @Html.LabelFor(model => model.estado_civil, htmlAttributes: new { @class = "control-label required-field col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.estado_civil, new SelectList(
                   new List<Object>{
 
                        new { value = "S" , text = "Soltero" },
@@ -408,10 +410,10 @@
                   "value",
                   "text",
                    2), new { @class = "form-control" })
-            
-            @Html.ValidationMessageFor(model => model.estado_civil, "", new { @class = "text-danger" })
+
+                @Html.ValidationMessageFor(model => model.estado_civil, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
 
         <div class="form-group">
@@ -502,30 +504,30 @@
         <br />
         <h4>Generar Cuenta</h4>
         <hr />
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.numero_cuenta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly"} })
+                @Html.EditorFor(model => model.numero_cuenta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.numero_cuenta, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-1">
-                <input type="button" id="generarbtn" value="Generar" class="btn btn-default" onclick="generar(this)"/>
+                <input type="button" id="generarbtn" value="Generar" class="btn btn-default" onclick="generar(this)" />
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascript:limpiarDatosGenerarCuenta()"/>
+                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascript:limpiarDatosGenerarCuenta()" />
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.puntos, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.puntos, new { htmlAttributes = new { @class = "form-control" , @readonly="readonly" } })
+                @Html.EditorFor(model => model.puntos, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.puntos, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.tipo_cuenta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
@@ -539,7 +541,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" , @onchange="habilitarCuentaTitular(this)" })
+                   2), new { @class = "form-control", @onchange = "habilitarCuentaTitular(this)" })
 
 
                 @Html.ValidationMessageFor(model => model.tipo_cuenta, "", new { @class = "text-danger" })
@@ -547,17 +549,17 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2" , @id="labelCuentaTitular" })
+            @Html.LabelFor(model => model.cuenta_titular, htmlAttributes: new { @class = "control-label col-md-2", @id = "labelCuentaTitular" })
             <div class="col-md-4">
                 @Html.EditorFor(model => model.cuenta_titular, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @*@Html.ValidationMessageFor(model => model.cuenta_titular, "", new { @class = "text-danger" })*@
                 @Html.ValidationMessageFor(model => model.fk_cuenta_titular, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.fk_cuenta_titular, null)
-                <span class="field-validation-valid text-danger" data-valmsg-for="fk_cuenta_titular"  id="validacionfk_cuenta_titular"></span>
+                <span class="field-validation-valid text-danger" data-valmsg-for="fk_cuenta_titular" id="validacionfk_cuenta_titular"></span>
             </div>
 
             <div class="col-md-1">
-                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="buscarCuentaTitular()"/>
+                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="buscarCuentaTitular()" />
             </div>
         </div>
 
@@ -581,7 +583,7 @@
                 @Html.ValidationMessageFor(model => model.numero_cuenta, "", new { @class = "text-danger" })
             </div>
 
-            
+
         </div>
 
         <div class="form-group">
@@ -592,8 +594,8 @@
                 <a href="@Url.Content("~/TarjetaAfiliacion/Create")" style="display:none" id="irAdministrar" target="_blank">Ingresar Administrar Tarjeta</a>
                 @*<input type="text" name="fk_tarjeta_afiliacion" id="fk_tarjeta_afiliacion" />*@
                 @*@Html.LabelFor(model => model.fk_tarjeta_afiliacion, htmlAttributes: new { @class = "control-label required-field col-md-2" })
-               @Html.EditorFor(model => model.fk_tarjeta_afiliacion, new { htmlAttributes = new { @class = "form-control" } })*@
-                 @Html.HiddenFor(model => model.fk_tarjeta_afiliacion, "")
+                    @Html.EditorFor(model => model.fk_tarjeta_afiliacion, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.HiddenFor(model => model.fk_tarjeta_afiliacion, "")
                 <span class="field-validation-valid text-danger" data-valmsg-for="fk_tarjeta_afiliacion" data-valmsg-replace="true" id="validacionfk_tarjeta_afiliacion"></span>
             </div>
 
@@ -601,7 +603,7 @@
                 <input type="button" value="Buscar" class="btn btn-default" onclick="buscarNumeroTarjeta()" />
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default"  onclick="javascript: limpiarDatosTarjeta()"/>
+                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascript: limpiarDatosTarjeta()" />
             </div>
         </div>
         <div class="form-group">
@@ -613,7 +615,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2"  })
+            @Html.LabelFor(model => model.estado_tarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @*Html.EditorFor(model => model.estado_tarjeta, new { htmlAttributes = new { @class = "form-control" } })*@
                 <input type="text" class="form-control" value="Activo" readonly />
@@ -632,13 +634,13 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="button" value="Grabar" class="btn btn-primary" onclick="procesarFormulario();"/>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'"/>
+                <input type="button" value="Grabar" class="btn btn-primary" onclick="procesarFormulario();" />&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'" />
             </div>
         </div>
     </div>
 }
 
 @*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@

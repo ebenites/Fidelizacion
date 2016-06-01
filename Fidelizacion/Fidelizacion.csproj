@@ -433,6 +433,7 @@
     <Content Include="Views\ReporteCanje\ReporteRotacion.cshtml" />
     <Content Include="Views\FichaAfiliacion\GetTarjetas.cshtml" />
     <Content Include="Views\FichaAfiliacion\GetContrato.cshtml" />
+    <Content Include="Views\FichaAfiliacion\GetTitulares.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

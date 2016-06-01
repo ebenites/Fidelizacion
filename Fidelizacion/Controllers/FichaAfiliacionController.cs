@@ -542,6 +542,13 @@ namespace Fidelizacion.Controllers
             return View("GetTarjetas", t_tarjeta_afiliacion.ToList());
         }
 
+        public ActionResult GetTitulares()
+        {
+            List< t_cuenta> titulares = db.t_cuenta.Where(o => o.estado_cuenta == "A" && o.fk_tipo_cuenta == 1).ToList();
+
+            return View(titulares);
+        }
+
         // GET: FichaAfiliacion/Details/5
         public ActionResult GetContrato(int? id)
         {
