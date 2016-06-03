@@ -68,6 +68,54 @@
 
         function procesarFormulario() {
 
+            // Validar numero_documento
+            var numero_documento = $('[name="numero_documento"]')
+            if (numero_documento.val() == '') {
+                numero_documento.next().text(numero_documento.data('val-required'));
+                bootbox.alert(numero_documento.data('val-required'));
+                return;
+            }
+
+            // Si es DNI
+            $('[name="numero_documento"]').next().text('');
+            if ($('[name="fk_tipo_documento"]').val() == '1') {
+
+                // Validar numero_documento DNI
+                var numero_documento = $('[name="numero_documento"]');
+                if (numero_documento.val().length != 8) {
+                    numero_documento.next().text('El numero de DNI debe contener los 8 dígitos');
+                    bootbox.alert('El numero de DNI debe contener los 8 dígitos');
+                    return;
+                }
+
+            } else {
+
+                // Validar numero_documento Carne de Extrangeria
+                var numero_documento = $('[name="numero_documento"]');
+                if (numero_documento.val().length != 12) {
+                    numero_documento.next().text('El numero de Carné Extranjería debe contener los 12 dígitos');
+                    bootbox.alert('El numero de Carné Extranjería debe contener los 12 dígitos');
+                    return;
+                }
+
+            }
+
+            // Validar nombres
+            var nombre = $('[name="nombre"]')
+            if (nombre.val() == '') {
+                nombre.next().text(nombre.data('val-required'));
+                bootbox.alert(nombre.data('val-required'));
+                return;
+            }
+
+            // Validar apellidos
+            var apellidos = $('[name="apellidos"]')
+            if (apellidos.val() == '') {
+                apellidos.next().text(apellidos.data('val-required'));
+                bootbox.alert(apellidos.data('val-required'));
+                return;
+            }
+
             // Validar edad
             var fnacimiento = $('[name="fecha_nacimiento"]');
 
@@ -85,43 +133,50 @@
             }
             //console.log(years)
 
-            // VAlidar todos los campos mandatorios con javascriprt
+            // Validar correo
+            var correo = $('[name="correo"]')
+            if (correo.val() == '') {
+                correo.next().text(correo.data('val-required'));
+                bootbox.alert(correo.data('val-required'));
+                return;
+            }
 
+            // Validar numero_cuenta
+            var numero_cuenta = $('[name="numero_cuenta"]');
+            numero_cuenta.next().text('');
+            if (numero_cuenta.val() == '') {
+                numero_cuenta.next().text(numero_cuenta.data('val-required'));
+                bootbox.alert(numero_cuenta.data('val-required'));
+                return;
+            }
+
+            // Si Tipo cuenta == 2
+            $('[name="fk_cuenta_titular"]').next().text('');
+            if ($('[name="tipo_cuenta"]').val() == '2') {
+
+                // Validar fk_cuenta_titular
+                var fk_cuenta_titular = $('[name="fk_cuenta_titular"]');
+                if (fk_cuenta_titular.val() == '') {
+                    fk_cuenta_titular.next().text("No se selecciono una cuenta titular.");
+                    bootbox.alert("No se selecciono una cuenta titular.");
+                    return;
+                }
+
+            }
+
+            // Validar fk_tarjeta_afiliacion
+            var fk_tarjeta_afiliacion = $('[name="fk_tarjeta_afiliacion"]')
+            fk_tarjeta_afiliacion.next().text('');
+            if (fk_tarjeta_afiliacion.val() == '') {
+                fk_tarjeta_afiliacion.next().text("No se selecciono un Tarjeta.");
+                bootbox.alert("No se selecciono un Tarjeta.");
+                return;
+            }
+
+            // Submit
             bootbox.confirm("¿Está seguro de grabar al afiliado y generar el contrato de afiliación?", function (result) {
                 if (result) {
-
-                    
-
-                    // ...
-
-                    var tarjeta_afiliacion = $('#fk_tarjeta_afiliacion').val()
-
-                    var tip_cuenta = $('#tipo_cuenta').val()
-                    var operacion = true;
-
-                    if (tip_cuenta == '2') {
-
-                        var fk_cuenta = $('#fk_cuenta_titular').val()
-
-                        if (fk_cuenta == null || fk_cuenta == '' || fk_cuenta == '0') {
-
-                            $('#validacionfk_cuenta_titular').text("No se selecciono una cuenta titular.");
-                            operacion = false;
-                        }
-
-                    }
-
-                    if (tarjeta_afiliacion == null || tarjeta_afiliacion == '' || tarjeta_afiliacion == '0') {
-                        $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
-                        operacion = false;
-                    }
-                    //bootbox.alert(tarjeta_afiliacion);
-                    if (operacion) {
-
-                        $('#formularioCrear').submit();
-
-                    }
-
+                    $('#formularioCrear').submit();
                 }
             });
 
@@ -553,7 +608,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(model => model.fk_tipo_documento, "", new { @class = "text-danger" })
 
@@ -567,7 +622,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = "12" } })
                 @Html.ValidationMessageFor(model => model.numero_documento, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -611,7 +666,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.sexo, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -630,7 +685,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(model => model.estado_civil, "", new { @class = "text-danger" })
             </div>
@@ -672,6 +727,20 @@
             </div>
         </div>
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.departamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.departamento, new SelectList(
+                  new List<Object>{
+
+                       new { value = "Lima" , text = "Lima" }
+                    },
+                  "value",
+                  "text",
+                   1), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.departamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.provincia, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -683,7 +752,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.provincia, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -693,14 +762,15 @@
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.distrito, new SelectList(
                   new List<Object>{
-
                        new { value = "Lima" , text = "Lima" },
+                       new { value = "Ate" , text = "Ate" },
+                       new { value = "Lince" , text = "Lince" },
                        new { value = "San Borja" , text = "San Borja" },
-                       new { value = "Surco" , text = "Surco" }
+                       new { value = "Santiago de Surco" , text = "Santiago de Surco" }
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.distrito, "", new { @class = "text-danger" })
             </div>
         </div>

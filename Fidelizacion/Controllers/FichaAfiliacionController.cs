@@ -615,7 +615,7 @@ namespace Fidelizacion.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "apellidos,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta,celular,direccion,provincia,distrito")] FichaAfiliacionViewModel fichaAfiliacionView)
+        public ActionResult Create([Bind(Include = "apellidos,nombre,numero_documento,sexo,correo,numero_telefono,estado_civil,fecha_nacimiento,fk_tipo_documento,numero_cuenta,puntos,tipo_cuenta,fk_tarjeta_afiliacion,fk_cuenta_titular,numero_tarjeta,celular,direccion,departamento,provincia,distrito")] FichaAfiliacionViewModel fichaAfiliacionView)
         {
             if (ModelState.IsValid)
             {
@@ -623,8 +623,16 @@ namespace Fidelizacion.Controllers
 
             try
             {
-               
+                    // Validar que no exista
+                    t_ficha_afiliacion afiliado = db.t_ficha_afiliacion.Where(o => o.numero_documento == fichaAfiliacionView.numero_documento).SingleOrDefault();
 
+                    if (afiliado != null)
+                    {
+                        ModelState.AddModelError("ERROR_MESSAGE", "El número de documento " + afiliado.numero_documento + " ya se encuentra regiatrado para " + afiliado.nombre + " " + afiliado.apellidos + ".");
+                        return View(fichaAfiliacionView);
+                    }
+
+                    // Validar otras cosas
                     t_tarjeta_afiliacion tarjetaAfiliacion = db.t_tarjeta_afiliacion.Find(fichaAfiliacionView.fk_tarjeta_afiliacion);
 
                     if (tarjetaAfiliacion!= null ) {
@@ -639,7 +647,7 @@ namespace Fidelizacion.Controllers
                             if (cuentaAfiliado != null)
                             {
                                 if (cuentaAfiliado.t_tipo_cuenta.id_tipo_cuenta.CompareTo(2)==0) {
-                                    ModelState.AddModelError("ERROR_MESSAGE", "El numero de tarjeta " + fichaAfiliacionView.numero_tarjeta + " es Asociado.");
+                                    ModelState.AddModelError("ERROR_MESSAGE", "El número de tarjeta " + fichaAfiliacionView.numero_tarjeta + " es Asociado.");
                                     return View(fichaAfiliacionView);
                                 }
                                 
@@ -653,52 +661,58 @@ namespace Fidelizacion.Controllers
                         int? fk_cuenta_afiliado = null;
                         if (cuentaAfiliado!= null) {
                             fk_cuenta_afiliado = cuentaAfiliado.id_cuenta;
+
+                            // Subir puntos a la cuenta titular
+                            cuentaAfiliado.puntos += 10;
+                            db.SaveChanges();
                         }
+
+                        // Registrar cuenta
 
                         Debug.WriteLine("cuenta:" + fk_cuenta_afiliado);
 
                         t_tarjera_afiliacion_cuenta t_tarjeta = new t_tarjera_afiliacion_cuenta()  {
 
-                        t_tarjeta_afiliacion = tarjetaAfiliacion,
+                            t_tarjeta_afiliacion = tarjetaAfiliacion,
                         
-                        t_cuenta = new t_cuenta() {
-                            numero_cuenta = fichaAfiliacionView.numero_cuenta,
-                            fecha_alta = DateTime.Now,
-                            puntos = fichaAfiliacionView.puntos,
-                            estado_cuenta = "A",
-                            t_ficha_afiliacion = new t_ficha_afiliacion() {
-                                apellidos = fichaAfiliacionView.apellidos,
-                                nombre = fichaAfiliacionView.nombre,
-                                numero_documento = fichaAfiliacionView.numero_documento,
-                                sexo = fichaAfiliacionView.sexo,
-                                correo = fichaAfiliacionView.correo,
-                                numero_telefono = fichaAfiliacionView.numero_telefono,
-                                estado_civil = fichaAfiliacionView.estado_civil,
+                            t_cuenta = new t_cuenta() {
+                                numero_cuenta = fichaAfiliacionView.numero_cuenta,
+                                fecha_alta = DateTime.Now,
+                                puntos = fichaAfiliacionView.puntos,
+                                estado_cuenta = "A",
+                                t_ficha_afiliacion = new t_ficha_afiliacion() {
+                                    apellidos = fichaAfiliacionView.apellidos,
+                                    nombre = fichaAfiliacionView.nombre,
+                                    numero_documento = fichaAfiliacionView.numero_documento,
+                                    sexo = fichaAfiliacionView.sexo,
+                                    correo = fichaAfiliacionView.correo,
+                                    numero_telefono = fichaAfiliacionView.numero_telefono,
+                                    estado_civil = fichaAfiliacionView.estado_civil,
 
-                                direccion = fichaAfiliacionView.direccion,
-                                celular = fichaAfiliacionView.celular,
-                                distrito = fichaAfiliacionView.distrito,
-                                provincia= fichaAfiliacionView.provincia,
+                                    direccion = fichaAfiliacionView.direccion,
+                                    celular = fichaAfiliacionView.celular,
+                                    distrito = fichaAfiliacionView.distrito,
+                                    provincia= fichaAfiliacionView.provincia,
+                                    departamento = fichaAfiliacionView.departamento,
 
-                                fecha_alta = DateTime.Now ,
-                                fecha_nacimiento = fichaAfiliacionView.fecha_nacimiento ,
-                                fk_tipo_documento = fichaAfiliacionView .fk_tipo_documento ,  
-                                estado_afiliado = "A"
+                                    fecha_alta = DateTime.Now ,
+                                    fecha_nacimiento = fichaAfiliacionView.fecha_nacimiento ,
+                                    fk_tipo_documento = fichaAfiliacionView .fk_tipo_documento ,  
+                                    estado_afiliado = "A"
 
+                                },
+                                fk_tipo_cuenta = fichaAfiliacionView.tipo_cuenta,
+                                fk_cuenta = fk_cuenta_afiliado
                             },
-                            fk_tipo_cuenta = fichaAfiliacionView.tipo_cuenta,
-                            fk_cuenta = fk_cuenta_afiliado
-                        },
-                        fecha_afiliacion = DateTime.Now,
-                        estado = "A"
+                            fecha_afiliacion = DateTime.Now,
+                            estado = "A"
 
 
-                    };
+                        };
 
-                    db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
+                        db.t_tarjera_afiliacion_cuenta.Add(t_tarjeta);
                     
-               
-                    db.SaveChanges();
+                        db.SaveChanges();
 
 
                         // Insert contrato

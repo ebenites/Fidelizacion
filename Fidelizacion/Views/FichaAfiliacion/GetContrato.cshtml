@@ -28,8 +28,11 @@
         @ViewBag.contrato.fecha_contrato.AddYears(5).ToString("dd/MM/yyyy")
     </div>
 </div>
+
+<hr/>
+
 <div class="row form-group">
-    <label class="col-xs-12 form-control-label">Datos de Afiliado</label>
+    <label class="col-xs-12 form-control-label" style="background-color: #eee">Datos del Afiliado</label>
 </div>
 <div class="row form-group">
     <label class="col-xs-3 form-control-label">Nombres</label>
@@ -41,18 +44,58 @@
         @ViewBag.contrato.t_cuenta.t_ficha_afiliacion.numero_documento
     </div>
 </div>
+
+<hr />
+
+@if (ViewBag.contrato.t_cuenta.t_cuenta2 != null)
+{
+    <div class="row form-group">
+        <label class="col-xs-12 form-control-label" style="background-color: #eee">Datos del Titular</label>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-3 form-control-label">Nombres</label>
+        <div class="col-xs-3 form-inline">
+            @ViewBag.contrato.t_cuenta.t_cuenta2.t_ficha_afiliacion.nombre @ViewBag.contrato.t_cuenta.t_cuenta2.t_ficha_afiliacion.apellidos
+        </div>
+        <label class="col-xs-3 form-control-label">N° Documento</label>
+        <div class="col-xs-3 form-inline">
+            @ViewBag.contrato.t_cuenta.t_cuenta2.t_ficha_afiliacion.numero_documento
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-12 form-control-label text-center">¡El Titular ha obtenido +10 puntos gracias a esta afiliación!</label>
+    </div>
+
+    <hr />
+}
+
 <div class="row form-group">
-    <label class="col-xs-12 form-control-label">Condiciones</label>
+    <label class="col-xs-12 form-control-label" style="background-color: #eee">Condiciones</label>
 </div>
 <div class="row form-group">
     <div class="col-xs-12 form-inline">
-        <ul>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-        </ul>
+        <ol>
+            <li style="text-align: justify">
+                <strong>FINALIDAD DE ESTE CONTRATO</strong>
+                <p>Usted y Supermercados Peruanos SA (en adelante <b>SPSA</b>) firman este Contrato para que SPSA le conceda, una vez que cumpla con todas las condiciones establecidas por el SPSA, una tarjeta de afiliación ("Tarjeta"), con la que podrá utilizar una Línea de Crédito revolvente ("Línea de Crédito") hasta por el moento que le sea aprobado.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>PLAZO DE ESTE CONTRATO</strong>
+                <p>El SPSA podrá dar por terminado este Contrato si considera que no resulta conveniente para sus intereses mantener terminará, conforme a lo señalado en el Numeral 16.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>PARA QUÉ SIRVE LA TARJETA</strong>
+                <p>La Tarjeta le permite a Usted: (i) adquirir bienes y servicios; y/o (ii) pagar obligaciones (deudas) en establecimientos hacer uso de otros servicios asociados a la Tarjeta como: (i) retirar dinero en efectivo de los cajeros automáticos del SPSA y/o afiliados a éste, (ii) compra, consumo o pago por internet a través de una página web distinta a la del SPSA; o, (iii) consumos en el exterior (con presencia física de la Tarjeta); teniendo en cuenta lo indicado en la Hoja Resumen Informativa que, como Anexo No. 1, es parte integrante del presente Contrato.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>ACTIVACIÓN Y USO DE LA TARJETA</strong>
+                <p>La Tarjeta se activará automáticamente dentro de las 48 horas, en caso haberla recibido Usted; si desea activarla activarla vía telefónica o por cualquier otro canal que el SPSA ponga a su disposición responsabilidad suya.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>QUÉ HACER EN CASO DE EXTRAVÍO, ROBO, HURTO O SUSTRACCIÓN DE LA(S) TARJETA(S) Y/O CÓDIGOS SECRETOS Y CLAVES</strong>
+                <p>Si sufre el extravío, robo, hurto o sustracción de la(s) Tarjeta(s), códigos secretos y/o claves, Usted deberá: (i) comunicar inmediatamente el hecho al SPSA, a través de los números telefónicos que aparecen en la Hoja Resumen Informativa, a efectos de bloquear la Tarjeta; (ii) hacer la denuncia policial.</p>
+            </li>
+        </ol>
     </div>
 </div>
 <div class="row form-group">
