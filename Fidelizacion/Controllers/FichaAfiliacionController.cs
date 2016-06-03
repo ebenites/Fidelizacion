@@ -537,6 +537,7 @@ namespace Fidelizacion.Controllers
 
         public ActionResult GetTarjetas(String numeroCuenta, String estado)
         {
+            
             var t_tarjeta_afiliacion = tarjetaAfiliacionService.Buscar(numeroCuenta, estado);
             
             return View("GetTarjetas", t_tarjeta_afiliacion.ToList());
@@ -544,8 +545,19 @@ namespace Fidelizacion.Controllers
 
         public ActionResult GetTitulares()
         {
-            List< t_cuenta> titulares = db.t_cuenta.Where(o => o.estado_cuenta == "A" && o.fk_tipo_cuenta == 1).ToList();
+            string dni = Request.Params["dni"];
 
+            List<t_cuenta> titulares = null;
+
+            if (dni != null)
+            {
+                titulares = db.t_cuenta.Where(o => o.estado_cuenta == "A" && o.fk_tipo_cuenta == 1 && o.t_ficha_afiliacion.numero_documento == dni).ToList();
+            }
+            else
+            {
+                titulares = db.t_cuenta.Where(o => o.estado_cuenta == "A" && o.fk_tipo_cuenta == 1).ToList();
+            }
+            
             return View(titulares);
         }
 

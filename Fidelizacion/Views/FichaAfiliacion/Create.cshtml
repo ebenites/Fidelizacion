@@ -117,11 +117,39 @@
             $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
         }
 
-        function buscarCuentaTitular() {
+        function cargarCuentaTitular() {
 
-            alert("Buscar");
+            $.post('@Url.Content("~/FichaAfiliacion/GetTitulares")', { }, function (data) {
 
-            Window.popup("Prueba",@Url.Content("~/FichaAfiliacion/GetTitulares"));
+                $('#titular-lista').html(data);
+
+                bootbox.dialog({
+                    message: $('#titular-template').html(),
+                    title: "Buscar Cuenta Titular",
+                    size: 'large'
+                });
+
+                $('#titular-lista table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+
+            })
+
+            /*bootbox.dialog({
+                message: '<iframe width="100%" height="560" src="'+url+'" frameborder="0" allowfullscreen></iframe>',
+                title: "Buscar Cuenta Titular"
+            });*/
+
+            //Window.popup("Prueba",@Url.Content("~/FichaAfiliacion/GetTitulares"));
             @*var cuentaTitular2 = $('#cuenta_titular').val();
 
 
@@ -169,6 +197,40 @@
 
         }
 
+        function seleccionarTitular() {
+            var cuenta = $('[name="titulares-cuenta"]:checked').val();
+            $('[name="fk_cuenta_titular"]').val(cuenta);
+
+            var numero = $('[name="titulares-cuenta"]:checked').data('numero');
+            $('[name="cuenta_titular"]').val(numero);
+
+            bootbox.hideAll();
+        }
+
+        function filtrarTitular() {
+
+            var dni = $('.bootbox [name="titular-dni"]').val();
+            
+            $.post('@Url.Content("~/FichaAfiliacion/GetTitulares")', { 'dni': dni }, function (data) {
+
+                $('.bootbox .titular-lista').empty();
+
+                $('.bootbox .titular-lista').html(data);
+                
+                $('.bootbox .titular-lista table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+            });
+        }
 
         function buscarNumeroTarjeta() {
 
@@ -229,19 +291,24 @@
         }
 
         function habilitarCuentaTitular(obj) {
-            alert(obj);
+
             var tipoCuenta = obj.value;
 
 
             if (tipoCuenta == "2") {
 
-                $('#cuenta_titular').attr("readonly", false);
+                //$('#cuenta_titular').attr("readonly", false);
                 $('#buscar_cuentatitular').attr("disabled", false);
 
                 $('#labelCuentaTitular').addClass("required-field");
 
             } else {
-                $('#cuenta_titular').attr("readonly", true);
+                //$('#cuenta_titular').attr("readonly", true);
+
+                $('[name="cuenta_titular"]').val('');
+                $('[name="fk_cuenta_titular"]').val('');
+
+
                 $('#buscar_cuentatitular').attr("disabled", true);
 
                 $('#labelCuentaTitular').removeClass("required-field");
@@ -252,7 +319,7 @@
         }
         $(function () {
             $('#estado_afiliado').val('Activo');
-            $('#tipo_cuenta').val('1');
+            //$('#tipo_cuenta').val('1');
             $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
             $("#fk_tipo_documento").val("1").change();
             $('#estado').val('A');
@@ -541,7 +608,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @onchange = "habilitarCuentaTitular(this)" })
+                   1), new { @class = "form-control", @onchange = "habilitarCuentaTitular(this)" })
 
 
                 @Html.ValidationMessageFor(model => model.tipo_cuenta, "", new { @class = "text-danger" })
@@ -559,7 +626,7 @@
             </div>
 
             <div class="col-md-1">
-                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="buscarCuentaTitular()" />
+                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="cargarCuentaTitular()" />
             </div>
         </div>
 
@@ -640,6 +707,25 @@
         </div>
     </div>
 }
+
+
+<div id="titular-template" style="display:none">
+
+    <fieldset class="form-inline">
+        <div class="form-group">
+            <label class="form-control-label">Titular</label>
+            <input type="text" name="titular-dni" class="form-control" placeholder="Número de documento"/>
+            <input type="button" value="Filtrar" onclick="filtrarTitular()" class="btn btn-default"/>
+        </div>
+    </fieldset>
+
+    <hr/>
+
+    <div id="titular-lista" class="titular-lista">
+
+    </div>
+
+</div>
 
 @*<div>
         @Html.ActionLink("Back to List", "Index")

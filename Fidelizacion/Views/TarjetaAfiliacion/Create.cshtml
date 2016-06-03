@@ -1,6 +1,5 @@
 ﻿@model Fidelizacion.Models.TarjetaAfiliacionViewModels
 
-
 @{
     ViewBag.Title = "Nueva Tarjeta de Afiliación";
 }
@@ -8,23 +7,23 @@
 <h2>Nueva Tarjeta de Afiliación</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-  
-    
+
+
     <div class="form-horizontal">
-        
+
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.ValidationMessage("NUM_CUENTA_EXISTE", "", new { @class = "text-danger" })
 
         <div class="form-group">
-            
+
             @Html.LabelFor(model => model.numeroTarjeta, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.EditorFor(model => model.numeroTarjeta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numeroTarjeta, new { htmlAttributes = new { @class = "form-control", @maxlength = "12" } })
                 @Html.ValidationMessageFor(model => model.numeroTarjeta, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -35,10 +34,10 @@
             <div class="col-md-2">
                 @Html.EditorFor(model => model.fechaEmision, new { htmlAttributes = new { @class = "form-control", @onblur = "checkboxcheck(this)" } })
                 @Html.ValidationMessageFor(model => model.fechaEmision, "", new { @class = "text-danger" })
-               
+
             </div>
         </div>
-        
+
 
         <div class="form-group" >
             @Html.LabelFor(model => model.fechaVencimiento,"Fecha Vencimiento", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -56,19 +55,19 @@
         </div>
 
 
-        
 
-      
+
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Grabar" class="btn btn-primary" />&nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="button" value="Salir" class="btn btn-danger" onclick="javascript:retornar()" />
             </div>
-           
-                
+
+
                 @*@Html.ActionLink("Salir", "Index")*@
-            
+
         </div>
     </div>
 }
@@ -85,11 +84,23 @@
         obj = {
             value : fechaEmision
         }
-        
+
         checkboxcheck(obj)
-      
+
        // $('#fechaVencimiento').attr('readonly', true);
-      
+
+        $('[name="numeroTarjeta"]').keydown(function (event) {
+            // Allow only backspace and delete
+            if (event.keyCode == 46 || event.keyCode == 8) {
+                // let it happen, don't do anything
+            }
+            else {
+                // Ensure that it is a number and stop the keypress
+                if (event.keyCode < 48 || event.keyCode > 57) {
+                    event.preventDefault();
+                }
+            }
+        });
 
     });
     function retornar() {
@@ -120,10 +131,10 @@
             $("#fechaVencimiento").attr("value", today);
             $('#fechaVencimiento').attr('readonly', true);
         }
-      
+
     }
 
 
-    </script>
+</script>
 
 }
