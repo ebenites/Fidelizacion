@@ -1,213 +1,60 @@
-﻿@model IEnumerable<Fidelizacion.Models.t_tarjeta_afiliacion>
+﻿@model List<Fidelizacion.Models.t_tarjeta_afiliacion>
 
-@section scripts {
-<script type="text/javascript">
-    $(function () {
-        $('#productos-table table.table').DataTable({
-            'pageLength': 5,
-            'bLengthChange': false,
-            'bFilter': false,
-            'bInfo': false,
-            'language': {
-                'paginate': {
-                    'next': 'Siguiente',
-                    'previous': 'Anterior'
-                }
-            }
-        });
+@{ Layout = null; }
 
-
-    });
-
-   
-    function irModificar() {
-
-        var idModificar =$('input:radio[name=opcionModificar]:checked').val();
-       
-       // var root = "~/TarjetaAfiliacionController/Edit?id=" + idModificar;
-       
-        if (idModificar == null) {
-            alert("Debe seleccionar un registro a modificar.")
-            return;
-        }
-         window.location.href = '@Url.Content("~/TarjetaAfiliacion/Edit?id=")' + idModificar;
-    }
-</script>
-}
-
-@{
-    ViewBag.Title = "Administrar Tarjeta";
-}
-
-<ol class="breadcrumb">
-    <li><a href="#">Inicio</a></li>
-    <li><a href="#">Gestión de Tarjetas de Afiliación</a></li>
-    <li class="active">Administrar tarjeta</li>
-</ol>
-
-<h2>Administrar Tarjeta</h2>
-@using (Html.BeginForm("Buscar", "TarjetaAfiliacion", FormMethod.Get))
+@if (Model.Count() == 0)
 {
-<div class="row form-group form-horizontal">
-    <label for="numeroCuenta" class="col-sm-2 control-label">Número Tarjeta</label>
-    <div class="col-sm-3">
-        <input type="text" name="numeroCuenta" class="form-control"  placeholder="Ingrese Número de tarjeta"  />
-    </div>
-</div>
-<div class="row form-group form-horizontal">
-    <label for="estado" class="col-sm-2 control-label">Estados</label>
-    <div class="col-sm-3">
-        <select  name="estado" class="form-control">
-            <option value="-1">Todos</option>
-            <option  value="A">Activo</option>
-            <option value="I">Inactivo</option>
-        </select>
 
+    <div class="alert alert-danger">
+        No hay registros disponibles
     </div>
-</div>
 
-<div class="row form-group form-horizontal">
-    <div class="col-sm-5 text-left">
-
-        <input type="submit" value="Buscar" class="btn btn-default" />
-        <a href="@Url.Content("~/TarjetaAfiliacion/Create")" class="btn btn-default">Nuevo</a>
-        <input type="button" value="Actualizar" class="btn btn-default" onclick="javascript:irModificar()" />
-    </div>
-</div>
 }
-    <br />
-@if (Model != null && Model.Count() > 0)
-{ <div id="productos-table" class="table-responsive">
-        <table class="table table-hover table-bordered">
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered" style="width: 100%">
             <colgroup>
-                <col width="30" />
+                <col width="40" />
+                <col width="100" />
                 <col />
                 <col />
                 <col />
                 <col />
-                
+
             </colgroup>
             <thead>
                 <tr>
-<th>
-
-                    </th>
-                    <th>
-                        N° Tarjeta
-                    </th>
-                    <th>
-                        Fecha Emisión
-                    </th>
-                    <th>
-                        Fecha Vencimiento
-                    </th>
-                    <th>
-                        Estado
-                    </th>
-
-
-            </tr>
-
-                    @*<th></th>*@
-              </thead>
+                    <th></th>
+                    <th> N° Tarjeta</th>
+                    <th>Fecha Emisión</th>
+                    <th> Fecha Vencimiento</th>
+                </tr>
+            </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var tarjeta in Model)
                 {
                     <tr>
-                        <td>
-
-                            <input type="radio" name="opcionModificar" id="opcionModificar" value="@item.id_tarjeta_afiliacion" />
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.numero_tarjeta)
-                        </td>
-                        <td>
-                            @string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_emision).ToString()))
-                            @*@Html.DisplayFor(modelItem => item.fecha_emision)*@
-                        </td>
-                        <td>
-                            
-                            @if (item.fecha_vencimiento.Value.AddMonths(-1) < DateTime.Now)
-                            {
-                                <span style="color:red;font-weight:bold">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
-                            }
-                            else {
-                                <span style="color:green;font-weight:bold">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
-                            }
-                            @*<span>@item.fecha_vencimiento.Value.AddMonths(-1)</span>*@
-
-                            @*@Html.DisplayFor(modelItem => item.fecha_vencimiento)*@
-                        </td>
-                        <td>
-                            @if (item.estado.Equals("A"))
-                            {
-                                <span>Activo</span>
-                            }
-                            else {
-                                <span>Inactivo</span>
-                            }
-                        </td>
-
-
-
-                        @*<td>
-
-                        @Html.ActionLink("Actualizar", "Edit", new { id = item.id_tarjeta_afiliacion })
-
-
-                    </td>*@
+                        <td><input type="radio" name="tarjetas-cuenta" value="@tarjeta.id_tarjeta_afiliacion" data-numero="@tarjeta.numero_tarjeta" /></td>
+                        <td>@tarjeta.numero_tarjeta</td>
+                        <td>@string.Format("{0:dd/MM/yyyy}", tarjeta.fecha_emision)</td>
+                        <td>@string.Format("{0:dd/MM/yyyy}", tarjeta.fecha_vencimiento)</td>
                     </tr>
 
                 }
             </tbody>
 
-</table>
-    </div>
-}
-else
-{
-
-    <div id="productos-table" class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <colgroup>
-                <col width="30" />
-                <col />
-                <col />
-                <col />
-                <col />
-
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>
-
-                    </th>
-                    <th>
-                        N° Tarjeta
-                    </th>
-                    <th>
-                        Fecha Emisión
-                    </th>
-                    <th>
-                        Fecha Vencimiento
-                    </th>
-                    <th>
-                        Estado
-                    </th>
-
-
-                </tr>
-
-                @*<th></th>*@
-            </thead>
-            <tbody>
-                <tr>
-
-                    <td colspan="5">No se encontraron registros</td>
-                </tr>
-            </tbody>
-
         </table>
     </div>
 
+    <hr />
+
+    <div class="row">
+        <div class="col-xs-6 text-right">
+            <input type="button" value="Aceptar" class="btn btn-primary" onclick="seleccionarTarjeta();" />
+        </div>
+        <div class="col-xs-6">
+            <input type="button" value="Cancelar" class="btn btn-danger" onclick="bootbox.hideAll()" />
+        </div>
+    </div>
 }

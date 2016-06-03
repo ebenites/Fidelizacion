@@ -535,17 +535,52 @@ namespace Fidelizacion.Controllers
             return Json(respuesta, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTarjetas(String numeroCuenta, String estado)
+        public ActionResult GetTarjetas(String numero)
         {
+            List<t_tarjeta_afiliacion> tarjetas = null;
+
+            if (numero != null)
+            {
+                tarjetas = db.t_tarjeta_afiliacion.Where(o => o.numero_tarjeta.Contains(numero) && o.estado == "A" && o.fecha_vencimiento > DateTime.Now && o.t_tarjera_afiliacion_cuenta.Count() == 0).ToList();
+            }
+            else
+            {
+                tarjetas = db.t_tarjeta_afiliacion.Where(o => o.estado == "A" && o.fecha_vencimiento > DateTime.Now && o.t_tarjera_afiliacion_cuenta.Count() == 0).ToList();
+            }
             
-            var t_tarjeta_afiliacion = tarjetaAfiliacionService.Buscar(numeroCuenta, estado);
-            
-            return View("GetTarjetas", t_tarjeta_afiliacion.ToList());
+            return View(tarjetas);
         }
 
-        public ActionResult GetTitulares()
+        [HttpPost]
+        public ActionResult AddTarjeta(String numeroTarjeta)
         {
-            string dni = Request.Params["dni"];
+
+            if (numeroTarjeta == null || numeroTarjeta == "")
+            {
+                return Json(new { Type = "error", Message = "Error en la validación de los campos." });
+            }
+
+            var lista = tarjetaAfiliacionService.Buscar(numeroTarjeta, "-1");
+            if (lista != null && lista.Count() > 0)
+            {
+                return Json(new { Type = "error", Message = "El numero de cuenta " + numeroTarjeta + " se encuentra registrado." });
+            }
+
+            TarjetaAfiliacionViewModels tarjeta = new TarjetaAfiliacionViewModels();
+            tarjeta.numeroTarjeta = numeroTarjeta;
+            tarjeta.fechaEmision = DateTime.Now;
+            tarjeta.fechaVencimiento = DateTime.Now.AddYears(5);
+
+            tarjetaAfiliacionService.insertar(tarjeta);
+            
+            var data = new { Type = "success", Message = "Se ha concluído la grabación de la tarjeta." };
+            return Json(data);
+        }
+
+
+        public ActionResult GetTitulares(string dni)
+        {
+            //string dni = Request.Params["dni"];
 
             List<t_cuenta> titulares = null;
 
