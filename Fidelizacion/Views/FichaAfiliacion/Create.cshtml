@@ -130,6 +130,10 @@
                 fnacimiento.next().text('El afiliado debe ser mayor de edad.');
                 bootbox.alert('El afiliado debe ser mayor de edad.');
                 return;
+            } else if (years > 90) {
+                fnacimiento.next().text('La edad sobrepasa más allá de lo permitido.');
+                bootbox.alert('La edad sobrepasa más allá de lo permitido.');
+                return;
             }
             //console.log(years)
 
@@ -324,6 +328,26 @@
                     }
                 });
 
+                $('.bootbox [name="tarjeta-numero"]').keydown(function (e) {
+                    // Allow: backspace, delete, tab, escape, enter and .
+                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                        // Allow: Ctrl+A
+                        (e.keyCode == 65 && e.ctrlKey === true) ||
+                        // Allow: Ctrl+C
+                        (e.keyCode == 67 && e.ctrlKey === true) ||
+                        // Allow: Ctrl+X
+                        (e.keyCode == 88 && e.ctrlKey === true) ||
+                        // Allow: home, end, left, right
+                        (e.keyCode >= 35 && e.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                    }
+                    // Ensure that it is a number and stop the keypress
+                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                    }
+                });
+
             })
 
             @*var cuentaTitular2 = $('#numero_tarjeta').val();
@@ -424,6 +448,28 @@
 
             $('.bootbox .form-tarjeta input[value="Salir"]').click(function () {
                 dialog.modal('hide');
+            });
+
+            console.log($('.bootbox .form-tarjeta [name="numeroTarjeta"]'));
+
+            $('.bootbox .form-tarjeta [name="numeroTarjeta"]').keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
             });
         }
 
@@ -535,25 +581,6 @@
                 }
             });
 
-            $('.form-tarjeta [name="numeroTarjeta"]').keydown(function (e) {
-                // Allow: backspace, delete, tab, escape, enter and .
-                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                    // Allow: Ctrl+A
-                    (e.keyCode == 65 && e.ctrlKey === true) ||
-                    // Allow: Ctrl+C
-                    (e.keyCode == 67 && e.ctrlKey === true) ||
-                    // Allow: Ctrl+X
-                    (e.keyCode == 88 && e.ctrlKey === true) ||
-                    // Allow: home, end, left, right
-                    (e.keyCode >= 35 && e.keyCode <= 39)) {
-                    // let it happen, don't do anything
-                    return;
-                }
-                // Ensure that it is a number and stop the keypress
-                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                    e.preventDefault();
-                }
-            });
         });
 
         function generar(obj) {
@@ -956,7 +983,7 @@
     <fieldset class="form-inline">
         <div class="form-group">
             <label class="form-control-label">Número de Tarjeta</label>
-            <input type="text" name="tarjeta-numero" class="form-control" placeholder="" />
+            <input type="text" name="tarjeta-numero" class="form-control" placeholder="" maxlength="12"/>
             <input type="button" value="Filtrar" onclick="filtrarTarjeta()" class="btn btn-default" />
             <input type="button" value="Nuevo" onclick="crearTarjeta()" class="btn btn-default" />
         </div>

@@ -150,7 +150,7 @@ namespace Fidelizacion.Controllers
                 }
 
                 
-                List<t_cuenta> asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).ToList();
+                List<t_cuenta> asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta && o.estado_cuenta == "A").ToList();
                 List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
                 foreach (t_cuenta item in asociados)
                 {
@@ -327,7 +327,7 @@ namespace Fidelizacion.Controllers
 
             };
 
-            List<t_cuenta> asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta).ToList();
+            List<t_cuenta> asociados = db.t_cuenta.Where(o => o.fk_cuenta == cuenta.id_cuenta && o.estado_cuenta == "A").ToList();
             List<DesasociarFichaAfiliacionViewModel> lista = new List<DesasociarFichaAfiliacionViewModel>();
             foreach (t_cuenta item in asociados) {
                 t_tarjera_afiliacion_cuenta tarjetaAsociadoCuenta = db.t_tarjera_afiliacion_cuenta.Where(o => o.fk_cuenta == item.id_cuenta).SingleOrDefault();
