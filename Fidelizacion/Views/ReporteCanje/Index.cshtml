@@ -221,7 +221,10 @@
 
                 chart.exportChart({
                     type: 'application/pdf',
-                    filename: 'Reporte'
+                    filename: 'Reporte',
+                    sourceWidth: 900,
+                    sourceHeight: 500,
+                    //scale: 1
                 },
                 {
                     legend: {
@@ -229,11 +232,12 @@
                     },
                     chart: {
                         height: 500,
+                        
                         events: {
                             load: function () {
                                 this.renderer.image('http://www.uneteaspsa.pe/images/plaza_vea.jpg', 10, 10, 80, 27).add();
-                                this.renderer.text('<b>Fecha: </b>@DateTime.Now.ToString("dd/MM/yyyy")', 480, 20).add();
-                                this.renderer.path(['M', 0, 400, 'L', 600, 400]).attr({ 'stroke': 'silver', 'stroke-width': 1 }).add();
+                                this.renderer.text('<b>Fecha: </b>@DateTime.Now.ToString("dd/MM/yyyy")', 760, 20).add();
+                                this.renderer.path(['M', 0, 400, 'L', 900, 400]).attr({ 'stroke': 'silver', 'stroke-width': 1 }).add();
 
                                 var tienda = $('[name="tienda"] option:selected').text().replace(/--/g, '');
                                 var anio = $('[name="anio"] option:selected').text().replace(/--/g, '');
@@ -423,19 +427,19 @@
                     <div class="radio">
                         <label>
                             <input type="radio" name="tipo" id="tipo" value="P" checked>
-                            Ranking de productos
+                            Ranking de Productos Canje
                         </label>
                     </div>
                     <div class="radio">
                         <label>
                             <input type="radio" name="tipo" id="tipo" value="C">
-                            Ranking de categorias
+                            Ranking de Categorias de Productos Canje
                         </label>
                     </div>
                     <div class="radio">
                         <label>
                             <input type="radio" name="tipo" id="tipo" value="R">
-                            Rotación de productos
+                            Rotación de Productos Canje
                         </label>
                     </div>
                 </div>
