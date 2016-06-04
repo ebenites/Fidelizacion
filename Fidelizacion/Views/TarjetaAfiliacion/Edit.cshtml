@@ -70,7 +70,7 @@
             <label for="estado" class="col-sm-2 control-label">Motivo</label>
             <div class="col-sm-2">
                 
-                @Html.EditorFor(model => model.motivo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.motivo, new { htmlAttributes = new { @class = "form-control", @cols = 80, @rows = 7 } })
                 @Html.ValidationMessageFor(model => model.motivo, "", new { @class = "text-danger" })
                 </div>
 

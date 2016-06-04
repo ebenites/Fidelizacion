@@ -27,7 +27,7 @@
        // var root = "~/TarjetaAfiliacionController/Edit?id=" + idModificar;
        
         if (idModificar == null) {
-            alert("Debe seleccionar un registro a modificar.")
+            bootbox.alert("Debe seleccionar un registro a modificar.")
             return;
         }
          window.location.href = '@Url.Content("~/TarjetaAfiliacion/Edit?id=")' + idModificar;

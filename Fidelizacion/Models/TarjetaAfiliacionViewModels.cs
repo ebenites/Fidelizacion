@@ -18,7 +18,7 @@ namespace Fidelizacion.Models
         public String numeroTarjeta { get; set; }
 
         [Required]
-        [Display(Name = "Fecha Emision")]
+        [Display(Name = "Fecha Emisión")]
         [DataType(DataType.Date)]
         [DateGreaterThanToday()]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -49,7 +49,7 @@ namespace Fidelizacion.Models
         public String numeroTarjeta { get; set; }
 
         [Required]
-        [Display(Name = "Fecha Emision")]
+        [Display(Name = "Fecha Emisión")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime fechaEmision { get; set; }
@@ -63,7 +63,9 @@ namespace Fidelizacion.Models
         public DateTime fechaVencimiento { get; set; }
 
         [Required]
+        [Display(Name = "Motivo")]
         [DataType(DataType.MultilineText)]
+        [StringLength(250, ErrorMessage = "El {0} debe poseer un máximo de {1} caracteres.", MinimumLength = 1)]
         public String motivo { get; set; }
 
     }

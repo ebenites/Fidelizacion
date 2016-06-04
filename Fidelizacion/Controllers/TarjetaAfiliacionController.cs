@@ -128,7 +128,8 @@ namespace Fidelizacion.Controllers
                 fechaEmision = (DateTime) t_tarjeta_afiliacion.fecha_emision ,
                  fechaVencimiento = (DateTime)t_tarjeta_afiliacion.fecha_vencimiento ,
                  Codigo = t_tarjeta_afiliacion.id_tarjeta_afiliacion  ,
-                  Estado = t_tarjeta_afiliacion.estado  
+                  Estado = t_tarjeta_afiliacion.estado ,
+                  motivo = t_tarjeta_afiliacion.motivo
             };
             return View(tarjetaView);
         }
