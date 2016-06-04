@@ -628,7 +628,7 @@ namespace Fidelizacion.Controllers
 
                     if (afiliado != null)
                     {
-                        ModelState.AddModelError("ERROR_MESSAGE", "El número de documento " + afiliado.numero_documento + " ya se encuentra regiatrado para " + afiliado.nombre + " " + afiliado.apellidos + ".");
+                        ModelState.AddModelError("ERROR_MESSAGE", "El número de documento " + afiliado.numero_documento + " ya se encuentra registrado para " + afiliado.nombre + " " + afiliado.apellidos + ".");
                         return View(fichaAfiliacionView);
                     }
 

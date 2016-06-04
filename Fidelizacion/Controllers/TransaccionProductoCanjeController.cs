@@ -113,6 +113,7 @@ namespace Fidelizacion.Controllers
 
         public ActionResult AddCarrito()
         {
+            int idtienda = (int)Session["TIENDA_ACTUAL"];
             int idcuenta = int.Parse(Request.Params["idcuenta"]);
             int idproducto = int.Parse(Request.Params["idproducto"]);
             int idmodalidad = int.Parse(Request.Params["idmodalidad"]);
@@ -133,7 +134,7 @@ namespace Fidelizacion.Controllers
 
             CarritoItem item = new CarritoItem(modalidad, cantidad);
 
-            // Validaciones
+            // Validaciones: Puntos disponibles en cuenta
             int puntosRequeridos = carrito.getTotalPuntos() + item.getSubTotalPuntos();
             int puntosDsiponibles = (int)cuenta.puntos;
 
@@ -144,8 +145,21 @@ namespace Fidelizacion.Controllers
             {
                 return Json(new { Type = "error", Message = "No no cuenta con puntos suficientes para completar la operación." });
             }
+
+            // Validaciones: Stock disponible de producto
+            int stockRequeridos = carrito.getTotalPorProducto(idproducto) + item.getCantidad();
+            int stockDsiponibles = (int)modalidad.t_producto_canje.getStockByTienda(idtienda);
+
+            System.Diagnostics.Debug.WriteLine("stockRequeridos:" + stockRequeridos);
+            System.Diagnostics.Debug.WriteLine("stockDsiponibles:" + stockDsiponibles);
+
+            if(stockRequeridos > stockDsiponibles)
+            {
+                return Json(new { Type = "error", Message = "No hay stock suficiente en tienda para completar la operación." });
+            }
+
             // 
-            
+
             carrito.agregar(item);
 
             setCarrito(carrito);
