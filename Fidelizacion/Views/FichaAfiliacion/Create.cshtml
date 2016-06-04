@@ -592,6 +592,34 @@
             obj.disabled = true;
         }
 
+        function validar() {
+
+            try {
+
+                var campoNumeroDocumento = $("#numero_documento")
+
+                valor = $('[name="fk_tipo_documento"]').val();
+                if (valor == 1) {
+                    campoNumeroDocumento.attr("maxlength", 8);
+                    var numeroDocumento = campoNumeroDocumento.val();
+
+                   
+                    if (numeroDocumento != null && numeroDocumento.length > 8) {
+                        
+                        var nuevoNumero = numeroDocumento.substr(0, 8);
+                        
+                        campoNumeroDocumento.val(nuevoNumero);
+                    }
+                } else {
+                    campoNumeroDocumento.attr("maxlength", 12);
+                }
+                
+            } catch (e) {
+                alert(e.message);
+            }
+            
+        }
+
     </script>
 }
 
@@ -636,7 +664,7 @@
                     },
                   "value",
                   "text",
-                   1), new { @class = "form-control" })
+                   1), new { @class = "form-control", @onchange = "validar()" })
 
                 @Html.ValidationMessageFor(model => model.fk_tipo_documento, "", new { @class = "text-danger" })
 
