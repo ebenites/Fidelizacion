@@ -129,7 +129,7 @@
         $('[name="motivo"]').keyup(function (e) {
             var tval = $(this).val(),
                 tlength = tval.length,
-                set = 500,
+                set = 250,
                 remain = parseInt(set - tlength);
             if (remain <= 0) {
                 $(this).val((tval).substring(0, set - 1))
