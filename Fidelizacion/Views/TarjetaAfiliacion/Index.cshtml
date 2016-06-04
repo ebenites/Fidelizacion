@@ -3,6 +3,27 @@
 @section scripts {
 <script type="text/javascript">
     $(function () {
+
+        $('[name="numeroCuenta"]').keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
         $('#productos-table table.table').DataTable({
             'pageLength': 5,
             'bLengthChange': false,
@@ -15,7 +36,6 @@
                 }
             }
         });
-
 
     });
 
@@ -51,7 +71,7 @@
 <div class="row form-group form-horizontal">
     <label for="numeroCuenta" class="col-sm-2 control-label">Número Tarjeta</label>
     <div class="col-sm-3">
-        <input type="text" name="numeroCuenta" class="form-control"  placeholder="Ingrese Número de tarjeta"  />
+        <input type="text" name="numeroCuenta" class="form-control"  placeholder="Ingrese Número de tarjeta"  maxlength="12"/>
     </div>
 </div>
 <div class="row form-group form-horizontal">
@@ -167,7 +187,7 @@
 else
 {
 
-    <div id="productos-table" class="table-responsive">
+    <div class="table-responsive">
         <table class="table table-hover table-bordered">
             <colgroup>
                 <col width="30" />

@@ -75,5 +75,18 @@ namespace Fidelizacion.Models
             return total;
         }
 
+        public int getTotalPorProducto(int idproducto)
+        {
+            int total = 0;
+            foreach (CarritoItem item in this.items)
+            {
+                if(item.getModalidad().fk_producto_canje == idproducto)
+                {
+                    total += item.getCantidad();
+                }
+            }
+            return total;
+        }
+
     }
 }

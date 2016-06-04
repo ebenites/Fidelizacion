@@ -1,187 +1,71 @@
-﻿@model IEnumerable<Fidelizacion.Models.t_cuenta>
+﻿@model List<Fidelizacion.Models.t_cuenta>
 
-@section scripts {
-<script type="text/javascript">
+@{ Layout = null; }
 
-    function aceptar() {
-
-        alert("OK");
-    }
-    $(function () {
-        $('#productos-table table.table').DataTable({
-            'pageLength': 5,
-            'bLengthChange': false,
-            'bFilter': false,
-            'bInfo': false,
-            'language': {
-                'paginate': {
-                    'next': 'Siguiente',
-                    'previous': 'Anterior'
-                }
-            }
-        });
-
-
-    });
-
-   
-   
-</script>
-}
-
-@{
-    ViewBag.Title = "Lista titulares";
-}
-
-
-
-<h2>Lista titulares</h2>
-@using (Html.BeginForm("Buscar", "TarjetaAfiliacion", FormMethod.Get))
+@if (Model.Count() == 0)
 {
-<div class="row form-group form-horizontal">
-    <label for="numeroCuenta" class="col-sm-2 control-label">Número Tarjeta</label>
-    <div class="col-sm-3">
-        <input type="text" name="numeroCuenta" class="form-control"  placeholder="Ingrese Número de tarjeta"  />
-    </div>
-</div>
 
-<div class="row form-group form-horizontal">
-    <div class="col-sm-5 text-left">
-
-        <input type="submit" value="Buscar" class="btn btn-default" />
-        <a href="@Url.Content("~/TarjetaAfiliacion/Create")" class="btn btn-default">Nuevo</a>
-       
+    <div class="alert alert-danger">
+        No hay registros disponibles
     </div>
-</div>
+
 }
-    <br />
-@if (Model != null && Model.Count() > 0)
-{ <div id="productos-table" class="table-responsive">
-        <table class="table table-hover table-bordered">
+else
+{
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered" style="width: 100%">
             <colgroup>
-                <col width="30" />
+                <col width="40"/>
+                <col width="120" />
                 <col />
                 <col />
                 <col />
-                <col />
-                
+                <col width="80"/>
             </colgroup>
             <thead>
                 <tr>
-<th>
+                    <th></th>
+                    <th>N° Documento</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>N° Cuenta</th>
+                    <th>Afiliados</th>
+                </tr>
 
-                    </th>
-                    <th>
-                        N° Tarjeta
-                    </th>
-                    <th>
-                        Fecha Emisión
-                    </th>
-                    <th>
-                        Fecha Vencimiento
-                    </th>
-                    <th>
-                        Estado
-                    </th>
-
-
-            </tr>
-
-                    @*<th></th>*@
-              </thead>
+            </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var cuenta in Model)
                 {
-                    <tr>
-                        <td>
-
-                            <input type="radio" name="idcuenta" value="@item.id_cuenta" />
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.numero_cuenta)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.t_ficha_afiliacion.nombre)
-                            @Html.DisplayFor(modelItem => item.t_ficha_afiliacion.apellidos)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.t_ficha_afiliacion.numero_documento)
-                        </td>
-                        <td>
-                            @if (item.t_cuenta1 != null)
+                    <tr @((@cuenta.t_cuenta1.Where(o => o.estado_cuenta == "A").Count() < 5)?"":"class=danger")>
+                        <th>
+                            @if (@cuenta.t_cuenta1.Where(o => o.estado_cuenta == "A").Count() < 5)
                             {
-                                var nummero = item.t_cuenta1.Count();
-                                if (nummero < 5)
-                                {
-                                    <span style="color:green">@nummero</span>
-
-                                }
-                                else {
-                                    <span style="color:red">@nummero</span>
-                                }
+                                <input type="radio" name="titulares-cuenta" value="@cuenta.id_cuenta" data-numero="@cuenta.numero_cuenta" />
                             }
-                            
-                        </td>
-
+                        </th>
+                        <td>@cuenta.t_ficha_afiliacion.numero_documento</td>
+                        <td>@cuenta.t_ficha_afiliacion.nombre</td>
+                        <td>@cuenta.t_ficha_afiliacion.apellidos</td>
+                        <td>@cuenta.numero_cuenta</td>
+                        <td>@cuenta.t_cuenta1.Where(o => o.estado_cuenta == "A").Count()</td>
                     </tr>
 
                 }
             </tbody>
 
-</table>
-    </div>
-}
-else
-{
-
-    <div id="productos-table" class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <colgroup>
-                <col width="30" />
-                <col />
-                <col />
-                <col />
-                <col />
-
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>
-
-                    </th>
-                    <th>
-                        N° Tarjeta
-                    </th>
-                    <th>
-                        Fecha Emisión
-                    </th>
-                    <th>
-                        Fecha Vencimiento
-                    </th>
-                    <th>
-                        Estado
-                    </th>
-
-
-                </tr>
-
-                @*<th></th>*@
-            </thead>
-            <tbody>
-                <tr>
-
-                    <td colspan="5">No se encontraron registros</td>
-                </tr>
-            </tbody>
-
         </table>
     </div>
 
-}
+    <hr />
 
-<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
-        <input type="button" value="Aceptar" class="btn btn-primary" onclick="aceptar();" />&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="button" value="Cancelar" class="btn btn-danger" onclick="cerrarPopup()" />
+    <div class="row">
+        <div class="col-xs-6 text-right">
+            <input type="button" value="Aceptar" class="btn btn-primary" onclick="seleccionarTitular();" />
+        </div>
+        <div class="col-xs-6">
+            <input type="button" value="Cancelar" class="btn btn-danger" onclick="bootbox.hideAll()" />
+        </div>
     </div>
-</div>
+
+}

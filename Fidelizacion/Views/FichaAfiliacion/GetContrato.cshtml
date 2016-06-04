@@ -28,8 +28,11 @@
         @ViewBag.contrato.fecha_contrato.AddYears(5).ToString("dd/MM/yyyy")
     </div>
 </div>
+
+<hr/>
+
 <div class="row form-group">
-    <label class="col-xs-12 form-control-label">Datos de Afiliado</label>
+    <label class="col-xs-12 form-control-label" style="background-color: #eee">Datos del Afiliado</label>
 </div>
 <div class="row form-group">
     <label class="col-xs-3 form-control-label">Nombres</label>
@@ -41,18 +44,58 @@
         @ViewBag.contrato.t_cuenta.t_ficha_afiliacion.numero_documento
     </div>
 </div>
+
+<hr />
+
+@if (ViewBag.contrato.t_cuenta.t_cuenta2 != null)
+{
+    <div class="row form-group">
+        <label class="col-xs-12 form-control-label" style="background-color: #eee">Datos del Titular</label>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-3 form-control-label">Nombres</label>
+        <div class="col-xs-3 form-inline">
+            @ViewBag.contrato.t_cuenta.t_cuenta2.t_ficha_afiliacion.nombre @ViewBag.contrato.t_cuenta.t_cuenta2.t_ficha_afiliacion.apellidos
+        </div>
+        <label class="col-xs-3 form-control-label">N° Documento</label>
+        <div class="col-xs-3 form-inline">
+            @ViewBag.contrato.t_cuenta.t_cuenta2.t_ficha_afiliacion.numero_documento
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-12 form-control-label text-center">¡El Titular ha obtenido +10 puntos gracias a esta afiliación!</label>
+    </div>
+
+    <hr />
+}
+
 <div class="row form-group">
-    <label class="col-xs-12 form-control-label">Condiciones</label>
+    <label class="col-xs-12 form-control-label" style="background-color: #eee">Condiciones</label>
 </div>
 <div class="row form-group">
     <div class="col-xs-12 form-inline">
-        <ul>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-        </ul>
+        <ol>
+            <li style="text-align: justify">
+                <strong>FINALIDAD DE ESTE CONTRATO</strong>
+                <p>Usted y Supermercados Peruanos SA (en adelante <b>SPSA</b>) firman este Contrato para que SPSA le conceda, una vez que cumpla con todas las condiciones establecidas por el SPSA, una tarjeta de afiliación ("Tarjeta"), con la que podrá acumular y utilizar una Línea de Puntos ("Puntos").</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>PLAZO DE ESTE CONTRATO</strong>
+                <p>El SPSA podrá dar por terminado este Contrato si considera que no resulta conveniente para sus intereses o ser realiza cambios en la política interna.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>PARA QUÉ SIRVE LA TARJETA</strong>
+                <p>La Tarjeta le permite a Usted: (i) tener beneficios de cajes de productos a través de puntos acumulados en la tarjeta (siempre y cuando sea el titular de la cuenta); y/o (ii) la acumulación de puntos a través de compras realizadas.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>ACTIVACIÓN Y USO DE LA TARJETA</strong>
+                <p>La Tarjeta se activará automáticamente desde la entrega hecha por el personal de SPSA luego del proceso de afiliación.</p>
+            </li>
+            <li style="text-align: justify">
+                <strong>QUÉ HACER EN CASO DE EXTRAVÍO, ROBO, HURTO O SUSTRACCIÓN DE LA(S) TARJETA(S) Y/O CÓDIGOS SECRETOS Y CLAVES</strong>
+                <p>Si sufre el extravío, robo, hurto o sustracción de la(s) Tarjeta(s), códigos secretos y/o claves, Usted deberá: (i) comunicar inmediatamente el hecho al SPSA, a través de los números telefónicos que aparecen en la Hoja Resumen Informativa, a efectos de bloquear la Tarjeta.</p>
+            </li>
+        </ol>
     </div>
 </div>
 <div class="row form-group">

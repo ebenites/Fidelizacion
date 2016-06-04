@@ -57,6 +57,8 @@ namespace Fidelizacion.Models
         [Display(Name = "Dirección")]
         public string direccion { get; set; }
 
+        [Display(Name = "Departamento")]
+        public String departamento { get; set; }
 
         [Display(Name = "Provincia")]
         public String provincia { get; set; }

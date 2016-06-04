@@ -68,60 +68,160 @@
 
         function procesarFormulario() {
 
+            // Validar numero_documento
+            var numero_documento = $('[name="numero_documento"]')
+            if (numero_documento.val() == '') {
+                numero_documento.next().text(numero_documento.data('val-required'));
+                bootbox.alert(numero_documento.data('val-required'));
+                return;
+            }
+
+            // Si es DNI
+            $('[name="numero_documento"]').next().text('');
+            if ($('[name="fk_tipo_documento"]').val() == '1') {
+
+                // Validar numero_documento DNI
+                var numero_documento = $('[name="numero_documento"]');
+                if (numero_documento.val().length != 8) {
+                    numero_documento.next().text('El numero de DNI debe contener los 8 dígitos');
+                    bootbox.alert('El numero de DNI debe contener los 8 dígitos');
+                    return;
+                }
+
+            } else {
+
+                // Validar numero_documento Carne de Extrangeria
+                var numero_documento = $('[name="numero_documento"]');
+                if (numero_documento.val().length != 12) {
+                    numero_documento.next().text('El numero de Carné Extranjería debe contener los 12 dígitos');
+                    bootbox.alert('El numero de Carné Extranjería debe contener los 12 dígitos');
+                    return;
+                }
+
+            }
+
+            // Validar nombres
+            var nombre = $('[name="nombre"]')
+            if (nombre.val() == '') {
+                nombre.next().text(nombre.data('val-required'));
+                bootbox.alert(nombre.data('val-required'));
+                return;
+            }
+
+            // Validar apellidos
+            var apellidos = $('[name="apellidos"]')
+            if (apellidos.val() == '') {
+                apellidos.next().text(apellidos.data('val-required'));
+                bootbox.alert(apellidos.data('val-required'));
+                return;
+            }
+
+            // Validar edad
+            var fnacimiento = $('[name="fecha_nacimiento"]');
+
+            if (fnacimiento.val() == '') {
+                fnacimiento.next().text(fnacimiento.data('val-required'));
+                bootbox.alert(fnacimiento.data('val-required'));
+                return;
+            }
+
+            var years = moment().diff(fnacimiento.val(), 'years');
+            if (years < 18) {
+                fnacimiento.next().text('El afiliado debe ser mayor de edad.');
+                bootbox.alert('El afiliado debe ser mayor de edad.');
+                return;
+            } else if (years > 90) {
+                fnacimiento.next().text('No se  puede registrar un afiliado mayor a los 90 años');
+                bootbox.alert('No se  puede registrar un afiliado mayor a los 90 años');
+                return;
+            }
+            //console.log(years)
+
+            // Validar correo
+            var correo = $('[name="correo"]')
+            if (correo.val() == '') {
+                correo.next().text(correo.data('val-required'));
+                bootbox.alert(correo.data('val-required'));
+                return;
+            }
+
+            // Validar numero_cuenta
+            var numero_cuenta = $('[name="numero_cuenta"]');
+            numero_cuenta.next().text('');
+            if (numero_cuenta.val() == '') {
+                numero_cuenta.next().text(numero_cuenta.data('val-required'));
+                bootbox.alert(numero_cuenta.data('val-required'));
+                return;
+            }
+
+            // Si Tipo cuenta == 2
+            $('[name="fk_cuenta_titular"]').next().text('');
+            if ($('[name="tipo_cuenta"]').val() == '2') {
+
+                // Validar fk_cuenta_titular
+                var fk_cuenta_titular = $('[name="fk_cuenta_titular"]');
+                if (fk_cuenta_titular.val() == '') {
+                    fk_cuenta_titular.next().text("No se selecciono una cuenta titular.");
+                    bootbox.alert("No se selecciono una cuenta titular.");
+                    return;
+                }
+
+            }
+
+            // Validar fk_tarjeta_afiliacion
+            var fk_tarjeta_afiliacion = $('[name="fk_tarjeta_afiliacion"]')
+            fk_tarjeta_afiliacion.next().text('');
+            if (fk_tarjeta_afiliacion.val() == '') {
+                fk_tarjeta_afiliacion.next().text("No se selecciono un Tarjeta.");
+                bootbox.alert("No se selecciono un Tarjeta.");
+                return;
+            }
+
+            // Submit
             bootbox.confirm("¿Está seguro de grabar al afiliado y generar el contrato de afiliación?", function (result) {
                 if (result) {
-
-                    // Validar edad
-                    var fnacimiento = $('[name="fecha_nacimiento"]').val();
-                    var years = moment().diff(fnacimiento, 'years');
-                    if (years < 18) {
-                        bootbox.alert('El afiliado debe ser mayor de edad.');
-                        operacion = false;
-                    }
-                    //console.log(years)
-
-                    // ...
-
-                    var tarjeta_afiliacion = $('#fk_tarjeta_afiliacion').val()
-
-                    var tip_cuenta = $('#tipo_cuenta').val()
-                    var operacion = true;
-
-                    if (tip_cuenta == '2') {
-
-                        var fk_cuenta = $('#fk_cuenta_titular').val()
-
-                        if (fk_cuenta == null || fk_cuenta == '' || fk_cuenta == '0') {
-
-                            $('#validacionfk_cuenta_titular').text("No se selecciono una cuenta titular.");
-                            operacion = false;
-                        }
-
-                    }
-
-                    if (tarjeta_afiliacion == null || tarjeta_afiliacion == '' || tarjeta_afiliacion == '0') {
-                        $('#validacionfk_tarjeta_afiliacion').text("No se selecciono un Tarjeta.");
-                        operacion = false;
-                    }
-                    //bootbox.alert(tarjeta_afiliacion);
-                    if (operacion) {
-
-                        $('#formularioCrear').submit();
-
-                    }
-
+                    $('#formularioCrear').submit();
                 }
             });
 
             // Fixed al boton
             $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
+            $('div.bootbox-confirm [data-bb-handler="cancel"]').text('Cancelar');
         }
 
-        function buscarCuentaTitular() {
+        function cargarCuentaTitular() {
 
-            alert("Buscar");
+            $.post('@Url.Content("~/FichaAfiliacion/GetTitulares")', { }, function (data) {
 
-            Window.popup("Prueba",@Url.Content("~/FichaAfiliacion/GetTitulares"));
+                $('.titular-lista').html(data);
+
+                bootbox.dialog({
+                    message: $('#titular-template').html(),
+                    title: "Buscar Cuenta Titular",
+                    size: 'large'
+                });
+
+                $('.titular-lista table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+
+            })
+
+            /*bootbox.dialog({
+                message: '<iframe width="100%" height="560" src="'+url+'" frameborder="0" allowfullscreen></iframe>',
+                title: "Buscar Cuenta Titular"
+            });*/
+
+            //Window.popup("Prueba",@Url.Content("~/FichaAfiliacion/GetTitulares"));
             @*var cuentaTitular2 = $('#cuenta_titular').val();
 
 
@@ -169,11 +269,89 @@
 
         }
 
+        function seleccionarTitular() {
+            var cuenta = $('[name="titulares-cuenta"]:checked').val();
+            $('[name="fk_cuenta_titular"]').val(cuenta);
+
+            var numero = $('[name="titulares-cuenta"]:checked').data('numero');
+            $('[name="cuenta_titular"]').val(numero);
+
+            bootbox.hideAll();
+        }
+
+        function filtrarTitular() {
+
+            var dni = $('.bootbox [name="titular-dni"]').val();
+            
+            $.post('@Url.Content("~/FichaAfiliacion/GetTitulares")', { 'dni': dni }, function (data) {
+
+                $('.bootbox .titular-lista').empty();
+
+                $('.bootbox .titular-lista').html(data);
+                
+                $('.bootbox .titular-lista table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+            });
+        }
 
         function buscarNumeroTarjeta() {
 
+            $.post('@Url.Content("~/FichaAfiliacion/GetTarjetas")', {}, function (data) {
 
-            var cuentaTitular2 = $('#numero_tarjeta').val();
+                $('.tarjeta-lista').html(data);
+
+                bootbox.dialog({
+                    message: $('#tarjeta-template').html(),
+                    title: "Buscar Tarjeta de Afiliación"
+                    //size: 'large'
+                });
+
+                $('.tarjeta-lista table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+
+                $('.bootbox [name="tarjeta-numero"]').keydown(function (e) {
+                    // Allow: backspace, delete, tab, escape, enter and .
+                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+                        // Allow: Ctrl+A
+                        (e.keyCode == 65 && e.ctrlKey === true) ||
+                        // Allow: Ctrl+C
+                        (e.keyCode == 67 && e.ctrlKey === true) ||
+                        // Allow: Ctrl+X
+                        (e.keyCode == 88 && e.ctrlKey === true) ||
+                        // Allow: home, end, left, right
+                        (e.keyCode >= 35 && e.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                    }
+                    // Ensure that it is a number and stop the keypress
+                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                    }
+                });
+
+            })
+
+            @*var cuentaTitular2 = $('#numero_tarjeta').val();
 
             //bootbox.alert(cuentaTitular2)
             var objeto = {
@@ -224,24 +402,130 @@
                 }
 
 
-            });
+            });*@
 
         }
 
+        function seleccionarTarjeta() {
+            var cuenta = $('[name="tarjetas-cuenta"]:checked').val();
+            $('[name="fk_tarjeta_afiliacion"]').val(cuenta);
+
+            var numero = $('[name="tarjetas-cuenta"]:checked').data('numero');
+            $('[name="numero_tarjeta"]').val(numero);
+
+            bootbox.hideAll();
+        }
+        
+        function filtrarTarjeta() {
+
+            var numero = $('.bootbox [name="tarjeta-numero"]').val();
+
+            $.post('@Url.Content("~/FichaAfiliacion/GetTarjetas")', { 'numero': numero }, function (data) {
+
+                $('.bootbox .tarjeta-lista').empty();
+
+                $('.bootbox .tarjeta-lista').html(data);
+
+                $('.bootbox .tarjeta-lista table.table').DataTable({
+                    'pageLength': 5,
+                    'bLengthChange': false,
+                    'bFilter': false,
+                    'bInfo': false,
+                    'language': {
+                        'paginate': {
+                            'next': 'Siguiente',
+                            'previous': 'Anterior'
+                        }
+                    }
+                });
+            });
+        }
+
+        function crearTarjeta() {
+            var dialog = bootbox.dialog({
+                message: $('#tarjeta-nuevo-template').html(),
+                title: "Nueva Tarjeta de Afiliación"
+            });
+
+            $('.bootbox .form-tarjeta input[value="Salir"]').click(function () {
+                dialog.modal('hide');
+            });
+
+            console.log($('.bootbox .form-tarjeta [name="numeroTarjeta"]'));
+
+            $('.bootbox .form-tarjeta [name="numeroTarjeta"]').keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        function grabarTarjeta() {
+            var tarjetaInput = $('.bootbox .form-tarjeta [name="numeroTarjeta"]');
+            var tarjetaNumero = tarjetaInput.val();
+
+            if (tarjetaNumero == '') {
+                tarjetaInput.next().text(tarjetaInput.data('val-required'));
+                bootbox.alert(tarjetaInput.data('val-required'));
+                return;
+            }
+            tarjetaInput.next().text('');
+
+            if (tarjetaNumero.length != 12) {
+                tarjetaInput.next().text(tarjetaInput.data('val-length'));
+                bootbox.alert(tarjetaInput.data('val-length'));
+                return;
+            }
+            tarjetaInput.next().text('');
+
+            $.post('@Url.Content("~/FichaAfiliacion/AddTarjeta")', { 'numeroTarjeta': tarjetaNumero }, function (data) {
+
+                if (data.Type == 'error') {
+                    tarjetaInput.next().text(data.Message);
+                    bootbox.alert(data.Message);
+                } else {
+                    bootbox.alert(data.Message);
+                    $('.bootbox [name="tarjeta-numero"]').val(tarjetaNumero);
+                    $('.bootbox .form-tarjeta input[value="Salir"]').trigger('click');
+                    $('.bootbox input[value="Filtrar"]').trigger('click');
+                }
+
+            }, 'json').fail(function (error) { bootbox.alert('Error interno en el servidor: ' + error.responseText) });;
+        }
+
         function habilitarCuentaTitular(obj) {
-            alert(obj);
+
             var tipoCuenta = obj.value;
 
 
             if (tipoCuenta == "2") {
 
-                $('#cuenta_titular').attr("readonly", false);
+                //$('#cuenta_titular').attr("readonly", false);
                 $('#buscar_cuentatitular').attr("disabled", false);
 
                 $('#labelCuentaTitular').addClass("required-field");
 
             } else {
-                $('#cuenta_titular').attr("readonly", true);
+                //$('#cuenta_titular').attr("readonly", true);
+
+                $('[name="cuenta_titular"]').val('');
+                $('[name="fk_cuenta_titular"]').val('');
+
+
                 $('#buscar_cuentatitular').attr("disabled", true);
 
                 $('#labelCuentaTitular').removeClass("required-field");
@@ -252,7 +536,7 @@
         }
         $(function () {
             $('#estado_afiliado').val('Activo');
-            $('#tipo_cuenta').val('1');
+            //$('#tipo_cuenta').val('1');
             $('#fecha_alta').val(moment().format('YYYY-MM-DD'));
             $("#fk_tipo_documento").val("1").change();
             $('#estado').val('A');
@@ -277,6 +561,26 @@
             $('#motivo').val('Alta de Afiliado');
 
             //$('[name="fecha_nacimiento"]').val(moment().subtract(18, 'years').format('YYYY-MM-DD'));
+
+            $('[name="numero_documento"]').keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
 
         });
 
@@ -332,7 +636,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(model => model.fk_tipo_documento, "", new { @class = "text-danger" })
 
@@ -346,7 +650,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_documento, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.EditorFor(model => model.numero_documento, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = "12" } })
                 @Html.ValidationMessageFor(model => model.numero_documento, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -354,7 +658,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.nombre, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = "50" } })
                 @Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -364,7 +668,7 @@
             @*Html.LabelFor(model => model.apellidos, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <label class="control-label required-field col-md-2" for="apellidos">Apellidos</label>
             <div class="col-md-4">
-                @Html.EditorFor(model => model.apellidos, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.EditorFor(model => model.apellidos, new { htmlAttributes = new { @class = "form-control", @required = "required", @maxlength = "50" } })
                 @Html.ValidationMessageFor(model => model.apellidos, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -390,7 +694,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.sexo, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -409,7 +713,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(model => model.estado_civil, "", new { @class = "text-danger" })
             </div>
@@ -419,7 +723,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.correo, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @type = "email", @class = "form-control" } })
+                @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @type = "email", @class = "form-control", @maxlength = "25" } })
                 @Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -427,7 +731,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_telefono, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_telefono, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numero_telefono, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
                 @Html.ValidationMessageFor(model => model.numero_telefono, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -436,7 +740,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.celular, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.celular, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.celular, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
                 @Html.ValidationMessageFor(model => model.celular, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -446,11 +750,25 @@
         <div class="form-group">
             @Html.LabelFor(model => model.direccion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.direccion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.direccion, new { htmlAttributes = new { @class = "form-control", @maxlength = "100" } })
                 @Html.ValidationMessageFor(model => model.direccion, "", new { @class = "text-danger" })
             </div>
         </div>
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.departamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.departamento, new SelectList(
+                  new List<Object>{
+
+                       new { value = "Lima" , text = "Lima" }
+                    },
+                  "value",
+                  "text",
+                   1), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.departamento, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.provincia, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -462,7 +780,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.provincia, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -472,14 +790,15 @@
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.distrito, new SelectList(
                   new List<Object>{
-
                        new { value = "Lima" , text = "Lima" },
+                       new { value = "Ate" , text = "Ate" },
+                       new { value = "Lince" , text = "Lince" },
                        new { value = "San Borja" , text = "San Borja" },
-                       new { value = "Surco" , text = "Surco" }
+                       new { value = "Santiago de Surco" , text = "Santiago de Surco" }
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control" })
+                   1), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.distrito, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -541,7 +860,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @onchange = "habilitarCuentaTitular(this)" })
+                   1), new { @class = "form-control", @onchange = "habilitarCuentaTitular(this)" })
 
 
                 @Html.ValidationMessageFor(model => model.tipo_cuenta, "", new { @class = "text-danger" })
@@ -559,7 +878,7 @@
             </div>
 
             <div class="col-md-1">
-                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="buscarCuentaTitular()" />
+                <input type="button" name="buscar_cuentatitular" id="buscar_cuentatitular" value="Buscar" class="btn btn-default" disabled onclick="cargarCuentaTitular()" />
             </div>
         </div>
 
@@ -589,7 +908,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.numero_tarjeta, htmlAttributes: new { @class = "control-label required-field col-md-2" })
             <div class="col-md-4">
-                @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.numero_tarjeta, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 @Html.ValidationMessageFor(model => model.numero_tarjeta, "", new { @class = "text-danger" })
                 <a href="@Url.Content("~/TarjetaAfiliacion/Create")" style="display:none" id="irAdministrar" target="_blank">Ingresar Administrar Tarjeta</a>
                 @*<input type="text" name="fk_tarjeta_afiliacion" id="fk_tarjeta_afiliacion" />*@
@@ -641,6 +960,90 @@
     </div>
 }
 
-@*<div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>*@
+
+<div id="titular-template" style="display:none">
+
+    <fieldset class="form-inline">
+        <div class="form-group">
+            <label class="form-control-label">Titular</label>
+            <input type="text" name="titular-dni" class="form-control" placeholder="Número de documento" maxlength="12"/>
+            <input type="button" value="Filtrar" onclick="filtrarTitular()" class="btn btn-default"/>
+        </div>
+    </fieldset>
+
+    <hr/>
+
+    <div class="titular-lista">
+
+    </div>
+
+</div>
+
+<div id="tarjeta-template" style="display:none">
+
+    <fieldset class="form-inline">
+        <div class="form-group">
+            <label class="form-control-label">Número de Tarjeta</label>
+            <input type="text" name="tarjeta-numero" class="form-control" placeholder="" maxlength="12"/>
+            <input type="button" value="Filtrar" onclick="filtrarTarjeta()" class="btn btn-default" />
+            <input type="button" value="Nuevo" onclick="crearTarjeta()" class="btn btn-default" />
+        </div>
+    </fieldset>
+
+    <hr />
+
+    <div class="tarjeta-lista">
+
+    </div>
+
+</div>
+
+<div id="tarjeta-nuevo-template" style="display:none">
+
+        <div class="form-tarjeta form-horizontal">
+
+            <div class="form-group">
+                <label id="numeroTarjeta" class="control-label col-md-4">Número de Tarjeta</label>
+                <div class="col-md-8">
+                    <input class="form-control" data-val="true" data-val-length="El N° Tarjeta debe poseer un máximo de 12 caracteres." data-val-length-max="12" data-val-length-min="12" data-val-required="El campo N° Tarjeta es obligatorio." id="numeroTarjeta" maxlength="12" name="numeroTarjeta" type="text" value="">
+                    <span class="field-validation-valid text-danger" data-valmsg-for="numeroTarjeta" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Fecha Emisión</label>
+                <div class="col-md-8">
+                    <input type="text" value="@DateTime.Now.ToString("dd/MM/yyyy")" readonly class="form-control" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Fecha Vencimiento</label>
+                <div class="col-md-8">
+                    <input type="text" value="@DateTime.Now.AddYears(5).ToString("dd/MM/yyyy")" readonly class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Estado</label>
+                <div class="col-sm-8">
+                    <input type="text" value="Activo" readonly class="form-control" />
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-xs-6 text-right">
+                    <input type="button" value="Grabar" class="btn btn-primary" onclick="grabarTarjeta();" />
+                </div>
+                <div class="col-xs-6">
+                    <input type="button" value="Salir" class="btn btn-danger" />
+                </div>
+            </div>
+
+        </div>
+
+</div>

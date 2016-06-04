@@ -6,6 +6,26 @@
 
 		//$('[name="destino"]').typeahead({ source: getNombres() });
 
+	    $('[name="origen"], [name="destino"]').keydown(function (e) {
+	        // Allow: backspace, delete, tab, escape, enter and .
+	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13/*, 110, 190*/]) !== -1 ||
+	            // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+	            // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+	            // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+	            // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+	            // let it happen, don't do anything
+	            return;
+	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+	            e.preventDefault();
+	        }
+	    });
+
 	});
 
 	function getCuentaOrigen() {
@@ -74,6 +94,26 @@
                 message: data,
                 title: "Transferencia de Puntos"
             });
+
+            // validar limite del motivo
+            $('[name="justificacion"]').keyup(function (e) {
+                var tval = $(this).val(),
+                    tlength = tval.length,
+                    set = 500,
+                    remain = parseInt(set - tlength);
+                if (remain <= 0) {
+                    $(this).val((tval).substring(0, set - 1))
+                }
+            });
+
+            // validar puntos enteros
+            $('[name="puntos"]').keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    return false;
+                }
+            });
+
         });
 
     }
@@ -154,6 +194,7 @@
 
         // Fixed al boton
         $('div.bootbox-confirm [data-bb-handler="confirm"]').text('Confirmar');
+        $('div.bootbox-confirm [data-bb-handler="cancel"]').text('Cancelar');
 
     }
 
@@ -180,7 +221,7 @@
     <div class="row form-group">
         <label for="origen" class="col-sm-2 form-control-label text-right">Cuenta Origen</label>
         <div class="col-sm-10 form-inline">
-            <input type="text" name="origen" class="form-control" style="width:300px" placeholder="Ingrese N° Documento" autocomplete="off" />
+            <input type="text" name="origen" class="form-control" style="width:300px" placeholder="Ingrese N° Documento" autocomplete="off" maxlength="12"/>
             <input type="button" id="buscar-origen-btn" value="Buscar" class="btn btn-default" onclick="getCuentaOrigen()"/>
         </div>
     </div>
@@ -194,7 +235,7 @@
     <div class="row form-group">
         <label for="destino" class="col-sm-2 form-control-label text-right">Cuenta Destino</label>
         <div class="col-sm-10 form-inline">
-            <input type="text" name="destino" class="form-control" style="width:300px" placeholder="Ingrese N° Documento" autocomplete="off" />
+            <input type="text" name="destino" class="form-control" style="width:300px" placeholder="Ingrese N° Documento" autocomplete="off" maxlength="12"/>
             <input type="button" id="buscar-destino-btn" value="Buscar" class="btn btn-default" onclick="getCuentaDestino()"/>
         </div>
     </div>

@@ -10,12 +10,6 @@
       
      
 
-       
-       
-
-      
-     
-
     });
 
   
@@ -24,7 +18,7 @@
 
     @{
         string idContrato = TempData["idContrato"] as string;
-        if (true || idContrato != null)
+        if (idContrato != null)
         {
             <script type="text/javascript">
                 $(function () {
@@ -32,7 +26,8 @@
                     $.post('@Url.Content("~/FichaAfiliacion/GetContrato/"+ idContrato)', null, function (data) {
                         bootbox.dialog({
                             message: data,
-                            title: ""
+                            title: "",
+                            closeButton: false
                         });
                     });
 
@@ -202,6 +197,22 @@
 
 
         <div class="form-group">
+            @Html.LabelFor(model => model.departamento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownListFor(model => model.departamento, new SelectList(
+                  new List<Object>{
+
+                       new { value = "Lima" , text = "Lima" }
+                    },
+                  "value",
+                  "text",
+                   1), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
             @Html.LabelFor(model => model.provincia, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.provincia, new SelectList(
@@ -211,7 +222,7 @@
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
+                   1), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
                
             </div>
         </div>
@@ -221,14 +232,15 @@
             <div class="col-md-4">
                 @Html.DropDownListFor(model => model.distrito, new SelectList(
                   new List<Object>{
-
                        new { value = "Lima" , text = "Lima" },
+                       new { value = "Ate" , text = "Ate" },
+                       new { value = "Lince" , text = "Lince" },
                        new { value = "San Borja" , text = "San Borja" },
-                       new { value = "Surco" , text = "Surco" }
+                       new { value = "Santiago de Surco" , text = "Santiago de Surco" }
                     },
                   "value",
                   "text",
-                   2), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
+                   1), new { @class = "form-control", @readonly = "readonly", @disabled = "disabled" })
                 
             </div>
         </div>
@@ -345,7 +357,7 @@
         }
         else
         {
-            <div class="alert alert-danger" role="alert">La cuenta no presenta alguna tarjeta de crédito activa.</div>
+            <div class="alert alert-danger" role="alert">La cuenta no presenta alguna tarjeta de afiliación activa.</div>
         }
 
         
@@ -365,7 +377,7 @@
                 <tr>
 
                     <td>N°</td>
-                    <td>DNI</td>
+                    <td>N° Documento de Identidad</td>
                     <td>Tarjeta</td>
                     <td>Cuenta</td>
                     <td>Nombres Afiliado</td>
