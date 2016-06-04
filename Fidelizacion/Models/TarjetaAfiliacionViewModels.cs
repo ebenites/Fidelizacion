@@ -15,6 +15,7 @@ namespace Fidelizacion.Models
         [Required]
         [StringLength(12, ErrorMessage = "El {0} debe poseer un máximo de {2} caracteres.", MinimumLength = 12)]
         [Display(Name = "N° Tarjeta")]
+        [ValidacionFormatoTarjeta]
         public String numeroTarjeta { get; set; }
 
         [Required]
@@ -120,6 +121,35 @@ namespace Fidelizacion.Models
             else
             {
                 return new ValidationResult("La Fecha de Emisión no debe ser menor a la fecha actual");
+            }
+        }
+    }
+
+
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ValidacionFormatoTarjetaAttribute : ValidationAttribute
+    {
+        public ValidacionFormatoTarjetaAttribute()
+        {
+
+        }
+
+        
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            String earlierDate = (String)value;
+            String inicio = earlierDate.Substring(0,4);
+            //  DateTime laterDate = (DateTime)validationContext.ObjectType.GetProperty(DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null);
+
+            if (inicio.Equals("4520"))
+            {
+                return ValidationResult.Success;
+            }
+            else
+            {
+                return new ValidationResult("El número de la tarjeta afiliación debe iniciar con los numeros 4520 ");
             }
         }
     }
