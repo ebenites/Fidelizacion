@@ -35,7 +35,7 @@ namespace Fidelizacion.Controllers
         public ActionResult Index()
         {
             var t_tarjeta_afiliacion = new List<t_tarjeta_afiliacion>();
-            return View(t_tarjeta_afiliacion.ToList());
+            return View();
         }
 
         //// GET: TarjetaAfiliacion/Details/5

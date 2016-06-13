@@ -809,7 +809,7 @@
           <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="numero_documento" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="sexo" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="correo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="correo" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="numero_telefono" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="fecha_alta" Type="DateTime" Precision="3" />
           <Property Name="fecha_nacimiento" Type="DateTime" Precision="0" />

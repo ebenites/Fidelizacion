@@ -59,6 +59,10 @@ namespace Fidelizacion
                       "~/Scripts/offline-exporting.js",
                       "~/Scripts/jquery.highchartTable.js"));
 
+            // http://garlicjs.org/
+            bundles.Add(new ScriptBundle("~/bundles/garlicjs").Include(
+                      "~/Scripts/garlic.min.js"));
+
             // gml resources
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                       ));

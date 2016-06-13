@@ -96,8 +96,12 @@
 </div>
 }
     <br />
-@if (Model != null && Model.Count() > 0)
-{ <div id="productos-table" class="table-responsive">
+@if (Model != null )
+{
+
+    if (Model.Count() > 0)
+    {
+    <div id="productos-table" class="table-responsive">
         <table class="table table-hover table-bordered">
             <colgroup>
                 <col width="30" />
@@ -151,7 +155,8 @@
                             {
                                 <span style="color:red;font-weight:bold">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
                             }
-                            else {
+                            else
+                            {
                                 <span style="color:green;font-weight:bold">@string.Format("{0:dd/MM/yyyy}", Convert.ToDateTime(Html.DisplayFor(modelItem => item.fecha_vencimiento).ToString()))</span>
                             }
                             @*<span>@item.fecha_vencimiento.Value.AddMonths(-1)</span>*@
@@ -163,7 +168,8 @@
                             {
                                 <span>Activo</span>
                             }
-                            else {
+                            else
+                            {
                                 <span>Inactivo</span>
                             }
                         </td>
@@ -183,6 +189,52 @@
 
 </table>
     </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <colgroup>
+                    <col width="30" />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                            N° Tarjeta
+                        </th>
+                        <th>
+                            Fecha Emisión
+                        </th>
+                        <th>
+                            Fecha Vencimiento
+                        </th>
+                        <th>
+                            Estado
+                        </th>
+
+
+                    </tr>
+
+                    @*<th></th>*@
+                </thead>
+                <tbody>
+                    <tr>
+
+                        <td colspan="5">No se encontraron registros</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    }
 }
 else
 {
@@ -220,12 +272,6 @@ else
 
                 @*<th></th>*@
             </thead>
-            <tbody>
-                <tr>
-
-                    <td colspan="5">No se encontraron registros</td>
-                </tr>
-            </tbody>
 
         </table>
     </div>

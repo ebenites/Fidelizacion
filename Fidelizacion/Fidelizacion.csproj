@@ -348,6 +348,7 @@
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\exporting.js" />
+    <Content Include="Scripts\garlic.min.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
