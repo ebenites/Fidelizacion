@@ -602,6 +602,14 @@
                 }
             });
 
+
+
+            $('input, select').garlic({
+                onRetrieve: function (elem, retrievedValue) {
+                    $('#auto-save').show();
+                }
+            });
+
         });
 
         function generar(obj) {
@@ -658,6 +666,10 @@
     }
 </style>
 
+<div id="auto-save" class="alert alert-warning" role="alert" style="display: none">
+    Se tiene un afiliado pendiente de grabar. &nbsp; <button class="btn btn-default" onclick="$('input, select').garlic('destroy'); location.reload();">Limpiar Formulario</button>
+</div>
+
 <h2>Nuevo Afiliado</h2>
 <br />
 
@@ -691,7 +703,7 @@
 
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascirpt:limpiarDatosPersonales()" />
+                <input type="button" name="limpiar-1" value="Limpiar" class="btn btn-default" onclick="javascirpt:limpiarDatosPersonales()" />
             </div>
         </div>
 
@@ -880,10 +892,10 @@
             </div>
 
             <div class="col-md-1">
-                <input type="button" id="generarbtn" value="Generar" class="btn btn-default" onclick="generar(this)" />
+                <input type="button" name="generar-input" id="generarbtn" value="Generar" class="btn btn-default" onclick="generar(this)" />
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascript:limpiarDatosGenerarCuenta()" />
+                <input type="button" name="limpiar-2" value="Limpiar" class="btn btn-default" onclick="javascript:limpiarDatosGenerarCuenta()" />
             </div>
         </div>
 
@@ -967,10 +979,10 @@
             </div>
 
             <div class="col-md-1">
-                <input type="button" value="Buscar" class="btn btn-default" onclick="buscarNumeroTarjeta()" />
+                <input type="button" name="buscar-tarjeta" value="Buscar" class="btn btn-default" onclick="buscarNumeroTarjeta()" />
             </div>
             <div class="col-md-1">
-                <input type="button" value="Limpiar" class="btn btn-default" onclick="javascript: limpiarDatosTarjeta()" />
+                <input type="button" name="limpiar-3" value="Limpiar" class="btn btn-default" onclick="javascript: limpiarDatosTarjeta()" />
             </div>
         </div>
         <div class="form-group">
@@ -1002,7 +1014,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="button" value="Grabar" class="btn btn-primary" onclick="procesarFormulario();" />&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" value="Salir" class="btn btn-danger" onclick="location.href='@Url.Content("~/FichaAfiliacion/")'" />
+                <input type="button" value="Salir" class="btn btn-danger" onclick="$('input, select').garlic( 'destroy' ); location.href='@Url.Content("~/FichaAfiliacion/")'" />
             </div>
         </div>
     </div>
